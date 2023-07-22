@@ -24,11 +24,11 @@ void GenerateCodeStyle(IServiceProvider serviceProvider)
     ICodeStyleWriter codeStyleWriter = serviceProvider.GetRequiredService<ICodeStyleWriter>();
 
     string editorConfigContent = editorConfigContentProvider.Provide();
-    EditorConfigRawValues editorConfigRawValues = editorConfigRuleParser.Parse(editorConfigContent);
+    EditorConfigRuleSet editorConfigRuleSet = editorConfigRuleParser.Parse(editorConfigContent);
 
     MicrosoftLearnDocumentationRawInfo microsoftLearnDocumentationRawInfo = microsoftLearnDocumentationInfoProvider.Provide();
-    EditorConfigRules editorConfigRules = microsoftLearnDocumentationParser.Parse(microsoftLearnDocumentationRawInfo);
+    RoslynRules roslynRules = microsoftLearnDocumentationParser.Parse(microsoftLearnDocumentationRawInfo);
 
-    CodeStyleInfo codeStyleInfo = codeStyleGenerator.Generate(editorConfigRawValues, editorConfigRules);
+    CodeStyleInfo codeStyleInfo = codeStyleGenerator.Generate(editorConfigRuleSet, roslynRules);
     codeStyleWriter.Write(codeStyleInfo);
 }

@@ -1,6 +1,6 @@
 ﻿namespace EditorConfigEditor.Core.EditorConfigModels;
 
-public class EditorConfigStyleRule
+public class RoslynStyleRule
 {
     public string RuleId { get; }
     public string Title { get; }
@@ -9,7 +9,7 @@ public class EditorConfigStyleRule
     public string Example { get; }
     public IReadOnlyCollection<EditorConfigStyleRuleOption> Options { get; }
 
-    public EditorConfigStyleRule(string ruleId, string title, string category, string overview, string example, IReadOnlyCollection<EditorConfigStyleRuleOption> options)
+    public RoslynStyleRule(string ruleId, string title, string category, string overview, string example, IReadOnlyCollection<EditorConfigStyleRuleOption> options)
     {
         RuleId = ruleId;
         Title = title;

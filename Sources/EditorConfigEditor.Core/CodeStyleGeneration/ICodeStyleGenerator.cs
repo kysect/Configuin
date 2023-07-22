@@ -5,5 +5,5 @@ namespace EditorConfigEditor.Core.CodeStyleGeneration;
 
 public interface ICodeStyleGenerator
 {
-    CodeStyleInfo Generate(EditorConfigRawValues editorConfigRawValues, EditorConfigRules editorConfigRules);
+    CodeStyleInfo Generate(EditorConfigRuleSet editorConfigRuleSet, RoslynRules roslynRules);
 }

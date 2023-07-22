@@ -5,5 +5,5 @@ namespace EditorConfigEditor.Core.MicrosoftLearnDocumentation;
 
 public interface IMicrosoftLearnDocumentationParser
 {
-    EditorConfigRules Parse(MicrosoftLearnDocumentationRawInfo rawInfo);
+    RoslynRules Parse(MicrosoftLearnDocumentationRawInfo rawInfo);
 }

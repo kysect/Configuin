@@ -2,5 +2,5 @@
 
 public interface IEditorConfigRuleParser
 {
-    EditorConfigRawValues Parse(string content);
+    EditorConfigRuleSet Parse(string content);
 }
