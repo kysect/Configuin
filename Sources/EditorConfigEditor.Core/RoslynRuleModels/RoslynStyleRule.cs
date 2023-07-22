@@ -1,4 +1,4 @@
-﻿namespace EditorConfigEditor.Core.EditorConfigModels;
+﻿namespace EditorConfigEditor.Core.RoslynRuleModels;
 
 public class RoslynStyleRule
 {
@@ -7,9 +7,9 @@ public class RoslynStyleRule
     public string Category { get; }
     public string Overview { get; }
     public string Example { get; }
-    public IReadOnlyCollection<EditorConfigStyleRuleOption> Options { get; }
+    public IReadOnlyCollection<RoslynStyleRuleOption> Options { get; }
 
-    public RoslynStyleRule(string ruleId, string title, string category, string overview, string example, IReadOnlyCollection<EditorConfigStyleRuleOption> options)
+    public RoslynStyleRule(string ruleId, string title, string category, string overview, string example, IReadOnlyCollection<RoslynStyleRuleOption> options)
     {
         RuleId = ruleId;
         Title = title;

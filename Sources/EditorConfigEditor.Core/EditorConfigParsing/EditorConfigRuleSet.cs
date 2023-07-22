@@ -2,10 +2,10 @@
 
 public class EditorConfigRuleSet
 {
-    public IReadOnlyCollection<IEditorConfigRule> Rows { get; }
+    public IReadOnlyCollection<IEditorConfigRule> Rules { get; }
 
-    public EditorConfigRuleSet(IReadOnlyCollection<IEditorConfigRule> rows)
+    public EditorConfigRuleSet(IReadOnlyCollection<IEditorConfigRule> rules)
     {
-        Rows = rows;
+        Rules = rules;
     }
 }

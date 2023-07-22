@@ -1,4 +1,4 @@
-﻿namespace EditorConfigEditor.Core.EditorConfigModels;
+﻿namespace EditorConfigEditor.Core.RoslynRuleModels;
 
 public class EditorConfigStyleRuleOptionValue
 {

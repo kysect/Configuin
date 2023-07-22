@@ -1,5 +1,5 @@
-﻿using EditorConfigEditor.Core.EditorConfigModels;
-using EditorConfigEditor.Core.EditorConfigParsing;
+﻿using EditorConfigEditor.Core.EditorConfigParsing;
+using EditorConfigEditor.Core.RoslynRuleModels;
 
 namespace EditorConfigEditor.Core.CodeStyleGeneration;
 
