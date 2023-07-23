@@ -1,4 +1,4 @@
-﻿namespace EditorConfigEditor.Core.CodeStyleGeneration;
+﻿namespace Kysect.Configuin.Core.CodeStyleGeneration;
 
 public interface ICodeStyleWriter
 {

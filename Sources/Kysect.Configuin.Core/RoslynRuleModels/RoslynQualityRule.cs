@@ -1,4 +1,4 @@
-﻿namespace EditorConfigEditor.Core.RoslynRuleModels;
+﻿namespace Kysect.Configuin.Core.RoslynRuleModels;
 
 public class RoslynQualityRule
 {

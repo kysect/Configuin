@@ -1,4 +1,4 @@
-﻿namespace EditorConfigEditor.Core.MsLearnDocumentation.Models;
+﻿namespace Kysect.Configuin.Core.MsLearnDocumentation.Models;
 
 public class MsLearnDocumentationRawInfo
 {
