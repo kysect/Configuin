@@ -1,8 +1,8 @@
-﻿using EditorConfigEditor.Core.CodeStyleGeneration;
-using EditorConfigEditor.Core.EditorConfigParsing;
-using EditorConfigEditor.Core.MsLearnDocumentation;
-using EditorConfigEditor.Core.MsLearnDocumentation.Models;
-using EditorConfigEditor.Core.RoslynRuleModels;
+﻿using Kysect.Configuin.Core.CodeStyleGeneration;
+using Kysect.Configuin.Core.EditorConfigParsing;
+using Kysect.Configuin.Core.MsLearnDocumentation;
+using Kysect.Configuin.Core.MsLearnDocumentation.Models;
+using Kysect.Configuin.Core.RoslynRuleModels;
 using Microsoft.Extensions.DependencyInjection;
 
 IServiceProvider sp = InitializeServiceProvider();

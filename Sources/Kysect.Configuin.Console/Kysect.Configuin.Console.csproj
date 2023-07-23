@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EditorConfigEditor.Core\EditorConfigEditor.Core.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.Core\Kysect.Configuin.Core.csproj" />
   </ItemGroup>
 
 </Project>
