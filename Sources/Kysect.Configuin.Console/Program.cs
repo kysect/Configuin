@@ -1,4 +1,6 @@
-﻿using Kysect.Configuin.Core.CodeStyleGeneration;
+﻿using Kysect.Configuin.Common;
+using Kysect.Configuin.Console.Configuration;
+using Kysect.Configuin.Core.CodeStyleGeneration;
 using Kysect.Configuin.Core.EditorConfigParsing;
 using Kysect.Configuin.Core.MsLearnDocumentation;
 using Kysect.Configuin.Core.MsLearnDocumentation.Models;
@@ -11,6 +13,9 @@ GenerateCodeStyle(sp);
 IServiceProvider InitializeServiceProvider()
 {
     var serviceCollection = new ServiceCollection();
+
+    serviceCollection.AddOptionsWithValidation<ConfiguinConfiguration>(nameof(ConfiguinConfiguration));
+
     return serviceCollection.BuildServiceProvider();
 }
 
