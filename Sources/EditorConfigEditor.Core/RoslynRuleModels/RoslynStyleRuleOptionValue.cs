@@ -1,11 +1,11 @@
 ﻿namespace EditorConfigEditor.Core.RoslynRuleModels;
 
-public class EditorConfigStyleRuleOptionValue
+public class RoslynStyleRuleOptionValue
 {
     public string Value { get; }
     public string Description { get; }
 
-    public EditorConfigStyleRuleOptionValue(string value, string description)
+    public RoslynStyleRuleOptionValue(string value, string description)
     {
         Value = value;
         Description = description;

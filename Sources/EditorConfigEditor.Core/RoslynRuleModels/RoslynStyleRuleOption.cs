@@ -3,9 +3,9 @@
 public class RoslynStyleRuleOption
 {
     public string Name { get; }
-    public IReadOnlyCollection<EditorConfigStyleRuleOptionValue> Options { get; }
+    public IReadOnlyCollection<RoslynStyleRuleOptionValue> Options { get; }
 
-    public RoslynStyleRuleOption(string name, IReadOnlyCollection<EditorConfigStyleRuleOptionValue> options)
+    public RoslynStyleRuleOption(string name, IReadOnlyCollection<RoslynStyleRuleOptionValue> options)
     {
         Name = name;
         Options = options;
