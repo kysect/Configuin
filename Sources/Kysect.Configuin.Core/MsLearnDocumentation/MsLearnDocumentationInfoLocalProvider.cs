@@ -20,12 +20,12 @@ public class MsLearnDocumentationInfoLocalProvider : IMsLearnDocumentationInfoPr
         string sharpFormattingOptions = Path.Combine(_pathToRepository, @"docs\fundamentals\code-analysis\style-rules\csharp-formatting-options.md");
         string dotnetFormattingOptions = Path.Combine(_pathToRepository, @"docs\fundamentals\code-analysis\style-rules\dotnet-formatting-options.md");
 
-        var qualityRuleInfos = Directory
+        IReadOnlyCollection<string> qualityRuleInfos = Directory
             .EnumerateFiles(qualityRulesDirectory, "ca*.md")
             .Select(File.ReadAllText)
             .ToList();
 
-        var styleRuleInfos = Directory
+        IReadOnlyCollection<string> styleRuleInfos = Directory
             .EnumerateFiles(styleRulesDirectory, "ide*.md")
             .Select(File.ReadAllText)
             .ToList();
