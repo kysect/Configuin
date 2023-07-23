@@ -1,4 +1,4 @@
-﻿namespace EditorConfigEditor.Core.EditorConfigParsing;
+﻿namespace Kysect.Configuin.Core.EditorConfigParsing;
 
 public interface IEditorConfigRuleParser
 {
