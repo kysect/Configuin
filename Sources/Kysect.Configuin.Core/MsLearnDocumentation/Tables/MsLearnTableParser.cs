@@ -5,36 +5,9 @@ namespace Kysect.Configuin.Core.MsLearnDocumentation.Tables;
 
 public class MsLearnTableParser
 {
-    public MsLearnKeyValueTableContent ParseToKeyValueContent(MarkdownTableContent simpleTable)
+    public MsLearnPropertyValueDescriptionTable Parse(MarkdownTableContent simpleTable)
     {
-        var values = new Dictionary<string, string>();
-
-        foreach (IReadOnlyList<string> row in simpleTable.Rows)
-        {
-            if (row.Count != 2)
-                throw new ArgumentException($"Unexpected row element count: {row.Count}");
-
-            values[row[0]] = row[1];
-        }
-
-        return new MsLearnKeyValueTableContent(simpleTable.Headers, values);
-    }
-
-    // TODO: reduce copy-paste code
-    public MsLearnPropertyValueDescriptionTable ToPropertyValueDescriptionTable(MarkdownTableContent simpleTable)
-    {
-        if (simpleTable.Headers is null)
-            throw new ArgumentException("Table must have header for parsing as property-value table");
-
-        if (simpleTable.Headers.Count != 2 && simpleTable.Headers.Count != 3)
-            throw new ArgumentException($"Unexpected column count in property-value table. Expected 2 or 3, but was {simpleTable.Headers.Count}");
-
-        string[] expectedHeaders = { "Property", "Value", "Description" };
-        for (int i = 0; i < simpleTable.Headers.Count; i++)
-        {
-            if (simpleTable.Headers[i] != expectedHeaders[i])
-                throw new ArgumentException($"Table header on index {i} must be equal to {expectedHeaders[i]} but was {simpleTable.Headers[i]}");
-        }
+        ValidateTableHeader(simpleTable);
 
         var rows = new Dictionary<string, IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>>();
         string? lastKey = null;
@@ -74,5 +47,21 @@ public class MsLearnTableParser
             rows[lastKey] = values;
 
         return new MsLearnPropertyValueDescriptionTable(rows);
+    }
+
+    private static void ValidateTableHeader(MarkdownTableContent simpleTable)
+    {
+        if (simpleTable.Headers is null)
+            throw new ArgumentException("Table must have header for parsing as property-value table");
+
+        if (simpleTable.Headers.Count != 2 && simpleTable.Headers.Count != 3)
+            throw new ArgumentException($"Unexpected column count in property-value table. Expected 2 or 3, but was {simpleTable.Headers.Count}");
+
+        string[] expectedHeaders = { "Property", "Value", "Description" };
+        for (int i = 0; i < simpleTable.Headers.Count; i++)
+        {
+            if (!string.IsNullOrEmpty(simpleTable.Headers[i]) && simpleTable.Headers[i] != expectedHeaders[i])
+                throw new ArgumentException($"Table header on index {i} must be equal to {expectedHeaders[i]} but was {simpleTable.Headers[i]}");
+        }
     }
 }
