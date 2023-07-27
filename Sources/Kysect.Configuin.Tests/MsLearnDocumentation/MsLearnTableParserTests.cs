@@ -28,16 +28,24 @@ public class MsLearnTableParserTests
 
         var msLearnTableParser = new MsLearnTableParser();
         MarkdownTableContent table = ConvertToMarkdownTable(input);
-        MsLearnKeyValueTableContent msLearnTableContent = msLearnTableParser.ParseToKeyValueContent(table);
 
-        Assert.IsNotNull(msLearnTableContent.Headers);
+        MsLearnPropertyValueDescriptionTable msLearnTableContent = msLearnTableParser.Parse(table);
 
-        Assert.That(msLearnTableContent.Headers[0], Is.EqualTo(string.Empty));
-        Assert.That(msLearnTableContent.Headers[1], Is.EqualTo("Value"));
+        MsLearnPropertyValueDescriptionTableAssert assert = MsLearnPropertyValueDescriptionTableAssert
+            .That(msLearnTableContent)
+            .RowCountIs(3);
 
-        Assert.That(msLearnTableContent.Rows["**Rule ID**"], Is.EqualTo("CA1000"));
-        Assert.That(msLearnTableContent.Rows["**Category**"], Is.EqualTo("[Design](design-warnings.md)"));
-        Assert.That(msLearnTableContent.Rows["**Fix is breaking or non-breaking**"], Is.EqualTo("Breaking"));
+        assert
+            .HasProperty("**Rule ID**")
+            .WithValue("CA1000");
+
+        assert
+            .HasProperty("**Category**")
+            .WithValue("[Design](design-warnings.md)");
+
+        assert
+            .HasProperty("**Fix is breaking or non-breaking**")
+            .WithValue("Breaking");
     }
 
     [Test]
@@ -58,7 +66,7 @@ public class MsLearnTableParserTests
         var msLearnTableParser = new MsLearnTableParser();
         MarkdownTableContent table = ConvertToMarkdownTable(input);
 
-        MsLearnPropertyValueDescriptionTable msLearnTableContent = msLearnTableParser.ToPropertyValueDescriptionTable(table);
+        MsLearnPropertyValueDescriptionTable msLearnTableContent = msLearnTableParser.Parse(table);
 
         MsLearnPropertyValueDescriptionTableAssert assert = MsLearnPropertyValueDescriptionTableAssert
             .That(msLearnTableContent)
@@ -92,7 +100,7 @@ public class MsLearnTableParserTests
         var msLearnTableParser = new MsLearnTableParser();
         MarkdownTableContent table = ConvertToMarkdownTable(input);
 
-        MsLearnPropertyValueDescriptionTable msLearnTableContent = msLearnTableParser.ToPropertyValueDescriptionTable(table);
+        MsLearnPropertyValueDescriptionTable msLearnTableContent = msLearnTableParser.Parse(table);
 
         MsLearnPropertyValueDescriptionTableAssert assert = MsLearnPropertyValueDescriptionTableAssert
             .That(msLearnTableContent)
