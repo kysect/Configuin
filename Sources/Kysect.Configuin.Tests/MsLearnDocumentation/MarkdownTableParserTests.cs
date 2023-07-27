@@ -1,4 +1,5 @@
-﻿using Kysect.CommonLib.BaseTypes.Extensions;
+﻿using FluentAssertions;
+using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.Core.MarkdownParser;
 using Kysect.Configuin.Core.MarkdownParser.Tables;
 using Kysect.Configuin.Core.MarkdownParser.Tables.Models;
@@ -28,17 +29,22 @@ public class MarkdownTableParserTests
         Table table = ParseToTable(input);
         MarkdownTableContent markdownTableContent = parser.ParseToSimpleContent(table);
 
-        Assert.IsNotNull(markdownTableContent.Headers);
+        markdownTableContent.Headers
+            .Should().NotBeNull()
+            .And.HaveCount(2)
+            .And.Equal(string.Empty, "Value");
 
-        Assert.That(markdownTableContent.Headers[0], Is.EqualTo(string.Empty));
-        Assert.That(markdownTableContent.Headers[1], Is.EqualTo("Value"));
+        markdownTableContent.Rows
+            .Should().HaveCount(3);
 
-        Assert.That(markdownTableContent.Rows[0][0], Is.EqualTo("**Rule ID**"));
-        Assert.That(markdownTableContent.Rows[0][1], Is.EqualTo("CA1000"));
-        Assert.That(markdownTableContent.Rows[1][0], Is.EqualTo("**Category**"));
-        Assert.That(markdownTableContent.Rows[1][1], Is.EqualTo("[Design](design-warnings.md)"));
-        Assert.That(markdownTableContent.Rows[2][0], Is.EqualTo("**Fix is breaking or non-breaking**"));
-        Assert.That(markdownTableContent.Rows[2][1], Is.EqualTo("Breaking"));
+        markdownTableContent.Rows[0]
+            .Should().Equal("**Rule ID**", "CA1000");
+
+        markdownTableContent.Rows[1]
+            .Should().Equal("**Category**", "[Design](design-warnings.md)");
+
+        markdownTableContent.Rows[2]
+            .Should().Equal("**Fix is breaking or non-breaking**", "Breaking");
     }
 
     private MarkdownTableParser CreateParser()

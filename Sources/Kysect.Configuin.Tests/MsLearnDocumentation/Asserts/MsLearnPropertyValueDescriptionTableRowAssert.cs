@@ -1,5 +1,5 @@
-﻿using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
-using NUnit.Framework;
+﻿using FluentAssertions;
+using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation.Asserts;
 
@@ -14,7 +14,8 @@ public class MsLearnPropertyValueDescriptionTableRowAssert
 
     public MsLearnPropertyValueDescriptionTableRowAssert WithValue(string key, string? value = null)
     {
-        Assert.That(_propertyValues, Does.Contain(new MsLearnPropertyValueDescriptionTableRow(key, value ?? string.Empty)));
+        _propertyValues.Should().Contain(new MsLearnPropertyValueDescriptionTableRow(key, value ?? string.Empty));
+
         return this;
     }
 }
