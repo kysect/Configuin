@@ -1,5 +1,5 @@
-﻿using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
-using NUnit.Framework;
+﻿using FluentAssertions;
+using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation.Asserts;
 
@@ -19,13 +19,15 @@ public class MsLearnPropertyValueDescriptionTableAssert
 
     public MsLearnPropertyValueDescriptionTableAssert RowCountIs(int count)
     {
-        Assert.That(_msLearnTableContent.Properties.Count, Is.EqualTo(count));
+        _msLearnTableContent.Properties.Should().HaveCount(count);
+
         return this;
     }
 
     public MsLearnPropertyValueDescriptionTableRowAssert HasProperty(string propertyName)
     {
-        Assert.True(_msLearnTableContent.Properties.ContainsKey(propertyName));
+        _msLearnTableContent.Properties.Should().ContainKey(propertyName);
+
         return new MsLearnPropertyValueDescriptionTableRowAssert(_msLearnTableContent.Properties[propertyName]);
     }
 }
