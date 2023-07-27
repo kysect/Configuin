@@ -15,10 +15,18 @@ namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MsLearnTableParserTests
 {
-    [Test]
-    public void ParseTable_ToKeyValueTableContent_ReturnExpectedResult()
+    private MsLearnTableParser _parser;
+
+    [SetUp]
+    public void Setup()
     {
-        string input = @"
+        _parser = new MsLearnTableParser();
+    }
+
+    [Test]
+    public void Parse_KeyValueTable_ReturnExpectedResult()
+    {
+        var input = @"
 |                                     | Value                        |
 |-------------------------------------|------------------------------|
 | **Rule ID**                         | CA1000                       |
@@ -26,10 +34,9 @@ public class MsLearnTableParserTests
 | **Fix is breaking or non-breaking** | Breaking                     |
 ";
 
-        var msLearnTableParser = new MsLearnTableParser();
         MarkdownTableContent table = ConvertToMarkdownTable(input);
 
-        MsLearnPropertyValueDescriptionTable msLearnTableContent = msLearnTableParser.Parse(table);
+        MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
 
         MsLearnPropertyValueDescriptionTableAssert assert = MsLearnPropertyValueDescriptionTableAssert
             .That(msLearnTableContent)
@@ -49,9 +56,9 @@ public class MsLearnTableParserTests
     }
 
     [Test]
-    public void ParseTable_ToKeyMultiValueTableContent_ReturnExpectedResult()
+    public void Parse_KeyMultiValueTableContent_ReturnExpectedResult()
     {
-        string input = @"
+        var input = @"
 | Property                 | Value                                                             |
 | ------------------------ | ----------------------------------------------------------------- |
 | **Rule ID**              | IDE0058                                                           |
@@ -63,10 +70,9 @@ public class MsLearnTableParserTests
 | **Applicable languages** | C# and Visual Basic                                               |
 ";
 
-        var msLearnTableParser = new MsLearnTableParser();
         MarkdownTableContent table = ConvertToMarkdownTable(input);
 
-        MsLearnPropertyValueDescriptionTable msLearnTableContent = msLearnTableParser.Parse(table);
+        MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
 
         MsLearnPropertyValueDescriptionTableAssert assert = MsLearnPropertyValueDescriptionTableAssert
             .That(msLearnTableContent)
@@ -87,9 +93,9 @@ public class MsLearnTableParserTests
     }
 
     [Test]
-    public void ParseTable_ToPropertyValueWithDescriptionTable_ReturnExpectedResult()
+    public void Parse_PropertyValueWithDescriptionTable_ReturnExpectedResult()
     {
-        string input = @"
+        var input = @"
 | Property                 | Value                                                            | Description                      |
 | ------------------------ | ---------------------------------------------------------------- | -------------------------------- |
 | **Option name**          | dotnet_style_prefer_is_null_check_over_reference_equality_method |                                  |
@@ -97,10 +103,9 @@ public class MsLearnTableParserTests
 |                          | `false`                                                          | Prefer reference equality method |
 | **Default option value** | `true`                                                           |                                  |";
 
-        var msLearnTableParser = new MsLearnTableParser();
         MarkdownTableContent table = ConvertToMarkdownTable(input);
 
-        MsLearnPropertyValueDescriptionTable msLearnTableContent = msLearnTableParser.Parse(table);
+        MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
 
         MsLearnPropertyValueDescriptionTableAssert assert = MsLearnPropertyValueDescriptionTableAssert
             .That(msLearnTableContent)

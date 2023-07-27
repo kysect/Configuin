@@ -13,10 +13,18 @@ namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MarkdownTableParserTests
 {
-    [Test]
-    public void ParseTable_ToSimpleTableContent_ReturnExpectedResult()
+    private MarkdownTableParser _parser;
+
+    [SetUp]
+    public void Setup()
     {
-        string input = @"
+        _parser = new MarkdownTableParser(new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault()));
+    }
+
+    [Test]
+    public void ParseToSimpleContent_ForSimpleTable_ReturnExpectedResult()
+    {
+        var input = @"
 |                                     | Value                        |
 |-------------------------------------|------------------------------|
 | **Rule ID**                         | CA1000                       |
@@ -24,10 +32,9 @@ public class MarkdownTableParserTests
 | **Fix is breaking or non-breaking** | Breaking                     |
 ";
 
-        MarkdownTableParser parser = CreateParser();
-
         Table table = ParseToTable(input);
-        MarkdownTableContent markdownTableContent = parser.ParseToSimpleContent(table);
+
+        MarkdownTableContent markdownTableContent = _parser.ParseToSimpleContent(table);
 
         markdownTableContent.Headers
             .Should().NotBeNull()
@@ -45,11 +52,6 @@ public class MarkdownTableParserTests
 
         markdownTableContent.Rows[2]
             .Should().Equal("**Fix is breaking or non-breaking**", "Breaking");
-    }
-
-    private MarkdownTableParser CreateParser()
-    {
-        return new MarkdownTableParser(new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault()));
     }
 
     private Table ParseToTable(string content)
