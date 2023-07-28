@@ -24,13 +24,13 @@ public class MarkdownTableParserTests
     [Test]
     public void ParseToSimpleContent_ForSimpleTable_ReturnExpectedResult()
     {
-        var input = @"
-|                                     | Value                        |
-|-------------------------------------|------------------------------|
-| **Rule ID**                         | CA1000                       |
-| **Category**                        | [Design](design-warnings.md) |
-| **Fix is breaking or non-breaking** | Breaking                     |
-";
+        var input = """
+                    |                                     | Value                        |
+                    |-------------------------------------|------------------------------|
+                    | **Rule ID**                         | CA1000                       |
+                    | **Category**                        | [Design](design-warnings.md) |
+                    | **Fix is breaking or non-breaking** | Breaking                     |
+                    """;
 
         Table table = ParseToTable(input);
 
