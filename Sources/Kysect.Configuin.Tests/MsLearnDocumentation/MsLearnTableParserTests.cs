@@ -26,13 +26,13 @@ public class MsLearnTableParserTests
     [Test]
     public void Parse_KeyValueTable_ReturnExpectedResult()
     {
-        var input = @"
-|                                     | Value                        |
-|-------------------------------------|------------------------------|
-| **Rule ID**                         | CA1000                       |
-| **Category**                        | [Design](design-warnings.md) |
-| **Fix is breaking or non-breaking** | Breaking                     |
-";
+        var input = """
+                    |                                     | Value                        |
+                    |-------------------------------------|------------------------------|
+                    | **Rule ID**                         | CA1000                       |
+                    | **Category**                        | [Design](design-warnings.md) |
+                    | **Fix is breaking or non-breaking** | Breaking                     |
+                    """;
 
         MarkdownTableContent table = ConvertToMarkdownTable(input);
 
@@ -58,17 +58,17 @@ public class MsLearnTableParserTests
     [Test]
     public void Parse_KeyMultiValueTableContent_ReturnExpectedResult()
     {
-        var input = @"
-| Property                 | Value                                                             |
-| ------------------------ | ----------------------------------------------------------------- |
-| **Rule ID**              | IDE0058                                                           |
-| **Title**                | Remove unnecessary expression value                               |
-| **Category**             | Style                                                             |
-| **Subcategory**          | Unnecessary code rules                                            |
-| **Options**              | `csharp_style_unused_value_expression_statement_preference`       |
-|                          | `visual_basic_style_unused_value_expression_statement_preference` |
-| **Applicable languages** | C# and Visual Basic                                               |
-";
+        var input = """
+                    | Property                 | Value                                                             |
+                    | ------------------------ | ----------------------------------------------------------------- |
+                    | **Rule ID**              | IDE0058                                                           |
+                    | **Title**                | Remove unnecessary expression value                               |
+                    | **Category**             | Style                                                             |
+                    | **Subcategory**          | Unnecessary code rules                                            |
+                    | **Options**              | `csharp_style_unused_value_expression_statement_preference`       |
+                    |                          | `visual_basic_style_unused_value_expression_statement_preference` |
+                    | **Applicable languages** | C# and Visual Basic                                               |
+                    """;
 
         MarkdownTableContent table = ConvertToMarkdownTable(input);
 
@@ -95,13 +95,14 @@ public class MsLearnTableParserTests
     [Test]
     public void Parse_PropertyValueWithDescriptionTable_ReturnExpectedResult()
     {
-        var input = @"
-| Property                 | Value                                                            | Description                      |
-| ------------------------ | ---------------------------------------------------------------- | -------------------------------- |
-| **Option name**          | dotnet_style_prefer_is_null_check_over_reference_equality_method |                                  |
-| **Option values**        | `true`                                                           | Prefer `is null` check           |
-|                          | `false`                                                          | Prefer reference equality method |
-| **Default option value** | `true`                                                           |                                  |";
+        var input = """
+                    | Property                 | Value                                                            | Description                      |
+                    | ------------------------ | ---------------------------------------------------------------- | -------------------------------- |
+                    | **Option name**          | dotnet_style_prefer_is_null_check_over_reference_equality_method |                                  |
+                    | **Option values**        | `true`                                                           | Prefer `is null` check           |
+                    |                          | `false`                                                          | Prefer reference equality method |
+                    | **Default option value** | `true`                                                           |                                  |
+                    """;
 
         MarkdownTableContent table = ConvertToMarkdownTable(input);
 
