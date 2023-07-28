@@ -37,6 +37,7 @@ public class MarkdownDocumentParser
                 }
 
                 headingBlock = currentHeaderBlock;
+                blocks = new List<Block>();
             }
             else
             {
