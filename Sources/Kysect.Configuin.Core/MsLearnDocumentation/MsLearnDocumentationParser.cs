@@ -72,6 +72,41 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             roslynStyleRuleOptions);
     }
 
+    public RoslynQualityRule ParseQualityRule(string info)
+    {
+        MarkdownDocument markdownDocument = _documentParser.Create(info);
+        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = _documentParser.SplitByHeaders(markdownDocument);
+
+        if (markdownHeadedBlocks.Count == 0)
+            throw new ConfiguinException("Style rule markdown file does not contains any heading blocks. Cannot parse description");
+
+        MarkdownHeadedBlock markdownHeadedBlock = markdownHeadedBlocks.First();
+        if (markdownHeadedBlock.Content.Count != 1)
+            throw new ConfiguinException($"Style rule description block contains unexpected child count. Expected 1, but was {markdownHeadedBlock.Content.Count}");
+
+        Block block = markdownHeadedBlock.Content.Single();
+        if (block is not Table tableBlock)
+            throw new ConfiguinException($"Style rule description block must contains Table block but was {block.GetType()}");
+
+        MarkdownTableContent markdownTableContent = _markdownTableParser.ParseToSimpleContent(tableBlock);
+        MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
+
+        // TODO: remove '*'
+        MsLearnPropertyValueDescriptionTableRow ruleId = table.GetSingleValue("**Rule ID**");
+        MsLearnPropertyValueDescriptionTableRow category = table.GetSingleValue("**Category**");
+        // TODO: add this fields to model
+        MsLearnPropertyValueDescriptionTableRow breakingChanges = table.GetSingleValue("**Fix is breaking or non-breaking**");
+        MsLearnPropertyValueDescriptionTableRow isDefault = table.GetSingleValue("**Enabled by default in .NET 7**");
+
+        return new RoslynQualityRule(
+            ruleId.Value,
+            // TODO: parse rule name
+            ruleName: string.Empty,
+            category.Value,
+            // TODO: parse description
+            description: string.Empty);
+    }
+
     private string GetStyleOverviewText(IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks)
     {
         // TODO: remove '#'
