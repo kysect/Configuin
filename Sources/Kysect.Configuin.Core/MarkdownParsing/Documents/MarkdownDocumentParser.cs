@@ -1,9 +1,23 @@
-﻿using Markdig.Syntax;
+﻿using Markdig;
+using Markdig.Parsers;
+using Markdig.Syntax;
 
-namespace Kysect.Configuin.Core.MarkdownParser.Documents;
+namespace Kysect.Configuin.Core.MarkdownParsing.Documents;
 
 public class MarkdownDocumentParser
 {
+    private readonly MarkdownPipeline _markdownPipeline;
+
+    public MarkdownDocumentParser(MarkdownPipeline markdownPipeline)
+    {
+        _markdownPipeline = markdownPipeline;
+    }
+
+    public MarkdownDocument Create(string content)
+    {
+        return MarkdownParser.Parse(content, _markdownPipeline);
+    }
+
     public IReadOnlyCollection<MarkdownHeadedBlock> SplitByHeaders(MarkdownDocument markdownDocument)
     {
         ArgumentNullException.ThrowIfNull(markdownDocument);
