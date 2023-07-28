@@ -1,10 +1,10 @@
 ﻿using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.Configuin.Core.MarkdownParser.Tables.Models;
-using Kysect.Configuin.Core.MarkdownParser.TextExtractor;
+using Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
+using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
 
-namespace Kysect.Configuin.Core.MarkdownParser.Tables;
+namespace Kysect.Configuin.Core.MarkdownParsing.Tables;
 
 public class MarkdownTableParser
 {

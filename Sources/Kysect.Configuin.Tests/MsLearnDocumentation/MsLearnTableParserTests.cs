@@ -1,14 +1,14 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.Configuin.Core.MarkdownParser.Tables.Models;
-using Kysect.Configuin.Core.MarkdownParser.Tables;
-using Kysect.Configuin.Core.MarkdownParser.TextExtractor;
-using Kysect.Configuin.Core.MarkdownParser;
+using Kysect.Configuin.Core.MarkdownParsing;
+using Kysect.Configuin.Core.MarkdownParsing.Documents;
+using Kysect.Configuin.Core.MarkdownParsing.Tables;
+using Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
+using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
 using Kysect.Configuin.Core.MsLearnDocumentation.Tables;
 using Kysect.Configuin.Tests.MsLearnDocumentation.Asserts;
 using Markdig.Extensions.Tables;
-using Markdig.Parsers;
 using Markdig.Syntax;
 using NUnit.Framework;
 
@@ -16,11 +16,13 @@ namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MsLearnTableParserTests
 {
+    private MarkdownDocumentParser _markdownDocumentParser;
     private MsLearnTableParser _parser;
 
     [SetUp]
     public void Setup()
     {
+        _markdownDocumentParser = new MarkdownDocumentParser(MarkdownPipelineProvider.GetDefault());
         _parser = new MsLearnTableParser();
     }
 
@@ -127,7 +129,7 @@ public class MsLearnTableParserTests
     private MarkdownTableContent ConvertToMarkdownTable(string content)
     {
         var parser = new MarkdownTableParser(new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault()));
-        MarkdownDocument markdownDocument = MarkdownParser.Parse(content, MarkdownPipelineProvider.GetDefault());
+        MarkdownDocument markdownDocument = _markdownDocumentParser.Create(content);
         Table table = markdownDocument.Single().To<Table>();
         return parser.ParseToSimpleContent(table);
     }

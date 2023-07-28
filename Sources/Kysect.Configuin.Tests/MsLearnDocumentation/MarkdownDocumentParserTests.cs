@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Kysect.Configuin.Core.MarkdownParser;
-using Kysect.Configuin.Core.MarkdownParser.Documents;
+using Kysect.Configuin.Core.MarkdownParsing;
+using Kysect.Configuin.Core.MarkdownParsing.Documents;
 using Markdig.Syntax;
 using NUnit.Framework;
 
@@ -13,7 +13,7 @@ public class MarkdownDocumentParserTests
     [SetUp]
     public void Setup()
     {
-        _parser = new MarkdownDocumentParser();
+        _parser = new MarkdownDocumentParser(MarkdownPipelineProvider.GetDefault());
     }
 
     [Test]
@@ -48,15 +48,9 @@ public class MarkdownDocumentParserTests
             - [CA1067: Override Equals when implementing IEquatable](ca1067.md)
             """;
 
-        MarkdownDocument markdownDocument = ReadDocument(input);
-
+        MarkdownDocument markdownDocument = _parser.Create(input);
         IReadOnlyCollection<MarkdownHeadedBlock> headedBlocks = _parser.SplitByHeaders(markdownDocument);
 
         headedBlocks.Should().HaveCount(3);
-    }
-
-    private MarkdownDocument ReadDocument(string content)
-    {
-        return Markdig.Parsers.MarkdownParser.Parse(content, MarkdownPipelineProvider.GetDefault());
     }
 }

@@ -3,7 +3,7 @@ using Markdig.Renderers.Roundtrip;
 using Markdig.Syntax;
 using System.Text;
 
-namespace Kysect.Configuin.Core.MarkdownParser.TextExtractor;
+namespace Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 
 public class RoundtripRendererTextExtractor : IMarkdownTextExtractor
 {
