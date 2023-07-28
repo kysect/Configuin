@@ -62,6 +62,22 @@ public class MsLearnDocumentationParserTests
         // TODO: should add validation for code samples
         //roslynStyleRule.Options.Single().CsharpCodeSample
         //    .Should().Be("");
+    }
 
+    [Test]
+    public void ParseQualityRule_CS1064_ReturnExpectedResult()
+    {
+        string fileText = File.ReadAllText(Path.Combine("MsLearnDocumentation", "Resources", "ca1064.md"));
+
+        RoslynQualityRule qualityRule = _parser.ParseQualityRule(fileText);
+
+        qualityRule.RuleId
+            .Should().Be("CA1064");
+
+        // TODO: remove link
+        qualityRule.Category
+            .Should().Be("[Design](design-warnings.md)");
+
+        // TODO: parse description
     }
 }
