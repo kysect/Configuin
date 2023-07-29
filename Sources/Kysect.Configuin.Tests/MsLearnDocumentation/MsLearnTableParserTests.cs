@@ -1,4 +1,5 @@
-﻿using Kysect.CommonLib.BaseTypes.Extensions;
+﻿using FluentAssertions;
+using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.Core.MarkdownParser.Tables.Models;
 using Kysect.Configuin.Core.MarkdownParser.Tables;
 using Kysect.Configuin.Core.MarkdownParser.TextExtractor;
@@ -38,21 +39,20 @@ public class MsLearnTableParserTests
 
         MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
 
-        MsLearnPropertyValueDescriptionTableAssert assert = MsLearnPropertyValueDescriptionTableAssert
-            .That(msLearnTableContent)
-            .RowCountIs(3);
+        msLearnTableContent.Properties
+            .Should().HaveCount(3);
 
-        assert
-            .HasProperty("**Rule ID**")
-            .WithValue("CA1000");
+        msLearnTableContent.Properties
+            .Should().ContainKey("**Rule ID**")
+            .WhoseValue.Should().Contain("CA1000");
 
-        assert
-            .HasProperty("**Category**")
-            .WithValue("[Design](design-warnings.md)");
+        msLearnTableContent.Properties
+            .Should().ContainKey("**Category**")
+            .WhoseValue.Should().Contain("[Design](design-warnings.md)");
 
-        assert
-            .HasProperty("**Fix is breaking or non-breaking**")
-            .WithValue("Breaking");
+        msLearnTableContent.Properties
+            .Should().ContainKey("**Fix is breaking or non-breaking**")
+            .WhoseValue.Should().Contain("Breaking");
     }
 
     [Test]
@@ -74,22 +74,21 @@ public class MsLearnTableParserTests
 
         MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
 
-        MsLearnPropertyValueDescriptionTableAssert assert = MsLearnPropertyValueDescriptionTableAssert
-            .That(msLearnTableContent)
-            .RowCountIs(6);
+        msLearnTableContent.Properties
+            .Should().HaveCount(6);
 
-        assert
-            .HasProperty("**Subcategory**")
-            .WithValue("Unnecessary code rules");
+        msLearnTableContent.Properties
+            .Should().ContainKey("**Subcategory**")
+            .WhoseValue.Should().Contain("Unnecessary code rules");
 
-        assert
-            .HasProperty("**Options**")
-            .WithValue("`csharp_style_unused_value_expression_statement_preference`")
-            .WithValue("`visual_basic_style_unused_value_expression_statement_preference`");
+        msLearnTableContent.Properties
+            .Should().ContainKey("**Options**")
+            .WhoseValue.Should().Contain("`csharp_style_unused_value_expression_statement_preference`")
+            .And.Contain("`visual_basic_style_unused_value_expression_statement_preference`");
 
-        assert
-            .HasProperty("**Applicable languages**")
-            .WithValue("C# and Visual Basic");
+        msLearnTableContent.Properties
+            .Should().ContainKey("**Applicable languages**")
+            .WhoseValue.Should().Contain("C# and Visual Basic");
     }
 
     [Test]
@@ -108,22 +107,21 @@ public class MsLearnTableParserTests
 
         MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
 
-        MsLearnPropertyValueDescriptionTableAssert assert = MsLearnPropertyValueDescriptionTableAssert
-            .That(msLearnTableContent)
-            .RowCountIs(3);
+        msLearnTableContent.Properties
+            .Should().HaveCount(3);
 
-        assert
-            .HasProperty("**Option name**")
-            .WithValue("dotnet_style_prefer_is_null_check_over_reference_equality_method");
+        msLearnTableContent.Properties
+            .Should().ContainKey("**Option name**")
+            .WhoseValue.Should().Contain("dotnet_style_prefer_is_null_check_over_reference_equality_method");
 
-        assert
-            .HasProperty("**Option values**")
-            .WithValue("`true`", "Prefer `is null` check")
-            .WithValue("`false`", "Prefer reference equality method");
+        msLearnTableContent.Properties
+            .Should().ContainKey("**Option values**")
+            .WhoseValue.Should().Contain("`true`", "Prefer `is null` check")
+            .And.Contain("`false`", "Prefer reference equality method");
 
-        assert
-            .HasProperty("**Default option value**")
-            .WithValue("`true`");
+        msLearnTableContent.Properties
+            .Should().ContainKey("**Default option value**")
+            .WhoseValue.Should().Contain("`true`");
     }
 
     private MarkdownTableContent ConvertToMarkdownTable(string content)
