@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Kysect.CommonLib" Version="0.1.0" />
     <PackageReference Include="Kysect.Editorconfig" Version="1.0.3" />
+    <PackageReference Include="Markdig" Version="0.31.0" />
   </ItemGroup>
 
 </Project>
