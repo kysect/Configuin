@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Kysect.Configuin.Core.MarkdownParsing;
 using Kysect.Configuin.Core.MarkdownParsing.Documents;
 using Markdig.Syntax;
 using NUnit.Framework;
@@ -8,14 +7,6 @@ namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MarkdownDocumentParserTests
 {
-    private MarkdownDocumentParser _parser;
-
-    [SetUp]
-    public void Setup()
-    {
-        _parser = new MarkdownDocumentParser(MarkdownPipelineProvider.GetDefault());
-    }
-
     [Test]
     public void SplitByHeaders_DocumentWithThreeHeaders_ReturnThreeParts()
     {
@@ -48,8 +39,8 @@ public class MarkdownDocumentParserTests
             - [CA1067: Override Equals when implementing IEquatable](ca1067.md)
             """;
 
-        MarkdownDocument markdownDocument = _parser.Create(input);
-        IReadOnlyCollection<MarkdownHeadedBlock> headedBlocks = _parser.SplitByHeaders(markdownDocument);
+        MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(input);
+        IReadOnlyCollection<MarkdownHeadedBlock> headedBlocks = markdownDocument.SplitByHeaders();
 
         headedBlocks.Should().HaveCount(3);
     }

@@ -6,7 +6,6 @@ using Kysect.Configuin.Core.MsLearnDocumentation.Models;
 using Kysect.Configuin.Core.MsLearnDocumentation.Tables;
 using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
 using Kysect.Configuin.Core.RoslynRuleModels;
-using Markdig;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
 
@@ -14,15 +13,13 @@ namespace Kysect.Configuin.Core.MsLearnDocumentation;
 
 public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 {
-    private readonly MarkdownDocumentParser _documentParser;
     private readonly MarkdownTableParser _markdownTableParser;
     private readonly MsLearnTableParser _msLearnTableParser;
     private readonly IMarkdownTextExtractor _textExtractor;
 
-    public MsLearnDocumentationParser(MarkdownPipeline markdownPipeline, IMarkdownTextExtractor textExtractor)
+    public MsLearnDocumentationParser(IMarkdownTextExtractor textExtractor)
     {
         _textExtractor = textExtractor;
-        _documentParser = new MarkdownDocumentParser(markdownPipeline);
         _markdownTableParser = new MarkdownTableParser(textExtractor);
         _msLearnTableParser = new MsLearnTableParser();
     }
@@ -34,8 +31,8 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     public RoslynStyleRule ParseStyleRule(string info)
     {
-        MarkdownDocument markdownDocument = _documentParser.Create(info);
-        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = _documentParser.SplitByHeaders(markdownDocument);
+        MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(info);
+        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders();
 
         if (markdownHeadedBlocks.Count == 0)
             throw new ConfiguinException("Style rule markdown file does not contains any heading blocks. Cannot parse description");
@@ -74,8 +71,8 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     public RoslynQualityRule ParseQualityRule(string info)
     {
-        MarkdownDocument markdownDocument = _documentParser.Create(info);
-        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = _documentParser.SplitByHeaders(markdownDocument);
+        MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(info);
+        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders();
 
         if (markdownHeadedBlocks.Count == 0)
             throw new ConfiguinException("Style rule markdown file does not contains any heading blocks. Cannot parse description");
