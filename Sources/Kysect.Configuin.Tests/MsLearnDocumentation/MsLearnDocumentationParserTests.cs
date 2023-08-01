@@ -20,7 +20,7 @@ public class MsLearnDocumentationParserTests
     [Test]
     public void ParseStyleRule_IDE0040_ReturnExpectedResult()
     {
-        string fileText = File.ReadAllText(Path.Combine("MsLearnDocumentation", "Resources", "ide0040.md"));
+        string fileText = File.ReadAllText(Path.Combine("MsLearnDocumentation", "Resources", "Ide0040.md"));
         var expectedOptions = new RoslynStyleRuleOption(
             "dotnet_style_require_accessibility_modifiers",
             new[]
@@ -67,7 +67,7 @@ public class MsLearnDocumentationParserTests
     [Test]
     public void ParseQualityRule_CS1064_ReturnExpectedResult()
     {
-        string fileText = File.ReadAllText(Path.Combine("MsLearnDocumentation", "Resources", "ca1064.md"));
+        string fileText = File.ReadAllText(Path.Combine("MsLearnDocumentation", "Resources", "Ca1064.md"));
 
         RoslynQualityRule qualityRule = _parser.ParseQualityRule(fileText);
 
