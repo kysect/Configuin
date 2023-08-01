@@ -14,7 +14,7 @@ public class MsLearnDocumentationParserTests
     [SetUp]
     public void Setup()
     {
-        _parser = new MsLearnDocumentationParser(MarkdownPipelineProvider.GetDefault(), new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault()));
+        _parser = new MsLearnDocumentationParser(new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault()));
     }
 
     [Test]

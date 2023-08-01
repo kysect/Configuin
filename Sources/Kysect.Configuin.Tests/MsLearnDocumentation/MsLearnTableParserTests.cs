@@ -16,13 +16,11 @@ namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MsLearnTableParserTests
 {
-    private MarkdownDocumentParser _markdownDocumentParser;
     private MsLearnTableParser _parser;
 
     [SetUp]
     public void Setup()
     {
-        _markdownDocumentParser = new MarkdownDocumentParser(MarkdownPipelineProvider.GetDefault());
         _parser = new MsLearnTableParser();
     }
 
@@ -129,7 +127,7 @@ public class MsLearnTableParserTests
     private MarkdownTableContent ConvertToMarkdownTable(string content)
     {
         var parser = new MarkdownTableParser(new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault()));
-        MarkdownDocument markdownDocument = _markdownDocumentParser.Create(content);
+        MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(content);
         Table table = markdownDocument.Single().To<Table>();
         return parser.ParseToSimpleContent(table);
     }
