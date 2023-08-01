@@ -6,5 +6,4 @@ namespace Kysect.Configuin.Core.MsLearnDocumentation;
 public interface IMsLearnDocumentationParser
 {
     RoslynRules Parse(MsLearnDocumentationRawInfo rawInfo);
-    RoslynStyleRule ParseStyleRule(string info);
 }
