@@ -12,10 +12,12 @@ public class MsLearnPropertyValueDescriptionTable
     public MsLearnPropertyValueDescriptionTableRow GetSingleValue(string key)
     {
         IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> values = GetValues(key);
-        if (values.Count != 1)
-        {
-            throw new ConfiguinException($"Table contains more that one value for property {key}");
-        }
+        if (values.Count == 0)
+            throw new ConfiguinException($"Table does not contains value for property {key}");
+
+
+        if (values.Count > 1)
+            throw new ConfiguinException($"Table contains more than one value for property {key}");
 
         return values[0];
     }
@@ -23,7 +25,7 @@ public class MsLearnPropertyValueDescriptionTable
     public IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> GetValues(string key)
     {
         if (!Properties.TryGetValue(key, out IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>? value))
-            throw new ConfiguinException($"Table contains more that one value for property {key}");
+            throw new ConfiguinException($"Table does not contains value for property {key}");
 
         return value;
     }

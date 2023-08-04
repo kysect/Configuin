@@ -21,17 +21,6 @@ public class MsLearnDocumentationParserTests
     public void ParseStyleRule_IDE0040_ReturnExpectedResult()
     {
         string fileText = File.ReadAllText(Path.Combine("MsLearnDocumentation", "Resources", "Ide0040.md"));
-        var expectedOptions = new RoslynStyleRuleOption(
-            "dotnet_style_require_accessibility_modifiers",
-            new[]
-            {
-                new RoslynStyleRuleOptionValue("`always`", "Prefer accessibility modifiers to be specified."),
-                new RoslynStyleRuleOptionValue("`for_non_interface_members`", "Prefer accessibility modifiers except for public interface members."),
-                new RoslynStyleRuleOptionValue("`never`", "Do not prefer accessibility modifiers to be specified."),
-                new RoslynStyleRuleOptionValue("`omit_if_default`", "Prefer accessibility modifiers except if they are the default modifier.")
-            },
-            "`for_non_interface_members`",
-            CsharpCodeSample: string.Empty);
 
         RoslynStyleRule roslynStyleRule = _parser.ParseStyleRule(fileText);
 
