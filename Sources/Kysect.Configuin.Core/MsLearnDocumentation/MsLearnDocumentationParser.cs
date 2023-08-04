@@ -93,6 +93,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         MsLearnPropertyValueDescriptionTableRow category = table.GetSingleValue("**Category**");
         // TODO: add this fields to model
         MsLearnPropertyValueDescriptionTableRow breakingChanges = table.GetSingleValue("**Fix is breaking or non-breaking**");
+        // TODO: remove hardcoded dotnet version
         MsLearnPropertyValueDescriptionTableRow isDefault = table.GetSingleValue("**Enabled by default in .NET 7**");
 
         return new RoslynQualityRule(
