@@ -22,4 +22,13 @@
     <ProjectReference Include="..\Kysect.Configuin.Core\Kysect.Configuin.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="MsLearnDocumentation\Resources\Ca1064.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MsLearnDocumentation\Resources\Ide0040.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

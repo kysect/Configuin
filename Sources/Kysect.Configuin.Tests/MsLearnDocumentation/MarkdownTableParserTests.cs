@@ -1,11 +1,12 @@
 ﻿using FluentAssertions;
 using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.Configuin.Core.MarkdownParser;
-using Kysect.Configuin.Core.MarkdownParser.Tables;
-using Kysect.Configuin.Core.MarkdownParser.Tables.Models;
-using Kysect.Configuin.Core.MarkdownParser.TextExtractor;
+using Kysect.Configuin.Core.MarkdownParsing;
+using Kysect.Configuin.Core.MarkdownParsing.Documents;
+using Kysect.Configuin.Core.MarkdownParsing.Tables;
+using Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
+using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
+using Markdig;
 using Markdig.Extensions.Tables;
-using Markdig.Parsers;
 using Markdig.Syntax;
 using NUnit.Framework;
 
@@ -18,7 +19,8 @@ public class MarkdownTableParserTests
     [SetUp]
     public void Setup()
     {
-        _parser = new MarkdownTableParser(new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault()));
+        MarkdownPipeline markdownPipeline = MarkdownPipelineProvider.GetDefault();
+        _parser = new MarkdownTableParser(new RoundtripRendererTextExtractor(markdownPipeline));
     }
 
     [Test]
@@ -56,7 +58,7 @@ public class MarkdownTableParserTests
 
     private Table ParseToTable(string content)
     {
-        MarkdownDocument markdownDocument = MarkdownParser.Parse(content, MarkdownPipelineProvider.GetDefault());
+        MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(content);
         Table table = markdownDocument.Single().To<Table>();
         return table;
     }
