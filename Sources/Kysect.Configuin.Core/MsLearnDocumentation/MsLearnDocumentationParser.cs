@@ -26,7 +26,11 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     public RoslynRules Parse(MsLearnDocumentationRawInfo rawInfo)
     {
-        throw new NotImplementedException();
+        // TODO: implement parsing for other info - SharpFormattingOptionsContent and DotnetFormattingOptionsContent
+
+        return new RoslynRules(
+            rawInfo.QualityRuleInfos.Select(ParseQualityRule).ToList(),
+            rawInfo.StyleRuleInfos.Select(ParseStyleRule).ToList());
     }
 
     public RoslynStyleRule ParseStyleRule(string info)
