@@ -23,6 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="EditorConfigFileParsing\Resources\Editor-config-sample.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="MsLearnDocumentation\Resources\Ca1064.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
