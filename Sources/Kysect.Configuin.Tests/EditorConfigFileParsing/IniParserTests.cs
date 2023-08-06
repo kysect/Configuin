@@ -13,11 +13,11 @@ public class IniParserTests
     {
         string content = "key = value";
 
-        IReadOnlyCollection<InitFileLine> result = _parser.Parse(content);
+        IReadOnlyCollection<IniFileLine> result = _parser.Parse(content);
 
         result
             .Should().HaveCount(1)
-            .And.Contain(new InitFileLine("key", "value"));
+            .And.Contain(new IniFileLine("key", "value"));
     }
 
     [Test]
@@ -25,7 +25,7 @@ public class IniParserTests
     {
         string content = "# key = value";
 
-        IReadOnlyCollection<InitFileLine> result = _parser.Parse(content);
+        IReadOnlyCollection<IniFileLine> result = _parser.Parse(content);
 
         result.Should().HaveCount(0);
     }
@@ -35,7 +35,7 @@ public class IniParserTests
     {
         string fileText = File.ReadAllText(Path.Combine("EditorConfigFileParsing", "Resources", "Editor-config-sample.ini"));
 
-        IReadOnlyCollection<InitFileLine> result = _parser.Parse(fileText);
+        IReadOnlyCollection<IniFileLine> result = _parser.Parse(fileText);
 
         result.Should().HaveCount(400);
     }

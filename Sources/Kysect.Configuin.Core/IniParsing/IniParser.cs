@@ -2,11 +2,11 @@
 
 public class IniParser
 {
-    public IReadOnlyCollection<InitFileLine> Parse(string content)
+    public IReadOnlyCollection<IniFileLine> Parse(string content)
     {
         string[] lines = content.Split(Environment.NewLine);
 
-        var result = new List<InitFileLine>();
+        var result = new List<IniFileLine>();
 
         foreach (string line in lines)
         {
@@ -30,7 +30,7 @@ public class IniParser
 
             string key = parts[0].Trim();
             string value = parts[1].Trim();
-            result.Add(new InitFileLine(key, value));
+            result.Add(new IniFileLine(key, value));
         }
 
         return result;
