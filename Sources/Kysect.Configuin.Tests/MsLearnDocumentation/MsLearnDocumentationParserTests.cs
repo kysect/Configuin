@@ -14,7 +14,7 @@ public class MsLearnDocumentationParserTests
     [SetUp]
     public void Setup()
     {
-        _parser = new MsLearnDocumentationParser(new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault()));
+        _parser = new MsLearnDocumentationParser(new RoundtripRendererPlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
     }
 
     [Test]
@@ -40,13 +40,13 @@ public class MsLearnDocumentationParserTests
             .Should().Be("dotnet_style_require_accessibility_modifiers");
 
         roslynStyleRule.Options.Single().Options
-            .Should().Contain(new RoslynStyleRuleOptionValue("`always`", "Prefer accessibility modifiers to be specified."))
-            .And.Contain(new RoslynStyleRuleOptionValue("`for_non_interface_members`", "Prefer accessibility modifiers except for public interface members."))
-            .And.Contain(new RoslynStyleRuleOptionValue("`never`", "Do not prefer accessibility modifiers to be specified."))
-            .And.Contain(new RoslynStyleRuleOptionValue("`omit_if_default`", "Prefer accessibility modifiers except if they are the default modifier."));
+            .Should().Contain(new RoslynStyleRuleOptionValue("always", "Prefer accessibility modifiers to be specified."))
+            .And.Contain(new RoslynStyleRuleOptionValue("for_non_interface_members", "Prefer accessibility modifiers except for public interface members."))
+            .And.Contain(new RoslynStyleRuleOptionValue("never", "Do not prefer accessibility modifiers to be specified."))
+            .And.Contain(new RoslynStyleRuleOptionValue("omit_if_default", "Prefer accessibility modifiers except if they are the default modifier."));
 
         roslynStyleRule.Options.Single().DefaultValue
-            .Should().Be("`for_non_interface_members`");
+            .Should().Be("for_non_interface_members");
 
         // TODO: should add validation for code samples
         //roslynStyleRule.Options.Single().CsharpCodeSample
@@ -62,10 +62,9 @@ public class MsLearnDocumentationParserTests
 
         qualityRule.RuleId
             .Should().Be("CA1064");
-
-        // TODO: remove link
+        
         qualityRule.Category
-            .Should().Be("[Design](design-warnings.md)");
+            .Should().Be("Design");
 
         // TODO: parse description
     }
