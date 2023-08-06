@@ -1,4 +1,6 @@
-﻿namespace Kysect.Configuin.Core.EditorConfigParsing;
+﻿using Kysect.Configuin.Core.EditorConfigParsing.Rules;
+
+namespace Kysect.Configuin.Core.EditorConfigParsing;
 
 public class EditorConfigRuleSet
 {
