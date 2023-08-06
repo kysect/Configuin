@@ -24,6 +24,9 @@ public class MsLearnRepositoryPathProviderTests
         string pathToSharpFormattingFile = pathProvider.GetPathToSharpFormattingFile();
         string pathToDotnetFormattingFile = pathProvider.GetPathToDotnetFormattingFile();
 
+        var directoryInfo = new DirectoryInfo(pathToRoot);
+        Directory.Exists(directoryInfo.FullName).Should().BeTrue($"Directory {directoryInfo.FullName} must exist");
+
         Directory.Exists(pathToStyleRules).Should().BeTrue($"Directory {pathToStyleRules} must exist");
         Directory.Exists(pathToQualityRules).Should().BeTrue($"Directory {pathToQualityRules} must exist");
 
