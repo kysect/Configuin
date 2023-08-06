@@ -11,21 +11,21 @@ public class MsLearnRepositoryPathProvider
 
     public string GetPathToQualityRules()
     {
-        return Path.Combine(_root, @"docs\fundamentals\code-analysis\quality-rules\");
+        return Path.Combine(_root, "docs", "fundamentals", "code-analysis", "quality-rules");
     }
 
     public string GetPathToStyleRules()
     {
-        return Path.Combine(_root, @"docs\fundamentals\code-analysis\style-rules\");
+        return Path.Combine(_root, "docs", "fundamentals", "code-analysis", "style-rules");
     }
 
     public string GetPathToSharpFormattingFile()
     {
-        return Path.Combine(_root, @"docs\fundamentals\code-analysis\style-rules\csharp-formatting-options.md");
+        return Path.Combine(_root, "docs", "fundamentals", "code-analysis", "style-rules", "csharp-formatting-options.md");
     }
 
     public string GetPathToDotnetFormattingFile()
     {
-        return Path.Combine(_root, @"docs\fundamentals\code-analysis\style-rules\dotnet-formatting-options.md");
+        return Path.Combine(_root, "docs", "fundamentals", "code-analysis", "style-rules", "dotnet-formatting-options.md");
     }
 }
