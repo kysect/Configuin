@@ -43,15 +43,15 @@ public class MsLearnTableParserTests
             .Should().HaveCount(3);
 
         msLearnTableContent.Properties
-            .Should().ContainKey("**Rule ID**")
+            .Should().ContainKey("Rule ID")
             .WhoseValue.Should().Contain("CA1000");
 
         msLearnTableContent.Properties
-            .Should().ContainKey("**Category**")
-            .WhoseValue.Should().Contain("[Design](design-warnings.md)");
+            .Should().ContainKey("Category")
+            .WhoseValue.Should().Contain("Design");
 
         msLearnTableContent.Properties
-            .Should().ContainKey("**Fix is breaking or non-breaking**")
+            .Should().ContainKey("Fix is breaking or non-breaking")
             .WhoseValue.Should().Contain("Breaking");
     }
 
@@ -78,16 +78,16 @@ public class MsLearnTableParserTests
             .Should().HaveCount(6);
 
         msLearnTableContent.Properties
-            .Should().ContainKey("**Subcategory**")
+            .Should().ContainKey("Subcategory")
             .WhoseValue.Should().Contain("Unnecessary code rules");
 
         msLearnTableContent.Properties
-            .Should().ContainKey("**Options**")
-            .WhoseValue.Should().Contain("`csharp_style_unused_value_expression_statement_preference`")
-            .And.Contain("`visual_basic_style_unused_value_expression_statement_preference`");
+            .Should().ContainKey("Options")
+            .WhoseValue.Should().Contain("csharp_style_unused_value_expression_statement_preference")
+            .And.Contain("visual_basic_style_unused_value_expression_statement_preference");
 
         msLearnTableContent.Properties
-            .Should().ContainKey("**Applicable languages**")
+            .Should().ContainKey("Applicable languages")
             .WhoseValue.Should().Contain("C# and Visual Basic");
     }
 
@@ -111,22 +111,22 @@ public class MsLearnTableParserTests
             .Should().HaveCount(3);
 
         msLearnTableContent.Properties
-            .Should().ContainKey("**Option name**")
+            .Should().ContainKey("Option name")
             .WhoseValue.Should().Contain("dotnet_style_prefer_is_null_check_over_reference_equality_method");
 
         msLearnTableContent.Properties
-            .Should().ContainKey("**Option values**")
-            .WhoseValue.Should().Contain("`true`", "Prefer `is null` check")
-            .And.Contain("`false`", "Prefer reference equality method");
+            .Should().ContainKey("Option values")
+            .WhoseValue.Should().Contain("true", "Prefer is null check")
+            .And.Contain("false", "Prefer reference equality method");
 
         msLearnTableContent.Properties
-            .Should().ContainKey("**Default option value**")
-            .WhoseValue.Should().Contain("`true`");
+            .Should().ContainKey("Default option value")
+            .WhoseValue.Should().Contain("true");
     }
 
     private MarkdownTableContent ConvertToMarkdownTable(string content)
     {
-        var parser = new MarkdownTableParser(new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault()));
+        var parser = new MarkdownTableParser(new RoundtripRendererPlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(content);
         Table table = markdownDocument.Single().To<Table>();
         return parser.ParseToSimpleContent(table);
