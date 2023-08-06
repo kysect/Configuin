@@ -17,7 +17,7 @@ public class MarkdownHeadedBlock
     // TODO: remove this method and pass header text instead of header block
     public string GetHeaderText()
     {
-        var roundtripRendererTextExtractor = new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault());
+        var roundtripRendererTextExtractor = new RoundtripRendererPlainTextExtractor(MarkdownPipelineProvider.GetDefault());
         return roundtripRendererTextExtractor.ExtractText(Header);
     }
 }

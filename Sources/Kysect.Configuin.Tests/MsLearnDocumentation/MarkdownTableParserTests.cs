@@ -20,7 +20,7 @@ public class MarkdownTableParserTests
     public void Setup()
     {
         MarkdownPipeline markdownPipeline = MarkdownPipelineProvider.GetDefault();
-        _parser = new MarkdownTableParser(new RoundtripRendererTextExtractor(markdownPipeline));
+        _parser = new MarkdownTableParser(new RoundtripRendererPlainTextExtractor(markdownPipeline));
     }
 
     [Test]
@@ -47,13 +47,13 @@ public class MarkdownTableParserTests
             .Should().HaveCount(3);
 
         markdownTableContent.Rows[0]
-            .Should().Equal("**Rule ID**", "CA1000");
+            .Should().Equal("Rule ID", "CA1000");
 
         markdownTableContent.Rows[1]
-            .Should().Equal("**Category**", "[Design](design-warnings.md)");
+            .Should().Equal("Category", "Design");
 
         markdownTableContent.Rows[2]
-            .Should().Equal("**Fix is breaking or non-breaking**", "Breaking");
+            .Should().Equal("Fix is breaking or non-breaking", "Breaking");
     }
 
     private Table ParseToTable(string content)

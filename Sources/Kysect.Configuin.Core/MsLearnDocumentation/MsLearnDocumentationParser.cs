@@ -52,14 +52,13 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         MarkdownTableContent markdownTableContent = _markdownTableParser.ParseToSimpleContent(tableBlock);
         MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
 
-        // TODO: remove '*'
-        MsLearnPropertyValueDescriptionTableRow ruleId = table.GetSingleValue("**Rule ID**");
-        MsLearnPropertyValueDescriptionTableRow title = table.GetSingleValue("**Title**");
-        MsLearnPropertyValueDescriptionTableRow category = table.GetSingleValue("**Category**");
-        MsLearnPropertyValueDescriptionTableRow subcategory = table.GetSingleValue("**Subcategory**");
-        MsLearnPropertyValueDescriptionTableRow applicableLanguages = table.GetSingleValue("**Applicable languages**");
-        MsLearnPropertyValueDescriptionTableRow introducedVersion = table.GetSingleValue("**Introduced version**");
-        IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> options = table.GetValues("**Options**");
+        MsLearnPropertyValueDescriptionTableRow ruleId = table.GetSingleValue("Rule ID");
+        MsLearnPropertyValueDescriptionTableRow title = table.GetSingleValue("Title");
+        MsLearnPropertyValueDescriptionTableRow category = table.GetSingleValue("Category");
+        MsLearnPropertyValueDescriptionTableRow subcategory = table.GetSingleValue("Subcategory");
+        MsLearnPropertyValueDescriptionTableRow applicableLanguages = table.GetSingleValue("Applicable languages");
+        MsLearnPropertyValueDescriptionTableRow introducedVersion = table.GetSingleValue("Introduced version");
+        IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> options = table.GetValues("Options");
 
         string overviewText = GetStyleOverviewText(markdownHeadedBlocks);
         IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = ParseOptions(markdownHeadedBlocks);
@@ -92,13 +91,12 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         MarkdownTableContent markdownTableContent = _markdownTableParser.ParseToSimpleContent(tableBlock);
         MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
 
-        // TODO: remove '*'
-        MsLearnPropertyValueDescriptionTableRow ruleId = table.GetSingleValue("**Rule ID**");
-        MsLearnPropertyValueDescriptionTableRow category = table.GetSingleValue("**Category**");
+        MsLearnPropertyValueDescriptionTableRow ruleId = table.GetSingleValue("Rule ID");
+        MsLearnPropertyValueDescriptionTableRow category = table.GetSingleValue("Category");
         // TODO: add this fields to model
-        MsLearnPropertyValueDescriptionTableRow breakingChanges = table.GetSingleValue("**Fix is breaking or non-breaking**");
+        MsLearnPropertyValueDescriptionTableRow breakingChanges = table.GetSingleValue("Fix is breaking or non-breaking");
         // TODO: remove hardcoded dotnet version
-        MsLearnPropertyValueDescriptionTableRow isDefault = table.GetSingleValue("**Enabled by default in .NET 7**");
+        MsLearnPropertyValueDescriptionTableRow isDefault = table.GetSingleValue("Enabled by default in .NET 7");
 
         return new RoslynQualityRule(
             ruleId.Value,
@@ -111,8 +109,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     private string GetStyleOverviewText(IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks)
     {
-        // TODO: remove '#'
-        MarkdownHeadedBlock? overviewBlock = markdownHeadedBlocks.FirstOrDefault(h => h.GetHeaderText() == "## Overview");
+        MarkdownHeadedBlock? overviewBlock = markdownHeadedBlocks.FirstOrDefault(h => h.GetHeaderText() == "Overview");
         if (overviewBlock is null)
             throw new ConfiguinException("Style rule page does not contains Overview block.");
 
@@ -129,7 +126,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         // TODO: fix header with option detecting
 
         return markdownHeadedBlocks
-            .Where(h => h.GetHeaderText().StartsWith("### dotnet_"))
+            .Where(h => h.GetHeaderText().StartsWith("dotnet_"))
             .Select(ParseOption)
             .ToList();
     }
@@ -146,10 +143,9 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         var codeBlocks = optionBlock.Content.OfType<CodeBlock>().ToList();
         // TODO: implement code block filtering (C# / VB) and parsing
 
-        // TODO: remove '*'
-        MsLearnPropertyValueDescriptionTableRow optionName = table.GetSingleValue("**Option name**");
-        IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> optionValues = table.GetValues("**Option values**");
-        MsLearnPropertyValueDescriptionTableRow defaultValue = table.GetSingleValue("**Default option value**");
+        MsLearnPropertyValueDescriptionTableRow optionName = table.GetSingleValue("Option name");
+        IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> optionValues = table.GetValues("Option values");
+        MsLearnPropertyValueDescriptionTableRow defaultValue = table.GetSingleValue("Default option value");
 
         return new RoslynStyleRuleOption(
             optionName.Value,
