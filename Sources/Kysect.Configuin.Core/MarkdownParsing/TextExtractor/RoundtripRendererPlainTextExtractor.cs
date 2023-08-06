@@ -1,30 +1,20 @@
 using Markdig;
-using Markdig.Renderers.Roundtrip;
 using Markdig.Syntax;
-using System.Text;
 
 namespace Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 
 public class RoundtripRendererPlainTextExtractor : IMarkdownTextExtractor
 {
-    private readonly MarkdownPipeline _markdownPipeline;
+    private readonly RoundtripRendererTextExtractor _roundtripRendererTextExtractor;
 
     public RoundtripRendererPlainTextExtractor(MarkdownPipeline markdownPipeline)
     {
-        _markdownPipeline = markdownPipeline;
+        _roundtripRendererTextExtractor = new RoundtripRendererTextExtractor(markdownPipeline);
     }
 
     public string ExtractText(Block block)
     {
-        var memoryStream = new MemoryStream();
-        using var streamWriter = new StreamWriter(memoryStream);
-        var renderer = new RoundtripRenderer(streamWriter);
-        _markdownPipeline.Setup(renderer);
-
-        renderer.Render(block);
-
-        streamWriter.Flush();
-        string result = Encoding.ASCII.GetString(memoryStream.ToArray());
+        string result = _roundtripRendererTextExtractor.ExtractText(block);
         return Markdown.ToPlainText(result).Trim();
     }
 }
