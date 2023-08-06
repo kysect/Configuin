@@ -4,21 +4,21 @@ namespace Kysect.Configuin.Core.MsLearnDocumentation;
 
 public class MsLearnDocumentationInfoLocalProvider : IMsLearnDocumentationInfoProvider
 {
-    private readonly string _pathToRepository;
+    private readonly MsLearnRepositoryPathProvider _repositoryPathProvider;
 
     public MsLearnDocumentationInfoLocalProvider(string pathToRepository)
     {
         ArgumentException.ThrowIfNullOrEmpty(pathToRepository);
 
-        _pathToRepository = pathToRepository;
+        _repositoryPathProvider = new MsLearnRepositoryPathProvider(pathToRepository);
     }
 
     public MsLearnDocumentationRawInfo Provide()
     {
-        string qualityRulesDirectory = Path.Combine(_pathToRepository, @"docs\fundamentals\code-analysis\quality-rules\");
-        string styleRulesDirectory = Path.Combine(_pathToRepository, @"docs\fundamentals\code-analysis\style-rules\");
-        string sharpFormattingOptions = Path.Combine(_pathToRepository, @"docs\fundamentals\code-analysis\style-rules\csharp-formatting-options.md");
-        string dotnetFormattingOptions = Path.Combine(_pathToRepository, @"docs\fundamentals\code-analysis\style-rules\dotnet-formatting-options.md");
+        string qualityRulesDirectory = _repositoryPathProvider.GetPathToQualityRules();
+        string styleRulesDirectory = _repositoryPathProvider.GetPathToStyleRules();
+        string sharpFormattingOptions = _repositoryPathProvider.GetPathToSharpFormattingFile();
+        string dotnetFormattingOptions = _repositoryPathProvider.GetPathToDotnetFormattingFile();
 
         IReadOnlyCollection<string> qualityRuleInfos = Directory
             .EnumerateFiles(qualityRulesDirectory, "ca*.md")
