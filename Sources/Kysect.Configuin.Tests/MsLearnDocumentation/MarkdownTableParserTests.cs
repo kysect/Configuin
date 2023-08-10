@@ -20,7 +20,7 @@ public class MarkdownTableParserTests
     public void Setup()
     {
         MarkdownPipeline markdownPipeline = MarkdownPipelineProvider.GetDefault();
-        _parser = new MarkdownTableParser(new RoundtripRendererPlainTextExtractor(markdownPipeline));
+        _parser = new MarkdownTableParser(new PlainTextExtractor(markdownPipeline));
     }
 
     [Test]
