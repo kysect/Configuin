@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Kysect.Configuin.Core.MarkdownParsing;
 using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MsLearnDocumentation;
@@ -16,7 +16,7 @@ public class MsLearnDocumentationParserTests
     [SetUp]
     public void Setup()
     {
-        _parser = new MsLearnDocumentationParser(new RoundtripRendererPlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
+        _parser = new MsLearnDocumentationParser(new PlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
     }
 
     [Test]
