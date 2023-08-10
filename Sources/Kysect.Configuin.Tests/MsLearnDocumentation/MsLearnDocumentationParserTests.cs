@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Kysect.Configuin.Core.MarkdownParsing;
 using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MsLearnDocumentation;
@@ -51,9 +51,23 @@ public class MsLearnDocumentationParserTests
         roslynStyleRule.Options.Single().DefaultValue
             .Should().Be("for_non_interface_members");
 
-        // TODO: should add validation for code samples
-        //roslynStyleRule.Options.Single().CsharpCodeSample
-        //    .Should().Be("");
+        var codeSample = """
+                         // dotnet_style_require_accessibility_modifiers = always
+                         // dotnet_style_require_accessibility_modifiers = for_non_interface_members
+                         class MyClass
+                         {
+                             private const string thisFieldIsConst = "constant";
+                         }
+
+                         // dotnet_style_require_accessibility_modifiers = never
+                         class MyClass
+                         {
+                             const string thisFieldIsConst = "constant";
+                         }
+                         """.Replace("\r\n", "\n", StringComparison.InvariantCultureIgnoreCase);
+
+        roslynStyleRule.Options.Single().CsharpCodeSample
+            .Should().Be(codeSample);
     }
 
     [Test]

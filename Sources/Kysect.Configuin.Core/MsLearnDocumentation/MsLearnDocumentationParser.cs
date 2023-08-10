@@ -142,7 +142,12 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
 
         var codeBlocks = optionBlock.Content.OfType<CodeBlock>().ToList();
-        // TODO: implement code block filtering (C# / VB) and parsing
+        CodeBlock? csharpCodeBlock = codeBlocks
+            .OfType<FencedCodeBlock>()
+            .FirstOrDefault(cb => cb.Info == "csharp");
+        string csharpCodeSample = csharpCodeBlock is null
+                                    ? ""
+                                    : _textExtractor.ExtractText(csharpCodeBlock);
 
         MsLearnPropertyValueDescriptionTableRow optionName = table.GetSingleValue("Option name");
         IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> optionValues = table.FindValues("Option values");
@@ -152,7 +157,6 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             optionName.Value,
             optionValues.Select(v => new RoslynStyleRuleOptionValue(v.Value, v.Description)).ToList(),
             defaultValue.Value,
-            // TODO: replace with real value
-            CsharpCodeSample: string.Empty);
+            csharpCodeSample);
     }
 }
