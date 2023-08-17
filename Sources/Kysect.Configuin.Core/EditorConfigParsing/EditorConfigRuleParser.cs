@@ -11,6 +11,7 @@ public class EditorConfigRuleParser : IEditorConfigRuleParser
 
     public EditorConfigRuleParser()
     {
+        // TODO: Investigate other rules
         _generalRuleKeys = new HashSet<string>
         {
             "tab_width",
@@ -37,30 +38,41 @@ public class EditorConfigRuleParser : IEditorConfigRuleParser
 
         bool isRoslynSeverityRule = line.Key.StartsWith("dotnet_diagnostic.");
         if (isRoslynSeverityRule)
-        {
-            string[] keyParts = line.Key.Split('.');
-
-            if (keyParts.Length != 3)
-                throw new ArgumentException($"Incorrect rule key: {line.Key}");
-
-            if (!string.Equals(keyParts[2], "severity", StringComparison.InvariantCultureIgnoreCase))
-                throw new ArgumentException($"Expect postfix .severity for diagnostic rule but was {keyParts[2]}");
-
-            if (!Enum.TryParse(line.Value, true, out RoslynRuleSeverity severity))
-                throw new ArgumentException($"Cannot parse severity from {line.Value}");
-
-            string ruleId = keyParts[1];
-            return new RoslynSeverityEditorConfigRule(ruleId, severity);
-        }
+            return ParseRoslynSeverityRule(line);
 
         // TODO: remove rule that force StringComparison for string comparing from project .editorconfig
         bool isCompositeKeyRule = line.Key.Contains('.', StringComparison.InvariantCultureIgnoreCase);
         if (isCompositeKeyRule)
-        {
-            string[] keyParts = line.Key.Split('.');
-            return new CompositeRoslynOptionEditorConfigRule(keyParts, line.Value, Severity: null);
-        }
+            return ParseCompositeKeyRule(line);
 
+        return ParseRoslynOptionRule(line);
+    }
+
+    private static IEditorConfigRule ParseRoslynSeverityRule(IniFileLine line)
+    {
+        string[] keyParts = line.Key.Split('.');
+
+        if (keyParts.Length != 3)
+            throw new ArgumentException($"Incorrect rule key: {line.Key}");
+
+        if (!string.Equals(keyParts[2], "severity", StringComparison.InvariantCultureIgnoreCase))
+            throw new ArgumentException($"Expect postfix .severity for diagnostic rule but was {keyParts[2]}");
+
+        if (!Enum.TryParse(line.Value, true, out RoslynRuleSeverity severity))
+            throw new ArgumentException($"Cannot parse severity from {line.Value}");
+
+        string ruleId = keyParts[1];
+        return new RoslynSeverityEditorConfigRule(ruleId, severity);
+    }
+
+    private static IEditorConfigRule ParseCompositeKeyRule(IniFileLine line)
+    {
+        string[] keyParts = line.Key.Split('.');
+        return new CompositeRoslynOptionEditorConfigRule(keyParts, line.Value, Severity: null);
+    }
+
+    private static IEditorConfigRule ParseRoslynOptionRule(IniFileLine line)
+    {
         bool containsSeverityInValue = line.Value.Contains(':', StringComparison.InvariantCultureIgnoreCase);
         if (containsSeverityInValue)
         {
