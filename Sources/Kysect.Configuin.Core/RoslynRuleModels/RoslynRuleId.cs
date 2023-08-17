@@ -2,7 +2,7 @@
 
 namespace Kysect.Configuin.Core.RoslynRuleModels;
 
-public struct RoslynRuleId
+public readonly struct RoslynRuleId
 {
     public RoslynRuleType Type { get; }
     public int Id { get; }
@@ -32,5 +32,23 @@ public struct RoslynRuleId
     {
         Type = type;
         Id = id;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is RoslynRuleId o)
+            return Equals(o);
+
+        return false;
+    }
+
+    public bool Equals(RoslynRuleId other)
+    {
+        return Type == other.Type && Id == other.Id;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine((int)Type, Id);
     }
 }
