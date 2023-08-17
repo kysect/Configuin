@@ -4,7 +4,7 @@ namespace Kysect.Configuin.Common;
 
 public static class StringExtensions
 {
-    public static string RemovePrefix(this string value, string prefix)
+    public static string WithoutPrefix(this string value, string prefix)
     {
         if (!value.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase))
             throw new ArgumentException($"String {value} does not start with {prefix}");
