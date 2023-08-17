@@ -3,7 +3,6 @@
 public enum RoslynRuleSeverity
 {
     Default,
-
     None,
     Silent,
     Suggestion,
