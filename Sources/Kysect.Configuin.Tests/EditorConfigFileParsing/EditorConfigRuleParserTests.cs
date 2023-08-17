@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Kysect.Configuin.Core.EditorConfigParsing;
 using Kysect.Configuin.Core.EditorConfigParsing.Rules;
+using Kysect.Configuin.Core.RoslynRuleModels;
 using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.EditorConfigFileParsing;
@@ -26,7 +27,8 @@ public class EditorConfigRuleParserTests
     public void Parse_DotnetDiagnosticSeverity_ReturnRoslyntSeverityRule()
     {
         string content = "dotnet_diagnostic.IDE0001.severity = warning";
-        var expected = new RoslynSeverityEditorConfigRule("IDE0001", RoslynRuleSeverity.Warning);
+        var roslynRuleId = RoslynRuleId.Parse("IDE0001");
+        var expected = new RoslynSeverityEditorConfigRule(roslynRuleId, RoslynRuleSeverity.Warning);
 
         EditorConfigRuleSet editorConfigRuleSet = _parser.Parse(content);
 
