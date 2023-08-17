@@ -57,11 +57,13 @@ public class MsLearnTableParser
         if (simpleTable.Headers.Count != 2 && simpleTable.Headers.Count != 3)
             throw new ArgumentException($"Unexpected column count in property-value table. Expected 2 or 3, but was {simpleTable.Headers.Count}");
 
-        string[] expectedHeaders = { "Property", "Value", "Description" };
-        for (int i = 0; i < simpleTable.Headers.Count; i++)
-        {
-            if (!string.IsNullOrEmpty(simpleTable.Headers[i]) && simpleTable.Headers[i] != expectedHeaders[i])
-                throw new ArgumentException($"Table header on index {i} must be equal to {expectedHeaders[i]} but was {simpleTable.Headers[i]}");
-        }
+        // TODO: This validation sometimes throw error. In some cases table has "Item" column instead of "Property".
+        // Maybe we need to drop it.
+        //string[] expectedHeaders = { "Property", "Value", "Description" };
+        //for (int i = 0; i < simpleTable.Headers.Count; i++)
+        //{
+        //    if (!string.IsNullOrEmpty(simpleTable.Headers[i]) && simpleTable.Headers[i] != expectedHeaders[i])
+        //        throw new ArgumentException($"Table header on index {i} must be equal to {expectedHeaders[i]} but was {simpleTable.Headers[i]}");
+        //}
     }
 }
