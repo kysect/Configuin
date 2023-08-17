@@ -64,7 +64,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = ParseOptions(markdownHeadedBlocks);
 
         return new RoslynStyleRule(
-            ruleId.Value,
+            RoslynRuleId.Parse(ruleId.Value),
             title.Value,
             category.Value,
             overviewText,
@@ -99,7 +99,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         MsLearnPropertyValueDescriptionTableRow isDefault = table.GetSingleValue("Enabled by default in .NET 7");
 
         return new RoslynQualityRule(
-            ruleId.Value,
+            RoslynRuleId.Parse(ruleId.Value),
             // TODO: parse rule name
             ruleName: string.Empty,
             category.Value,

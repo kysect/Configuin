@@ -1,4 +1,6 @@
-﻿namespace Kysect.Configuin.Core.EditorConfigParsing.Rules;
+﻿using Kysect.Configuin.Core.RoslynRuleModels;
+
+namespace Kysect.Configuin.Core.EditorConfigParsing.Rules;
 
 public interface IEditorConfigRule
 {
@@ -16,8 +18,9 @@ public record GeneralEditorConfigRule(
 public record RoslynOptionEditorConfigRule(
     string Key,
     string Value,
+    // TODO: ensure that this is supported (severity per option)
     RoslynRuleSeverity? Severity) : IEditorConfigRule;
 
 public record RoslynSeverityEditorConfigRule(
-    string RuleId,
+    RoslynRuleId RuleId,
     RoslynRuleSeverity Severity) : IEditorConfigRule;
