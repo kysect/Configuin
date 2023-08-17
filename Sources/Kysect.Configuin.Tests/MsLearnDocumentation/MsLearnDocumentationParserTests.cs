@@ -2,7 +2,9 @@
 using Kysect.Configuin.Core.MarkdownParsing;
 using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MsLearnDocumentation;
+using Kysect.Configuin.Core.MsLearnDocumentation.Models;
 using Kysect.Configuin.Core.RoslynRuleModels;
+using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation;
@@ -69,5 +71,19 @@ public class MsLearnDocumentationParserTests
             .Should().Be("Design");
 
         // TODO: parse description
+    }
+
+    // TODO: remove ignore
+    [Test]
+    [Ignore("Need to fix all related problems")]
+    public void Parse_MsDocsRepository_FinishWithoutError()
+    {
+        var repositoryPathProvider = new MsLearnDocumentationInfoLocalProvider(Constants.GetPathToMsDocsRoot());
+
+        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = repositoryPathProvider.Provide();
+        RoslynRules roslynRules = _parser.Parse(msLearnDocumentationRawInfo);
+
+        // TODO: add asserts
+        Assert.Pass();
     }
 }

@@ -22,6 +22,14 @@ public class MsLearnPropertyValueDescriptionTable
         return values[0];
     }
 
+    public IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> FindValues(string key)
+    {
+        if (!Properties.TryGetValue(key, out IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>? value))
+            return Array.Empty<MsLearnPropertyValueDescriptionTableRow>();
+
+        return value;
+    }
+
     public IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> GetValues(string key)
     {
         if (!Properties.TryGetValue(key, out IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>? value))
