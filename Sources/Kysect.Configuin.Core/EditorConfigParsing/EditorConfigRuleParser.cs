@@ -1,5 +1,6 @@
 ﻿using Kysect.Configuin.Core.EditorConfigParsing.Rules;
 using Kysect.Configuin.Core.IniParsing;
+using Kysect.Configuin.Core.RoslynRuleModels;
 
 namespace Kysect.Configuin.Core.EditorConfigParsing;
 
@@ -61,7 +62,7 @@ public class EditorConfigRuleParser : IEditorConfigRuleParser
         if (!Enum.TryParse(line.Value, true, out RoslynRuleSeverity severity))
             throw new ArgumentException($"Cannot parse severity from {line.Value}");
 
-        string ruleId = keyParts[1];
+        var ruleId = RoslynRuleId.Parse(keyParts[1]);
         return new RoslynSeverityEditorConfigRule(ruleId, severity);
     }
 
