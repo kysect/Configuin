@@ -21,11 +21,12 @@ public class MsLearnDocumentationParserTests
     public void ParseStyleRule_IDE0040_ReturnExpectedResult()
     {
         string fileText = File.ReadAllText(Path.Combine("MsLearnDocumentation", "Resources", "Ide0040.md"));
+        RoslynRuleId expected = RoslynRuleId.Parse("IDE0040");
 
         RoslynStyleRule roslynStyleRule = _parser.ParseStyleRule(fileText);
 
         roslynStyleRule.RuleId
-            .Should().Be("IDE0040");
+            .Should().Be(expected);
 
         roslynStyleRule.Title
             .Should().Be("Add accessibility modifiers");
@@ -57,12 +58,13 @@ public class MsLearnDocumentationParserTests
     public void ParseQualityRule_CS1064_ReturnExpectedResult()
     {
         string fileText = File.ReadAllText(Path.Combine("MsLearnDocumentation", "Resources", "Ca1064.md"));
+        RoslynRuleId expected = RoslynRuleId.Parse("CA1064");
 
         RoslynQualityRule qualityRule = _parser.ParseQualityRule(fileText);
 
         qualityRule.RuleId
-            .Should().Be("CA1064");
-        
+            .Should().Be(expected);
+
         qualityRule.Category
             .Should().Be("Design");
 
