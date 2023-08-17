@@ -13,7 +13,7 @@ public readonly struct RoslynRuleId
         string qualityRulePrefix = "CA";
         if (value.StartsWith(qualityRulePrefix, StringComparison.InvariantCultureIgnoreCase))
         {
-            string id = value.RemovePrefix(qualityRulePrefix);
+            string id = value.WithoutPrefix(qualityRulePrefix);
             return new RoslynRuleId(RoslynRuleType.QualityRule, int.Parse(id));
         }
 
@@ -21,8 +21,8 @@ public readonly struct RoslynRuleId
         string styleRulePrefix = "IDE";
         if (value.StartsWith(styleRulePrefix, StringComparison.InvariantCultureIgnoreCase))
         {
-            string id = value.RemovePrefix(styleRulePrefix);
-            return new RoslynRuleId(RoslynRuleType.QualityRule, int.Parse(id));
+            string id = value.WithoutPrefix(styleRulePrefix);
+            return new RoslynRuleId(RoslynRuleType.StyleRule, int.Parse(id));
         }
 
         throw new ArgumentException($"String {value} is not valid Roslyn rule id");
