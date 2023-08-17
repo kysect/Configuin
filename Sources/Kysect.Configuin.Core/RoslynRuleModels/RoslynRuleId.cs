@@ -11,7 +11,7 @@ public readonly struct RoslynRuleId
     {
         // CA1234
         string qualityRulePrefix = "CA";
-        if (value.StartWithIgnoreCase(qualityRulePrefix))
+        if (value.StartsWith(qualityRulePrefix, StringComparison.InvariantCultureIgnoreCase))
         {
             string id = value.RemovePrefix(qualityRulePrefix);
             return new RoslynRuleId(RoslynRuleType.QualityRule, int.Parse(id));
@@ -19,7 +19,7 @@ public readonly struct RoslynRuleId
 
         // IDE1234
         string styleRulePrefix = "IDE";
-        if (value.StartWithIgnoreCase(styleRulePrefix))
+        if (value.StartsWith(styleRulePrefix, StringComparison.InvariantCultureIgnoreCase))
         {
             string id = value.RemovePrefix(styleRulePrefix);
             return new RoslynRuleId(RoslynRuleType.QualityRule, int.Parse(id));
