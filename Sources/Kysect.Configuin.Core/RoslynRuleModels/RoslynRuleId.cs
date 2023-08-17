@@ -51,4 +51,9 @@ public readonly struct RoslynRuleId
     {
         return HashCode.Combine((int)Type, Id);
     }
+
+    public override string ToString()
+    {
+        return $"{Type}{Id:D4}";
+    }
 }
