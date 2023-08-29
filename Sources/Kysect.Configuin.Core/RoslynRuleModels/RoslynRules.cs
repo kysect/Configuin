@@ -10,4 +10,11 @@ public class RoslynRules
         QualityRules = qualityRules;
         StyleRules = styleRules;
     }
+
+    public IReadOnlyCollection<RoslynStyleRuleOption> GetOptions()
+    {
+        return StyleRules
+            .SelectMany(r => r.Options)
+            .ToList();
+    }
 }
