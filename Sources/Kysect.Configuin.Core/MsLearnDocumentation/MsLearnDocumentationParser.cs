@@ -33,6 +33,12 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             rawInfo.StyleRuleInfos.Select(ParseStyleRule).ToList());
     }
 
+    public IReadOnlyCollection<RoslynStyleRule> ParseStyleRules(string info)
+    {
+        // TODO: do in better way
+        return new[] { ParseStyleRule(info) };
+    }
+
     public RoslynStyleRule ParseStyleRule(string info)
     {
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(info);
