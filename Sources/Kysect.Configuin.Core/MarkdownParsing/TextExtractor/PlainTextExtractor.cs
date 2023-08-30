@@ -34,8 +34,15 @@ public class PlainTextExtractor : IMarkdownTextExtractor
         renderer.Render(block);
 
         streamWriter.Flush();
-        string result = Encoding.ASCII.GetString(memoryStream.ToArray());
+        string result = Encoding.ASCII
+            .GetString(memoryStream.ToArray())
+            .Trim();
+
         // KB: HtmlRenderer change '"' to "&quot;". Decode will change in back
-        return HttpUtility.HtmlDecode(result.Trim());
+        return HttpUtility
+            .HtmlDecode(result)
+            // TODO: To smth with this =_=
+            .Replace("\r\n", "\n", StringComparison.InvariantCultureIgnoreCase)
+            .Replace("\n", "\r\n", StringComparison.InvariantCultureIgnoreCase);
     }
 }

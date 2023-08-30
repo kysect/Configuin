@@ -31,7 +31,7 @@ public class MsLearnDocumentationParserTests
                          {
                              const string thisFieldIsConst = "constant";
                          }
-                         """.Replace("\r\n", "\n", StringComparison.InvariantCultureIgnoreCase);
+                         """;
 
         RoslynStyleRuleOptionValue[] expectedOptionValues =
         {
@@ -67,44 +67,98 @@ public class MsLearnDocumentationParserTests
 
         var options = new RoslynStyleRuleOption[]
         {
+            // TODO: add dots to end of lines into source code and fix test
             new RoslynStyleRuleOption(
                 "dotnet_style_qualification_for_field",
                 new []
                 {
-                    new RoslynStyleRuleOptionValue("true", "Prefer fields to be prefaced with `this.` in C# or `Me.` in Visual Basic"),
-                    new RoslynStyleRuleOptionValue("false", "Prefer fields _not_ to be prefaced with `this.` or `Me.`"),
+                    new RoslynStyleRuleOptionValue("true", "Prefer fields to be prefaced with this. in C# or Me. in Visual Basic"),
+                    new RoslynStyleRuleOptionValue("false", "Prefer fields not to be prefaced with this. or Me."),
                 },
                 "false",
-                string.Empty)
+                """
+                // dotnet_style_qualification_for_field = true
+                this.capacity = 0;
+                
+                // dotnet_style_qualification_for_field = false
+                capacity = 0;
+                """),
+
+            new RoslynStyleRuleOption(
+                "dotnet_style_qualification_for_property",
+                new []
+                {
+                    new RoslynStyleRuleOptionValue("true", "Prefer properties to be prefaced with this. in C# or Me. in Visual Basic."),
+                    new RoslynStyleRuleOptionValue("false", "Prefer properties not to be prefaced with this. or Me.."),
+                },
+                "false",
+                """
+                // dotnet_style_qualification_for_property = true
+                this.ID = 0;
+                
+                // dotnet_style_qualification_for_property = false
+                ID = 0;
+                """),
+
+            new RoslynStyleRuleOption(
+                "dotnet_style_qualification_for_method",
+                new []
+                {
+                    new RoslynStyleRuleOptionValue("true", "Prefer methods to be prefaced with this. in C# or Me. in Visual Basic."),
+                    new RoslynStyleRuleOptionValue("false", "Prefer methods not to be prefaced with this. or Me.."),
+                },
+                "false",
+                """
+                // dotnet_style_qualification_for_method = true
+                this.Display();
+                
+                // dotnet_style_qualification_for_method = false
+                Display();
+                """),
+
+            new RoslynStyleRuleOption(
+                "dotnet_style_qualification_for_event",
+                new []
+                {
+                    new RoslynStyleRuleOptionValue("true", "Prefer events to be prefaced with this. in C# or Me. in Visual Basic."),
+                    new RoslynStyleRuleOptionValue("false", "Prefer events not to be prefaced with this. or Me.."),
+                },
+                "false",
+                """
+                // dotnet_style_qualification_for_event = true
+                this.Elapsed += Handler;
+                
+                // dotnet_style_qualification_for_event = false
+                Elapsed += Handler;
+                """),
         };
+
+        string overview = """
+                          These two rules define whether or not you prefer the use of this (C#) and Me. (Visual Basic) qualifiers. To enforce that the qualifiers aren't present, set the severity of IDE0003 to warning or error. To enforce that the qualifiers are present, set the severity of IDE0009 to warning or error.
+                          For example, if you prefer qualifiers for fields and properties but not for methods or events, then you can enable IDE0009 and set the options dotnet_style_qualification_for_field and dotnet_style_qualification_for_property to true. However, this configuration would not flag methods and events that do have this and Me qualifiers. To also enforce that methods and events don't have qualifiers, enable IDE0003.
+                          """;
 
         var ide0003 = new RoslynStyleRule(
             RoslynRuleId.Parse("IDE0003"),
             "Remove this or Me qualification",
             "Style",
-            """
-            These two rules define whether or not you prefer the use of [this (C#)](../../../csharp/language-reference/keywords/this.md) and `Me.` (Visual Basic) qualifiers. To enforce that the qualifiers *aren't* present, set the severity of `IDE0003` to warning or error. To enforce that the qualifiers *are* present, set the severity of `IDE0009` to warning or error.
-            
-            For example, if you prefer qualifiers for fields and properties but not for methods or events, then you can enable `IDE0009` and set the options `dotnet_style_qualification_for_field` and `dotnet_style_qualification_for_property` to `true`. However, this configuration would not flag methods and events that *do* have `this` and `Me` qualifiers. To also enforce that methods and events *don't* have qualifiers, enable `IDE0003`.
-            """,
+            overview,
             string.Empty,
             options);
 
         var ide0009 = new RoslynStyleRule(
             RoslynRuleId.Parse("IDE0009"),
-            "**Add** `this` or `Me` qualification",
+            "Add this or Me qualification",
             "Style",
-            """
-            These two rules define whether or not you prefer the use of [this (C#)](../../../csharp/language-reference/keywords/this.md) and `Me.` (Visual Basic) qualifiers. To enforce that the qualifiers *aren't* present, set the severity of `IDE0003` to warning or error. To enforce that the qualifiers *are* present, set the severity of `IDE0009` to warning or error.
-
-            For example, if you prefer qualifiers for fields and properties but not for methods or events, then you can enable `IDE0009` and set the options `dotnet_style_qualification_for_field` and `dotnet_style_qualification_for_property` to `true`. However, this configuration would not flag methods and events that *do* have `this` and `Me` qualifiers. To also enforce that methods and events *don't* have qualifiers, enable `IDE0003`.
-            """,
+            overview,
             string.Empty,
             options);
 
         IReadOnlyCollection<RoslynStyleRule> roslynStyleRules = _parser.ParseStyleRules(fileText);
 
-        roslynStyleRules.Should().ContainInOrder(ide0003, ide0009);
+        roslynStyleRules.Should().HaveCount(2);
+        roslynStyleRules.ElementAt(0).Should().BeEquivalentTo(ide0003);
+        roslynStyleRules.ElementAt(1).Should().BeEquivalentTo(ide0009);
     }
 
     [Test]
