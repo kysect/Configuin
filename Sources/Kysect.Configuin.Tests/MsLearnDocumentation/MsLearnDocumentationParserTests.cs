@@ -22,7 +22,7 @@ public class MsLearnDocumentationParserTests
     [Test]
     public void ParseStyleRule_IDE0040_ReturnExpectedResult()
     {
-        string fileText = File.ReadAllText(Path.Combine("MsLearnDocumentation", "Resources", "Ide0040.md"));
+        string fileText = File.ReadAllText(Path.Combine("Resources", "Ide0040.md"));
         RoslynRuleId expected = RoslynRuleId.Parse("IDE0040");
 
         RoslynStyleRule roslynStyleRule = _parser.ParseStyleRule(fileText);
@@ -74,7 +74,7 @@ public class MsLearnDocumentationParserTests
     [Test]
     public void ParseQualityRule_CS1064_ReturnExpectedResult()
     {
-        string fileText = File.ReadAllText(Path.Combine("MsLearnDocumentation", "Resources", "Ca1064.md"));
+        string fileText = File.ReadAllText(Path.Combine("Resources", "Ca1064.md"));
         RoslynRuleId expected = RoslynRuleId.Parse("CA1064");
 
         RoslynQualityRule qualityRule = _parser.ParseQualityRule(fileText);

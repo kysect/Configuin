@@ -79,7 +79,7 @@ public class EditorConfigRuleParserTests
     [Test]
     public void Parse_EditorConfigFile_ReturnWithoutErrors()
     {
-        string fileText = File.ReadAllText(Path.Combine("EditorConfigFileParsing", "Resources", "Editor-config-sample.ini"));
+        string fileText = File.ReadAllText(Path.Combine("Resources", "Editor-config-sample.ini"));
 
         EditorConfigRuleSet editorConfigRuleSet = _parser.Parse(fileText);
 
