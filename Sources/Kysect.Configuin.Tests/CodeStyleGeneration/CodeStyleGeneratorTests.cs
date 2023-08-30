@@ -2,10 +2,10 @@
 using Kysect.Configuin.Core.MsLearnDocumentation;
 using Kysect.Configuin.Core.RoslynRuleModels;
 using Kysect.Configuin.Core.EditorConfigParsing;
-using Kysect.Configuin.Core.MarkdownParsing;
 using Kysect.Configuin.Core.CodeStyleGeneration;
 using Kysect.Configuin.Core.CodeStyleGeneration.Models;
 using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
+using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.CodeStyleGeneration;
@@ -19,16 +19,9 @@ public class CodeStyleGeneratorTests
     public CodeStyleGeneratorTests()
     {
         _editorConfigRuleParser = new EditorConfigRuleParser();
-        _msLearnDocumentationParser = new MsLearnDocumentationParser(new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault()));
+        _msLearnDocumentationParser = new MsLearnDocumentationParser(RoundtripRendererTextExtractor.Create());
 
-        // TODO: remove duplication
-        string pathToRoot = Path.Combine(
-            "..", // netX.0
-            "..", // Debug
-            "..", // bin
-            "..", // Kysect.Configuin.Tests
-            "..", // root
-            "ms-learn");
+        string pathToRoot = Constants.GetPathToMsDocsRoot();
 
         _repositoryPathProvider = new MsLearnDocumentationInfoLocalProvider(pathToRoot);
     }
@@ -38,11 +31,12 @@ public class CodeStyleGeneratorTests
     [Ignore("Return to this test after fixes in _msLearnDocumentationParser.Parse")]
     public void Generate_ForAllMsLearnDocumentation_FinishWithoutErrors()
     {
-        string fileText = File.ReadAllText(Path.Combine("EditorConfigFileParsing", "Resources", "Editor-config-sample.ini"));
+        string pathToIniFile = Path.Combine("Resources", "Editor-config-sample.ini");
         var sut = new CodeStyleGenerator();
 
         MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = _repositoryPathProvider.Provide();
         RoslynRules roslynRules = _msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
+        string fileText = File.ReadAllText(pathToIniFile);
         EditorConfigRuleSet editorConfigRuleSet = _editorConfigRuleParser.Parse(fileText);
 
         CodeStyleInfo codeStyleInfo = sut.Generate(editorConfigRuleSet, roslynRules);
