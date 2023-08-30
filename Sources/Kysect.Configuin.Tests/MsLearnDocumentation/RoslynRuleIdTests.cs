@@ -27,4 +27,19 @@ public class RoslynRuleIdTests
             var roslynRuleId = RoslynRuleId.Parse("QWE1234");
         });
     }
+
+    [Test]
+    public void Parse_Range_ReturnAllValueInRange()
+    {
+        string input = "CA1865-CA1867";
+
+        var range = RoslynRuleIdRange.Parse(input);
+        var roslynRuleIds = range.Enumerate().ToList();
+
+        roslynRuleIds
+            .Should().HaveCount(3)
+            .And.Contain(new RoslynRuleId(RoslynRuleType.QualityRule, 1865))
+            .And.Contain(new RoslynRuleId(RoslynRuleType.QualityRule, 1866))
+            .And.Contain(new RoslynRuleId(RoslynRuleType.QualityRule, 1867));
+    }
 }

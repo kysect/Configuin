@@ -9,12 +9,20 @@ public readonly struct RoslynRuleId
 
     public static RoslynRuleId Parse(string value)
     {
+        int ParseInt(string intAsString)
+        {
+            if (int.TryParse(intAsString, out int parsedInt))
+                return parsedInt;
+
+            throw new ConfiguinException($"Value {value} is not valid rule identifier.");
+        }
+
         // CA1234
         string qualityRulePrefix = "CA";
         if (value.StartsWith(qualityRulePrefix, StringComparison.InvariantCultureIgnoreCase))
         {
             string id = value.WithoutPrefix(qualityRulePrefix);
-            return new RoslynRuleId(RoslynRuleType.QualityRule, int.Parse(id));
+            return new RoslynRuleId(RoslynRuleType.QualityRule, ParseInt(id));
         }
 
         // IDE1234
@@ -22,7 +30,7 @@ public readonly struct RoslynRuleId
         if (value.StartsWith(styleRulePrefix, StringComparison.InvariantCultureIgnoreCase))
         {
             string id = value.WithoutPrefix(styleRulePrefix);
-            return new RoslynRuleId(RoslynRuleType.StyleRule, int.Parse(id));
+            return new RoslynRuleId(RoslynRuleType.StyleRule, ParseInt(id));
         }
 
         throw new ArgumentException($"String {value} is not valid Roslyn rule id");

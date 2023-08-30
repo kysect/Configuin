@@ -1,4 +1,3 @@
-using Kysect.CommonLib.Collections.Extensions;
 using Kysect.Configuin.Core.MarkdownParsing.Documents;
 using Kysect.Configuin.Core.MarkdownParsing.Tables;
 using Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
@@ -30,7 +29,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         // TODO: implement parsing for other info - SharpFormattingOptionsContent and DotnetFormattingOptionsContent
 
         return new RoslynRules(
-            rawInfo.QualityRuleInfos.Select(ParseQualityRule).ToList(),
+            rawInfo.QualityRuleInfos.SelectMany(ParseQualityRules).ToList(),
             rawInfo.StyleRuleInfos.SelectMany(ParseStyleRules).ToList());
     }
 
@@ -61,15 +60,6 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         return roslynStyleRuleInformationTables
             .Select(table => ConvertToRule(table, overviewText, roslynStyleRuleOptions))
             .ToList();
-    }
-
-    public RoslynStyleRule ParseStyleRule(string info)
-    {
-        IReadOnlyCollection<RoslynStyleRule> result = ParseStyleRules(info);
-        if (result.Count > 1)
-            throw new ConfiguinException("Page contains more than one rule: " + result.Select(r => r.RuleId).ToSingleString());
-
-        return result.Single();
     }
 
     private RoslynStyleRuleInformationTable ParseInformationTable(Table tableBlock)
@@ -113,7 +103,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             roslynStyleRuleOptions);
     }
 
-    public RoslynQualityRule ParseQualityRule(string info)
+    public IReadOnlyCollection<RoslynQualityRule> ParseQualityRules(string info)
     {
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(info);
         IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders();
@@ -138,14 +128,26 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         // TODO: docs contains both .NET7 and .NET8 =_=
         //MsLearnPropertyValueDescriptionTableRow isDefault = table.GetSingleValue("Enabled by default in .NET 8");
 
+        IReadOnlyCollection<RoslynRuleId> ruleIds = ParseQualityRuleTableIdRow(ruleId);
 
-        return new RoslynQualityRule(
-            RoslynRuleId.Parse(ruleId.Value),
-            // TODO: parse rule name
-            ruleName: string.Empty,
-            category.Value,
-            // TODO: parse description
-            description: string.Empty);
+        return ruleIds
+            .Select(id => new RoslynQualityRule(
+                id,
+                // TODO: parse rule name
+                ruleName: string.Empty,
+                category.Value,
+                // TODO: parse description
+                description: string.Empty))
+            .ToList();
+    }
+
+    private IReadOnlyCollection<RoslynRuleId> ParseQualityRuleTableIdRow(MsLearnPropertyValueDescriptionTableRow ruleId)
+    {
+        // TODO: remove StringComparison
+        if (ruleId.Value.Contains("-", StringComparison.InvariantCultureIgnoreCase))
+            return RoslynRuleIdRange.Parse(ruleId.Value).Enumerate().ToList();
+
+        return new[] { RoslynRuleId.Parse(ruleId.Value) };
     }
 
     private string GetStyleOverviewText(IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks)

@@ -55,9 +55,10 @@ public class MsLearnDocumentationParserTests
             string.Empty,
             new[] { expectedOption });
 
-        RoslynStyleRule roslynStyleRule = _parser.ParseStyleRule(fileText);
+        var roslynStyleRules = _parser.ParseStyleRules(fileText);
 
-        roslynStyleRule.Should().BeEquivalentTo(expected);
+        roslynStyleRules.Should().HaveCount(1)
+            .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
     }
 
     [Test]
@@ -162,7 +163,7 @@ public class MsLearnDocumentationParserTests
     }
 
     [Test]
-    public void ParseQualityRule_CS1064_ReturnExpectedResult()
+    public void ParseQualityRule_CA1064_ReturnExpectedResult()
     {
         string fileText = GetPathToCa("ca1064.md");
 
@@ -173,9 +174,30 @@ public class MsLearnDocumentationParserTests
             "Design",
             string.Empty);
 
-        RoslynQualityRule qualityRule = _parser.ParseQualityRule(fileText);
+        IReadOnlyCollection<RoslynQualityRule> qualityRule = _parser.ParseQualityRules(fileText);
 
-        qualityRule.Should().BeEquivalentTo(expected);
+        qualityRule.Should().HaveCount(1)
+            .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
+    }
+
+    [Test]
+    public void ParseQualityRule_CA1865_CA1867_ReturnExpectedResult()
+    {
+        string fileText = GetPathToCa("ca1865-ca1867.md");
+
+        // TODO: parse description
+        var expected = new RoslynQualityRule(
+            RoslynRuleId.Parse("CA1865"),
+            // TODO: parse name?
+            ruleName: string.Empty,
+            category: "Performance",
+            // TODO: parse description?
+            description: string.Empty);
+
+        IReadOnlyCollection<RoslynQualityRule> qualityRules = _parser.ParseQualityRules(fileText);
+
+        qualityRules.Should().HaveCount(3);
+        qualityRules.ElementAt(0).Should().BeEquivalentTo(expected);
     }
 
     // TODO: remove ignore
