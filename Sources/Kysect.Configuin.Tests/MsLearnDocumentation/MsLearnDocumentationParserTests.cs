@@ -11,12 +11,12 @@ namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MsLearnDocumentationParserTests
 {
-    private MsLearnDocumentationParser _parser = new(new PlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
+    private MsLearnDocumentationParser _parser = new MsLearnDocumentationParser(new PlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
 
     [Test]
     public void ParseStyleRule_IDE0040_ReturnExpectedResult()
     {
-        string fileText = File.ReadAllText(Path.Combine("Resources", "Ide0040.md"));
+        string fileText = GetIdeDescription("Ide0040.md");
 
         var codeSample = """
                          // dotnet_style_require_accessibility_modifiers = always
@@ -63,7 +63,7 @@ public class MsLearnDocumentationParserTests
     [Test]
     public void ParseStyleRule_IDE0003_0009_ReturnExpectedResult()
     {
-        string fileText = File.ReadAllText(Path.Combine("Resources", "ide0003-ide0009.md"));
+        string fileText = GetIdeDescription( "ide0003-ide0009.md");
 
         var options = new RoslynStyleRuleOption[]
         {
@@ -110,7 +110,8 @@ public class MsLearnDocumentationParserTests
     [Test]
     public void ParseQualityRule_CS1064_ReturnExpectedResult()
     {
-        string fileText = File.ReadAllText(Path.Combine("Resources", "Ca1064.md"));
+        string fileText = GetPathToCa("Ca1064.md");
+
         // TODO: parse description
         var expected = new RoslynQualityRule(
             RoslynRuleId.Parse("CA1064"),
@@ -135,5 +136,17 @@ public class MsLearnDocumentationParserTests
 
         // TODO: add asserts
         Assert.Pass();
+    }
+
+    private static string GetIdeDescription(string fileName)
+    {
+        string path = Path.Combine(new MsLearnRepositoryPathProvider(Constants.GetPathToMsDocsRoot()).GetPathToStyleRules(), fileName);
+        return File.ReadAllText(path);
+    }
+
+    private static string GetPathToCa(string fileName)
+    {
+        string path = Path.Combine(new MsLearnRepositoryPathProvider(Constants.GetPathToMsDocsRoot()).GetPathToQualityRules(), fileName);
+        return File.ReadAllText(path);
     }
 }
