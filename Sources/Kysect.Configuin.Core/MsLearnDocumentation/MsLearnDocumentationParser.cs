@@ -144,6 +144,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         CodeBlock? csharpCodeBlock = codeBlocks
             .OfType<FencedCodeBlock>()
             .FirstOrDefault(cb => cb.Info == "csharp");
+        // TODO: use null instead of empty line
         string csharpCodeSample = csharpCodeBlock is null
                                     ? ""
                                     : _textExtractor.ExtractText(csharpCodeBlock);
