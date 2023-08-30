@@ -1,3 +1,4 @@
+using Kysect.CommonLib.Collections.Extensions;
 using Kysect.Configuin.Core.MarkdownParsing.Documents;
 using Kysect.Configuin.Core.MarkdownParsing.Tables;
 using Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
@@ -30,10 +31,10 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
         return new RoslynRules(
             rawInfo.QualityRuleInfos.Select(ParseQualityRule).ToList(),
-            rawInfo.StyleRuleInfos.Select(ParseStyleRule).ToList());
+            rawInfo.StyleRuleInfos.SelectMany(ParseStyleRules).ToList());
     }
 
-    public RoslynStyleRule ParseStyleRule(string info)
+    public IReadOnlyCollection<RoslynStyleRule> ParseStyleRules(string info)
     {
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(info);
         IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders();
@@ -41,14 +42,38 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         if (markdownHeadedBlocks.Count == 0)
             throw new ConfiguinException("Style rule markdown file does not contains any heading blocks. Cannot parse description");
 
-        MarkdownHeadedBlock markdownHeadedBlock = markdownHeadedBlocks.First();
-        if (markdownHeadedBlock.Content.Count != 1)
-            throw new ConfiguinException($"Style rule description block contains unexpected child count. Expected 1, but was {markdownHeadedBlock.Content.Count}");
+        var ruleDescriptionTables = markdownHeadedBlocks
+            .First()
+            .Content
+            .OfType<Table>()
+            .ToList();
 
-        Block block = markdownHeadedBlock.Content.Single();
-        if (block is not Table tableBlock)
-            throw new ConfiguinException($"Style rule description block must contains Table block but was {block.GetType()}");
+        if (ruleDescriptionTables.Count == 0)
+            throw new ConfiguinException($"Style rule description block does not contains child table.");
 
+        var roslynStyleRuleInformationTables = ruleDescriptionTables
+            .Select(ParseInformationTable)
+            .ToList();
+
+        string overviewText = GetStyleOverviewText(markdownHeadedBlocks);
+        IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = ParseOptions(markdownHeadedBlocks);
+
+        return roslynStyleRuleInformationTables
+            .Select(table => ConvertToRule(table, overviewText, roslynStyleRuleOptions))
+            .ToList();
+    }
+
+    public RoslynStyleRule ParseStyleRule(string info)
+    {
+        IReadOnlyCollection<RoslynStyleRule> result = ParseStyleRules(info);
+        if (result.Count > 1)
+            throw new ConfiguinException("Page contains more than one rule: " + result.Select(r => r.RuleId).ToSingleString());
+
+        return result.Single();
+    }
+
+    private RoslynStyleRuleInformationTable ParseInformationTable(Table tableBlock)
+    {
         MarkdownTableContent markdownTableContent = _markdownTableParser.ParseToSimpleContent(tableBlock);
         MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
 
@@ -59,16 +84,31 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         MsLearnPropertyValueDescriptionTableRow applicableLanguages = table.GetSingleValue("Applicable languages");
         // TODO: return as optional parameter. Not all rules contains it
         //MsLearnPropertyValueDescriptionTableRow introducedVersion = table.GetSingleValue("Introduced version");
-        IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> options = table.FindValues("Options");
+        var options = table
+            .FindValues("Options")
+            .Select(o => o.Value)
+            .ToList();
 
-        string overviewText = GetStyleOverviewText(markdownHeadedBlocks);
-        IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = ParseOptions(markdownHeadedBlocks);
-
-        return new RoslynStyleRule(
+        return new RoslynStyleRuleInformationTable(
             RoslynRuleId.Parse(ruleId.Value),
             title.Value,
             category.Value,
+            subcategory.Value,
+            applicableLanguages.Value,
+            options);
+    }
+
+    private RoslynStyleRule ConvertToRule(
+        RoslynStyleRuleInformationTable roslynStyleRuleInformationTable,
+        string overviewText,
+        IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions)
+    {
+        return new RoslynStyleRule(
+            roslynStyleRuleInformationTable.RuleId,
+            roslynStyleRuleInformationTable.Title,
+            roslynStyleRuleInformationTable.Category,
             overviewText,
+            // TODO: support this?
             example: string.Empty,
             roslynStyleRuleOptions);
     }
