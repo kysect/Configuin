@@ -2,28 +2,28 @@
 using Kysect.Configuin.Core.MsLearnDocumentation;
 using Kysect.Configuin.Core.RoslynRuleModels;
 using Kysect.Configuin.Core.EditorConfigParsing;
-using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MarkdownParsing;
 using Kysect.Configuin.Core.CodeStyleGeneration;
 using Kysect.Configuin.Core.CodeStyleGeneration.Models;
+using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.CodeStyleGeneration;
 
 public class CodeStyleGeneratorTests
 {
-    private MsLearnDocumentationParser _msLearnDocumentationParser;
+    private readonly MsLearnDocumentationParser _msLearnDocumentationParser;
     private readonly EditorConfigRuleParser _editorConfigRuleParser;
-    private MsLearnDocumentationInfoLocalProvider _repositoryPathProvider;
+    private readonly MsLearnDocumentationInfoLocalProvider _repositoryPathProvider;
 
     public CodeStyleGeneratorTests()
     {
         _editorConfigRuleParser = new EditorConfigRuleParser();
-        _msLearnDocumentationParser = new MsLearnDocumentationParser(new RoundtripRendererPlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
+        _msLearnDocumentationParser = new MsLearnDocumentationParser(new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault()));
 
         // TODO: remove duplication
         string pathToRoot = Path.Combine(
-            "..", // net7.0
+            "..", // netX.0
             "..", // Debug
             "..", // bin
             "..", // Kysect.Configuin.Tests
