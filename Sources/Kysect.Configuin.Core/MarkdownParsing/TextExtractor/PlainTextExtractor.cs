@@ -10,6 +10,11 @@ public class PlainTextExtractor : IMarkdownTextExtractor
 {
     private readonly MarkdownPipeline _markdownPipeline;
 
+    public static PlainTextExtractor Create()
+    {
+        return new PlainTextExtractor(MarkdownPipelineProvider.GetDefault());
+    }
+
     public PlainTextExtractor(MarkdownPipeline markdownPipeline)
     {
         _markdownPipeline = markdownPipeline;
