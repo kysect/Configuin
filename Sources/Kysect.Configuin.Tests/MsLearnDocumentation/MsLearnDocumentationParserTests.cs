@@ -16,7 +16,7 @@ public class MsLearnDocumentationParserTests
     [SetUp]
     public void Setup()
     {
-        _parser = new MsLearnDocumentationParser(new RoundtripRendererPlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
+        _parser = new MsLearnDocumentationParser(new PlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
     }
 
     [Test]
@@ -51,9 +51,24 @@ public class MsLearnDocumentationParserTests
         roslynStyleRule.Options.Single().DefaultValue
             .Should().Be("for_non_interface_members");
 
-        // TODO: should add validation for code samples
-        //roslynStyleRule.Options.Single().CsharpCodeSample
-        //    .Should().Be("");
+        // TODO: add method Be() with ignoreEndOfLine or smth like this
+        var codeSample = """
+                         // dotnet_style_require_accessibility_modifiers = always
+                         // dotnet_style_require_accessibility_modifiers = for_non_interface_members
+                         class MyClass
+                         {
+                             private const string thisFieldIsConst = "constant";
+                         }
+
+                         // dotnet_style_require_accessibility_modifiers = never
+                         class MyClass
+                         {
+                             const string thisFieldIsConst = "constant";
+                         }
+                         """.Replace("\r\n", "\n", StringComparison.InvariantCultureIgnoreCase);
+
+        roslynStyleRule.Options.Single().CsharpCodeSample
+            .Should().Be(codeSample);
     }
 
     [Test]

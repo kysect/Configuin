@@ -126,7 +126,7 @@ public class MsLearnTableParserTests
 
     private MarkdownTableContent ConvertToMarkdownTable(string content)
     {
-        var parser = new MarkdownTableParser(new RoundtripRendererPlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
+        var parser = new MarkdownTableParser(new PlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(content);
         Table table = markdownDocument.Single().To<Table>();
         return parser.ParseToSimpleContent(table);
