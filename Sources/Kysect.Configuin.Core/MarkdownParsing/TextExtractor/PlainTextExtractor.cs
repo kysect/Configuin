@@ -30,6 +30,7 @@ public class PlainTextExtractor : IMarkdownTextExtractor
 
         streamWriter.Flush();
         string result = Encoding.ASCII.GetString(memoryStream.ToArray());
+        // KB: HtmlRenderer change '"' to "&quot;". Decode will change in back
         return HttpUtility.HtmlDecode(result.Trim());
     }
 }

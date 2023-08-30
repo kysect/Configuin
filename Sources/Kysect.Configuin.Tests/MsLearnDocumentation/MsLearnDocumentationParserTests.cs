@@ -51,6 +51,7 @@ public class MsLearnDocumentationParserTests
         roslynStyleRule.Options.Single().DefaultValue
             .Should().Be("for_non_interface_members");
 
+        // TODO: add method Be() with ignoreEndOfLine or smth like this
         var codeSample = """
                          // dotnet_style_require_accessibility_modifiers = always
                          // dotnet_style_require_accessibility_modifiers = for_non_interface_members
