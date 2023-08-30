@@ -1,11 +1,9 @@
 ﻿using FluentAssertions;
 using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.Configuin.Core.MarkdownParsing;
 using Kysect.Configuin.Core.MarkdownParsing.Documents;
 using Kysect.Configuin.Core.MarkdownParsing.Tables;
 using Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
 using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
-using Markdig;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
 using NUnit.Framework;
@@ -14,14 +12,7 @@ namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MarkdownTableParserTests
 {
-    private MarkdownTableParser _parser;
-
-    [SetUp]
-    public void Setup()
-    {
-        MarkdownPipeline markdownPipeline = MarkdownPipelineProvider.GetDefault();
-        _parser = new MarkdownTableParser(new PlainTextExtractor(markdownPipeline));
-    }
+    private readonly MarkdownTableParser _parser = new (PlainTextExtractor.Create());
 
     [Test]
     public void ParseToSimpleContent_ForSimpleTable_ReturnExpectedResult()
@@ -33,27 +24,19 @@ public class MarkdownTableParserTests
                     | **Category**                        | [Design](design-warnings.md) |
                     | **Fix is breaking or non-breaking** | Breaking                     |
                     """;
+        var expected = new MarkdownTableContent(
+            headers: new[] { string.Empty, "Value" },
+            rows: new[]
+            {
+                new[] { "Rule ID", "CA1000" },
+                new[] { "Category", "Design" },
+                new[] { "Fix is breaking or non-breaking", "Breaking" }
+            });
 
         Table table = ParseToTable(input);
-
         MarkdownTableContent markdownTableContent = _parser.ParseToSimpleContent(table);
 
-        markdownTableContent.Headers
-            .Should().NotBeNull()
-            .And.HaveCount(2)
-            .And.Equal(string.Empty, "Value");
-
-        markdownTableContent.Rows
-            .Should().HaveCount(3);
-
-        markdownTableContent.Rows[0]
-            .Should().Equal("Rule ID", "CA1000");
-
-        markdownTableContent.Rows[1]
-            .Should().Equal("Category", "Design");
-
-        markdownTableContent.Rows[2]
-            .Should().Equal("Fix is breaking or non-breaking", "Breaking");
+        markdownTableContent.Should().BeEquivalentTo(expected);
     }
 
     private Table ParseToTable(string content)

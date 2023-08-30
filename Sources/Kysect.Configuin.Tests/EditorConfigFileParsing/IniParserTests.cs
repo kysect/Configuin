@@ -33,10 +33,11 @@ public class IniParserTests
     [Test]
     public void Parse_EditorConfigFile_ParsedWithoutErrors()
     {
-        string fileText = File.ReadAllText(Path.Combine("EditorConfigFileParsing", "Resources", "Editor-config-sample.ini"));
+        string fileText = File.ReadAllText(Path.Combine("Resources", "Editor-config-sample.ini"));
 
         IReadOnlyCollection<IniFileLine> result = _parser.Parse(fileText);
 
+        // TODO: add more asserts
         result.Should().HaveCount(400);
     }
 }

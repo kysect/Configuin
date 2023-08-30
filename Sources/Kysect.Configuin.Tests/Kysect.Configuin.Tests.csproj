@@ -23,13 +23,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="EditorConfigFileParsing\Resources\Editor-config-sample.ini">
+    <None Update="Resources\Editor-config-sample.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="MsLearnDocumentation\Resources\Ca1064.md">
+    <None Update="Resources\Ca1064.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="MsLearnDocumentation\Resources\Ide0040.md">
+    <None Update="Resources\Ide0040.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -7,7 +7,6 @@ using Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
 using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
 using Kysect.Configuin.Core.MsLearnDocumentation.Tables;
-using Kysect.Configuin.Tests.MsLearnDocumentation.Asserts;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
 using NUnit.Framework;
@@ -35,24 +34,19 @@ public class MsLearnTableParserTests
                     | **Fix is breaking or non-breaking** | Breaking                     |
                     """;
 
-        MarkdownTableContent table = ConvertToMarkdownTable(input);
+        var expected = new MsLearnPropertyValueDescriptionTable(
+            new Dictionary<string, IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>>()
+            {
+                {"Rule ID", new []{new MsLearnPropertyValueDescriptionTableRow("CA1000") }},
+                {"Category", new []{new MsLearnPropertyValueDescriptionTableRow("Design") }},
+                {"Fix is breaking or non-breaking", new []{new MsLearnPropertyValueDescriptionTableRow("Breaking") }},
+            });
 
+
+        MarkdownTableContent table = ConvertToMarkdownTable(input);
         MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
 
-        msLearnTableContent.Properties
-            .Should().HaveCount(3);
-
-        msLearnTableContent.Properties
-            .Should().ContainKey("Rule ID")
-            .WhoseValue.Should().Contain("CA1000");
-
-        msLearnTableContent.Properties
-            .Should().ContainKey("Category")
-            .WhoseValue.Should().Contain("Design");
-
-        msLearnTableContent.Properties
-            .Should().ContainKey("Fix is breaking or non-breaking")
-            .WhoseValue.Should().Contain("Breaking");
+        msLearnTableContent.Should().BeEquivalentTo(expected);
     }
 
     [Test]
@@ -70,25 +64,25 @@ public class MsLearnTableParserTests
                     | **Applicable languages** | C# and Visual Basic                                               |
                     """;
 
-        MarkdownTableContent table = ConvertToMarkdownTable(input);
+        var expected = new MsLearnPropertyValueDescriptionTable(
+            new Dictionary<string, IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>>()
+            {
+                {"Rule ID", new []{new MsLearnPropertyValueDescriptionTableRow("IDE0058") }},
+                {"Title", new []{new MsLearnPropertyValueDescriptionTableRow("Remove unnecessary expression value") }},
+                {"Category", new []{new MsLearnPropertyValueDescriptionTableRow("Style") }},
+                {"Subcategory", new []{new MsLearnPropertyValueDescriptionTableRow("Unnecessary code rules") }},
+                {"Options", new []
+                {
+                    new MsLearnPropertyValueDescriptionTableRow("csharp_style_unused_value_expression_statement_preference"),
+                    new MsLearnPropertyValueDescriptionTableRow("visual_basic_style_unused_value_expression_statement_preference"),
+                }},
+                {"Applicable languages", new []{new MsLearnPropertyValueDescriptionTableRow("C# and Visual Basic") }}
+            });
 
+        MarkdownTableContent table = ConvertToMarkdownTable(input);
         MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
 
-        msLearnTableContent.Properties
-            .Should().HaveCount(6);
-
-        msLearnTableContent.Properties
-            .Should().ContainKey("Subcategory")
-            .WhoseValue.Should().Contain("Unnecessary code rules");
-
-        msLearnTableContent.Properties
-            .Should().ContainKey("Options")
-            .WhoseValue.Should().Contain("csharp_style_unused_value_expression_statement_preference")
-            .And.Contain("visual_basic_style_unused_value_expression_statement_preference");
-
-        msLearnTableContent.Properties
-            .Should().ContainKey("Applicable languages")
-            .WhoseValue.Should().Contain("C# and Visual Basic");
+        msLearnTableContent.Should().BeEquivalentTo(expected);
     }
 
     [Test]
@@ -103,25 +97,23 @@ public class MsLearnTableParserTests
                     | **Default option value** | `true`                                                           |                                  |
                     """;
 
+        var expected = new MsLearnPropertyValueDescriptionTable(
+            new Dictionary<string, IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>>()
+            {
+                {"Option name", new []{new MsLearnPropertyValueDescriptionTableRow("dotnet_style_prefer_is_null_check_over_reference_equality_method")}},
+                {"Option values", new []
+                {
+                    new MsLearnPropertyValueDescriptionTableRow("true", "Prefer is null check"),
+                    new MsLearnPropertyValueDescriptionTableRow("false", "Prefer reference equality method")
+                }},
+                {"Default option value", new []{new MsLearnPropertyValueDescriptionTableRow("true") }},
+            });
+
         MarkdownTableContent table = ConvertToMarkdownTable(input);
 
         MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
 
-        msLearnTableContent.Properties
-            .Should().HaveCount(3);
-
-        msLearnTableContent.Properties
-            .Should().ContainKey("Option name")
-            .WhoseValue.Should().Contain("dotnet_style_prefer_is_null_check_over_reference_equality_method");
-
-        msLearnTableContent.Properties
-            .Should().ContainKey("Option values")
-            .WhoseValue.Should().Contain("true", "Prefer is null check")
-            .And.Contain("false", "Prefer reference equality method");
-
-        msLearnTableContent.Properties
-            .Should().ContainKey("Default option value")
-            .WhoseValue.Should().Contain("true");
+        msLearnTableContent.Should().BeEquivalentTo(expected);
     }
 
     private MarkdownTableContent ConvertToMarkdownTable(string content)
