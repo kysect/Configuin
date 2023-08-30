@@ -16,7 +16,7 @@ public class MsLearnDocumentationParserTests
     [Test]
     public void ParseStyleRule_IDE0040_ReturnExpectedResult()
     {
-        string fileText = GetIdeDescription("Ide0040.md");
+        string fileText = GetIdeDescription("ide0040.md");
 
         var codeSample = """
                          // dotnet_style_require_accessibility_modifiers = always
@@ -164,7 +164,7 @@ public class MsLearnDocumentationParserTests
     [Test]
     public void ParseQualityRule_CS1064_ReturnExpectedResult()
     {
-        string fileText = GetPathToCa("Ca1064.md");
+        string fileText = GetPathToCa("ca1064.md");
 
         // TODO: parse description
         var expected = new RoslynQualityRule(
