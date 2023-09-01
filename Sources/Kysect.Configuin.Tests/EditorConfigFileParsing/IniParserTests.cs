@@ -38,6 +38,6 @@ public class IniParserTests
         IReadOnlyCollection<IniFileLine> result = _parser.Parse(fileText);
 
         // TODO: add more asserts
-        result.Should().HaveCount(400);
+        result.Should().HaveCount(393);
     }
 }

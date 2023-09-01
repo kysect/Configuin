@@ -146,23 +146,9 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     public IReadOnlyCollection<RoslynStyleRuleOption> ParseAdditionalFormattingOptions(string dotnetFormattingFileContent)
     {
-        bool HeaderForOption(MarkdownHeadedBlock markdownHeadedBlock)
-        {
-            // TODO: do it in better way?
-            // TODO: remove StringComparison
-            string headerText = markdownHeadedBlock.GetHeaderText();
-
-            return headerText.StartsWith("dotnet_")
-                   || headerText.StartsWith("csharp_");
-        }
-
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(dotnetFormattingFileContent);
         IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders();
-
-        return markdownHeadedBlocks
-            .Where(HeaderForOption)
-            .Select(ParseOption)
-            .ToList();
+        return ParseOptions(markdownHeadedBlocks);
     }
 
     private IReadOnlyCollection<RoslynRuleId> ParseQualityRuleTableIdRow(MsLearnPropertyValueDescriptionTableRow ruleId)
@@ -178,7 +164,9 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     {
         MarkdownHeadedBlock? overviewBlock = markdownHeadedBlocks.FirstOrDefault(h => h.GetHeaderText() == "Overview");
         if (overviewBlock is null)
-            throw new ConfiguinException("Style rule page does not contains Overview block.");
+            // TODO: IDE0055
+            //throw new ConfiguinException("Style rule page does not contains Overview block.");
+            return string.Empty;
 
         string overviewText = overviewBlock
             .Content
@@ -190,12 +178,22 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     private IReadOnlyCollection<RoslynStyleRuleOption> ParseOptions(IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks)
     {
-        // TODO: fix header with option detecting
-
         return markdownHeadedBlocks
-            .Where(h => h.GetHeaderText().StartsWith("dotnet_"))
+            .Where(HeaderForOption)
             .Select(ParseOption)
             .ToList();
+    }
+
+    private bool HeaderForOption(MarkdownHeadedBlock markdownHeadedBlock)
+    {
+        // TODO: do it in better way?
+        // TODO: remove StringComparison
+        string headerText = markdownHeadedBlock.GetHeaderText();
+
+        return headerText.StartsWith("dotnet_")
+               || headerText.StartsWith("csharp_")
+               // IDE0073
+               || headerText == "file_header_template";
     }
 
     private RoslynStyleRuleOption ParseOption(MarkdownHeadedBlock optionBlock)

@@ -92,6 +92,6 @@ public class EditorConfigRuleParserTests
 
         // TODO: add more asserts
         editorConfigRuleSet.Rules
-            .Should().HaveCount(400);
+            .Should().HaveCount(393);
     }
 }

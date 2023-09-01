@@ -295,6 +295,36 @@ public class MsLearnDocumentationParserTests
         roslynStyleRuleOptions.ElementAt(0).Should().BeEquivalentTo(csharp_new_line_before_open_brace);
     }
 
+    [Test]
+    [Ignore("Issue #33")]
+    public void Parse_CodeStyleRefactoringOptions_ReturnExpectedResult()
+    {
+        string pathToFile = string.Empty;
+        string fileContent = File.ReadAllText(pathToFile);
+        var dotnet_style_operator_placement_when_wrapping = new RoslynStyleRuleOption(
+            "dotnet_style_operator_placement_when_wrapping",
+            new[]
+            {
+                new RoslynStyleRuleOptionValue("end_of_line", "Place operator at the end of a line."),
+                new RoslynStyleRuleOptionValue("beginning_of_line", "Place operator on a new line."),
+            },
+            "beginning_of_line",
+            """
+            // dotnet_style_operator_placement_when_wrapping = end_of_line
+            if (true && 
+                true)
+            
+            // dotnet_style_operator_placement_when_wrapping = beginning_of_line
+            if (true
+                && true)
+            """);
+
+        IReadOnlyCollection<RoslynStyleRuleOption> codeStyleRefactoringOptions = _parser.ParseAdditionalFormattingOptions(fileContent);
+
+        codeStyleRefactoringOptions.Should().HaveCount(1);
+        codeStyleRefactoringOptions.ElementAt(0).Should().BeEquivalentTo(dotnet_style_operator_placement_when_wrapping);
+    }
+
     // TODO: remove ignore
     [Test]
     [Ignore("Need to fix all related problems")]
