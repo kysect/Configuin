@@ -28,6 +28,9 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     {
         // TODO: implement parsing for other info - SharpFormattingOptionsContent and DotnetFormattingOptionsContent
 
+        IReadOnlyCollection<RoslynStyleRuleOption> dotnetFormattingOptions = ParseAdditionalFormattingOptions(rawInfo.DotnetFormattingOptionsContent);
+        IReadOnlyCollection<RoslynStyleRuleOption> sharpFormattingOptions = ParseAdditionalFormattingOptions(rawInfo.SharpFormattingOptionsContent);
+
         return new RoslynRules(
             rawInfo.QualityRuleInfos.SelectMany(ParseQualityRules).ToList(),
             rawInfo.StyleRuleInfos.SelectMany(ParseStyleRules).ToList());
@@ -141,6 +144,27 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             .ToList();
     }
 
+    public IReadOnlyCollection<RoslynStyleRuleOption> ParseAdditionalFormattingOptions(string dotnetFormattingFileContent)
+    {
+        bool HeaderForOption(MarkdownHeadedBlock markdownHeadedBlock)
+        {
+            // TODO: do it in better way?
+            // TODO: remove StringComparison
+            string headerText = markdownHeadedBlock.GetHeaderText();
+
+            return headerText.StartsWith("dotnet_")
+                   || headerText.StartsWith("csharp_");
+        }
+
+        MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(dotnetFormattingFileContent);
+        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders();
+
+        return markdownHeadedBlocks
+            .Where(HeaderForOption)
+            .Select(ParseOption)
+            .ToList();
+    }
+
     private IReadOnlyCollection<RoslynRuleId> ParseQualityRuleTableIdRow(MsLearnPropertyValueDescriptionTableRow ruleId)
     {
         // TODO: remove StringComparison
@@ -194,12 +218,12 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
         MsLearnPropertyValueDescriptionTableRow optionName = table.GetSingleValue("Option name");
         IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> optionValues = table.FindValues("Option values");
-        MsLearnPropertyValueDescriptionTableRow defaultValue = table.GetSingleValue("Default option value");
+        MsLearnPropertyValueDescriptionTableRow? defaultValue = table.FindValues("Default option value").SingleOrDefault();
 
         return new RoslynStyleRuleOption(
             optionName.Value,
             optionValues.Select(v => new RoslynStyleRuleOptionValue(v.Value, v.Description)).ToList(),
-            defaultValue.Value,
+            defaultValue?.Value,
             csharpCodeSample);
     }
 }
