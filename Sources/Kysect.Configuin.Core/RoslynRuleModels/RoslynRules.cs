@@ -23,6 +23,8 @@ public class RoslynRules
     {
         return StyleRules
             .SelectMany(r => r.Options)
+            .Concat(DotnetFormattingOptions)
+            .Concat(SharpFormattingOptions)
             .ToList();
     }
 }

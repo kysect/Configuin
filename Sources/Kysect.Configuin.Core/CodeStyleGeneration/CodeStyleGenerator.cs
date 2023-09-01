@@ -13,6 +13,8 @@ public class CodeStyleGenerator : ICodeStyleGenerator
         IReadOnlyCollection<IEditorConfigRule> notProcessedRules = editorConfigRuleSet.Rules;
         IReadOnlyCollection<RoslynStyleRuleOption> optionsFromDocs = roslynRules.GetOptions();
 
+        notProcessedRules = notProcessedRules.Where(IsSupported).ToList();
+
         // TODO: support in some way
         notProcessedRules = notProcessedRules.Where(r => r is not GeneralEditorConfigRule).ToList();
 
@@ -30,6 +32,7 @@ public class CodeStyleGenerator : ICodeStyleGenerator
             .OfType<RoslynSeverityEditorConfigRule>()
             .Select(r => ParseRule(r, roslynOptionEditorConfigRules, roslynRules))
             .ToList();
+
         notProcessedRules = notProcessedRules.Where(r => r is not RoslynSeverityEditorConfigRule).ToList();
 
         if (notProcessedRules.Any())
@@ -43,6 +46,18 @@ public class CodeStyleGenerator : ICodeStyleGenerator
         }
 
         return new CodeStyleInfo(elements);
+    }
+
+    private bool IsSupported(IEditorConfigRule rule)
+    {
+        // TODO: support parsing for this rule
+        if (rule is RoslynSeverityEditorConfigRule severityEditorConfigRule
+            && severityEditorConfigRule.RuleId.Equals(new RoslynRuleId(RoslynRuleType.StyleRule, 1006)))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     // TODO: Rework naming
