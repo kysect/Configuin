@@ -11,7 +11,9 @@ namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MsLearnDocumentationParserTests
 {
-    private MsLearnDocumentationParser _parser = new MsLearnDocumentationParser(new PlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
+    private static readonly MsLearnRepositoryPathProvider MsLearnRepositoryPathProvider = new MsLearnRepositoryPathProvider(Constants.GetPathToMsDocsRoot());
+
+    private readonly MsLearnDocumentationParser _parser = new MsLearnDocumentationParser(new PlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
 
     [Test]
     public void ParseStyleRule_IDE0040_ReturnExpectedResult()
@@ -200,6 +202,99 @@ public class MsLearnDocumentationParserTests
         qualityRules.ElementAt(0).Should().BeEquivalentTo(expected);
     }
 
+    [Test]
+    public void Parse_DotnetFormattingOptions_ReturnExpectedResult()
+    {
+        string pathToDotnetFormattingFile = MsLearnRepositoryPathProvider.GetPathToDotnetFormattingFile();
+        string fileContent = File.ReadAllText(pathToDotnetFormattingFile);
+
+        IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = _parser.ParseAdditionalFormattingOptions(fileContent);
+
+        var dotnet_sort_system_directives_first = new RoslynStyleRuleOption(
+            "dotnet_sort_system_directives_first",
+            new []
+            {
+                new RoslynStyleRuleOptionValue("true", "Sort System.* using directives alphabetically, and place them before other using directives."),
+                new RoslynStyleRuleOptionValue("false", "Do not place System.* using directives before other using directives.")
+            },
+            "true",
+            """
+            // dotnet_sort_system_directives_first = true
+            using System.Collections.Generic;
+            using System.Threading.Tasks;
+            using Octokit;
+            
+            // dotnet_sort_system_directives_first = false
+            using System.Collections.Generic;
+            using Octokit;
+            using System.Threading.Tasks;
+            """);
+
+        var dotnet_separate_import_directive_groups = new RoslynStyleRuleOption(
+            "dotnet_separate_import_directive_groups",
+            new[]
+            {
+                new RoslynStyleRuleOptionValue("true", "Place a blank line between using directive groups."),
+                new RoslynStyleRuleOptionValue("false", "Do not place a blank line between using directive groups.")
+            },
+            "false",
+            """
+            // dotnet_separate_import_directive_groups = true
+            using System.Collections.Generic;
+            using System.Threading.Tasks;
+            
+            using Octokit;
+            
+            // dotnet_separate_import_directive_groups = false
+            using System.Collections.Generic;
+            using System.Threading.Tasks;
+            using Octokit;
+            """);
+
+
+        roslynStyleRuleOptions.Should().HaveCount(2);
+        roslynStyleRuleOptions.ElementAt(0).Should().BeEquivalentTo(dotnet_sort_system_directives_first);
+        roslynStyleRuleOptions.ElementAt(1).Should().BeEquivalentTo(dotnet_separate_import_directive_groups);
+    }
+
+    [Test]
+    public void Parse_CsharpFormattingOptions_ReturnExpectedResult()
+    {
+        string pathToFile = MsLearnRepositoryPathProvider.GetPathToSharpFormattingFile();
+        string fileContent = File.ReadAllText(pathToFile);
+        var csharp_new_line_before_open_brace = new RoslynStyleRuleOption(
+            "csharp_new_line_before_open_brace",
+            new []
+            {
+                new RoslynStyleRuleOptionValue("all", "Require braces to be on a new line for all expressions (\"Allman\" style)."),
+                new RoslynStyleRuleOptionValue("none", "Require braces to be on the same line for all expressions (\"K&R\")."),
+                new RoslynStyleRuleOptionValue("accessors, anonymous_methods, anonymous_types, control_blocks, events, indexers,lambdas, local_functions, methods, object_collection_array_initializers, properties, types", "Require braces to be on a new line for the specified code element (\"Allman\" style)."),
+            },
+            "all",
+            """
+            // csharp_new_line_before_open_brace = all
+            void MyMethod()
+            {
+                if (...)
+                {
+                    ...
+                }
+            }
+            
+            // csharp_new_line_before_open_brace = none
+            void MyMethod() {
+                if (...) {
+                    ...
+                }
+            }
+            """);
+
+        IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = _parser.ParseAdditionalFormattingOptions(fileContent);
+
+        roslynStyleRuleOptions.Should().HaveCount(37);
+        roslynStyleRuleOptions.ElementAt(0).Should().BeEquivalentTo(csharp_new_line_before_open_brace);
+    }
+
     // TODO: remove ignore
     [Test]
     [Ignore("Need to fix all related problems")]
@@ -216,13 +311,13 @@ public class MsLearnDocumentationParserTests
 
     private static string GetIdeDescription(string fileName)
     {
-        string path = Path.Combine(new MsLearnRepositoryPathProvider(Constants.GetPathToMsDocsRoot()).GetPathToStyleRules(), fileName);
+        string path = Path.Combine(MsLearnRepositoryPathProvider.GetPathToStyleRules(), fileName);
         return File.ReadAllText(path);
     }
 
     private static string GetPathToCa(string fileName)
     {
-        string path = Path.Combine(new MsLearnRepositoryPathProvider(Constants.GetPathToMsDocsRoot()).GetPathToQualityRules(), fileName);
+        string path = Path.Combine(MsLearnRepositoryPathProvider.GetPathToQualityRules(), fileName);
         return File.ReadAllText(path);
     }
 }
