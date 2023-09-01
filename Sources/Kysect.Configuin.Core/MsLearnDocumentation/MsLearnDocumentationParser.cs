@@ -26,14 +26,14 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     public RoslynRules Parse(MsLearnDocumentationRawInfo rawInfo)
     {
-        // TODO: implement parsing for other info - SharpFormattingOptionsContent and DotnetFormattingOptionsContent
-
         IReadOnlyCollection<RoslynStyleRuleOption> dotnetFormattingOptions = ParseAdditionalFormattingOptions(rawInfo.DotnetFormattingOptionsContent);
         IReadOnlyCollection<RoslynStyleRuleOption> sharpFormattingOptions = ParseAdditionalFormattingOptions(rawInfo.SharpFormattingOptionsContent);
 
         return new RoslynRules(
             rawInfo.QualityRuleInfos.SelectMany(ParseQualityRules).ToList(),
-            rawInfo.StyleRuleInfos.SelectMany(ParseStyleRules).ToList());
+            rawInfo.StyleRuleInfos.SelectMany(ParseStyleRules).ToList(),
+            dotnetFormattingOptions,
+            sharpFormattingOptions);
     }
 
     public IReadOnlyCollection<RoslynStyleRule> ParseStyleRules(string info)
