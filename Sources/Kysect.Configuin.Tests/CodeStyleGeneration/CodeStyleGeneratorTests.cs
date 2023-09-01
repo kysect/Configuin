@@ -19,16 +19,14 @@ public class CodeStyleGeneratorTests
     public CodeStyleGeneratorTests()
     {
         _editorConfigRuleParser = new EditorConfigRuleParser();
-        _msLearnDocumentationParser = new MsLearnDocumentationParser(RoundtripRendererTextExtractor.Create());
+        _msLearnDocumentationParser = new MsLearnDocumentationParser(PlainTextExtractor.Create());
 
         string pathToRoot = Constants.GetPathToMsDocsRoot();
 
         _repositoryPathProvider = new MsLearnDocumentationInfoLocalProvider(pathToRoot);
     }
 
-    // TODO: remove ignore
     [Test]
-    [Ignore("Return to this test after fixes in _msLearnDocumentationParser.Parse")]
     public void Generate_ForAllMsLearnDocumentation_FinishWithoutErrors()
     {
         string pathToIniFile = Path.Combine("Resources", "Editor-config-sample.ini");
