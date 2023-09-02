@@ -39,7 +39,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     public IReadOnlyCollection<RoslynStyleRule> ParseStyleRules(string info)
     {
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(info);
-        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders();
+        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders(_textExtractor);
 
         if (markdownHeadedBlocks.Count == 0)
             throw new ConfiguinException("Style rule markdown file does not contains any heading blocks. Cannot parse description");
@@ -109,7 +109,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     public IReadOnlyCollection<RoslynQualityRule> ParseQualityRules(string info)
     {
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(info);
-        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders();
+        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders(_textExtractor);
 
         if (markdownHeadedBlocks.Count == 0)
             throw new ConfiguinException("Style rule markdown file does not contains any heading blocks. Cannot parse description");
@@ -147,7 +147,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     public IReadOnlyCollection<RoslynStyleRuleOption> ParseAdditionalFormattingOptions(string dotnetFormattingFileContent)
     {
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(dotnetFormattingFileContent);
-        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders();
+        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders(_textExtractor);
         return ParseOptions(markdownHeadedBlocks);
     }
 
@@ -161,7 +161,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     private string GetStyleOverviewText(IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks)
     {
-        MarkdownHeadedBlock? overviewBlock = markdownHeadedBlocks.FirstOrDefault(h => h.GetHeaderText() == "Overview");
+        MarkdownHeadedBlock? overviewBlock = markdownHeadedBlocks.FirstOrDefault(h => h.HeaderText == "Overview");
         if (overviewBlock is null)
             // TODO: IDE0055
             //throw new ConfiguinException("Style rule page does not contains Overview block.");
@@ -186,7 +186,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     private bool HeaderForOption(MarkdownHeadedBlock markdownHeadedBlock)
     {
         // TODO: do it in better way?
-        string headerText = markdownHeadedBlock.GetHeaderText();
+        string headerText = markdownHeadedBlock.HeaderText;
 
         return headerText.StartsWith("dotnet_")
                || headerText.StartsWith("csharp_")
@@ -198,7 +198,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     {
         var tables = optionBlock.Content.OfType<Table>().ToList();
         if (tables.Count != 1)
-            throw new ConfiguinException($"Unexpected table count in option block {optionBlock.GetHeaderText()}");
+            throw new ConfiguinException($"Unexpected table count in option block {optionBlock.HeaderText}");
 
         MarkdownTableContent markdownTableContent = _markdownTableParser.ParseToSimpleContent(tables.Single());
         MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
