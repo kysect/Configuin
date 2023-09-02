@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
 using Kysect.Configuin.Core.MarkdownParsing.Documents;
+using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
+using Kysect.Configuin.Tests.Tools;
 using Markdig.Syntax;
 using NUnit.Framework;
 
@@ -7,6 +9,8 @@ namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MarkdownDocumentParserTests
 {
+    private readonly IMarkdownTextExtractor _plainTextExtractor = TestImplementations.GetTextExtractor();
+
     [Test]
     public void SplitByHeaders_DocumentWithThreeHeaders_ReturnThreeParts()
     {
@@ -40,7 +44,7 @@ public class MarkdownDocumentParserTests
             """;
 
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(input);
-        IReadOnlyCollection<MarkdownHeadedBlock> headedBlocks = markdownDocument.SplitByHeaders();
+        IReadOnlyCollection<MarkdownHeadedBlock> headedBlocks = markdownDocument.SplitByHeaders(_plainTextExtractor);
 
         headedBlocks.Should().HaveCount(3);
     }

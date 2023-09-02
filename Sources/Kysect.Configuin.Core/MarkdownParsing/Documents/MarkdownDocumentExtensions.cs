@@ -1,4 +1,5 @@
-﻿using Markdig.Parsers;
+﻿using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
+using Markdig.Parsers;
 using Markdig.Syntax;
 
 namespace Kysect.Configuin.Core.MarkdownParsing.Documents;
@@ -10,7 +11,7 @@ public static class MarkdownDocumentExtensions
         return MarkdownParser.Parse(content, MarkdownPipelineProvider.GetDefault());
     }
 
-    public static IReadOnlyCollection<MarkdownHeadedBlock> SplitByHeaders(this MarkdownDocument markdownDocument)
+    public static IReadOnlyCollection<MarkdownHeadedBlock> SplitByHeaders(this MarkdownDocument markdownDocument, IMarkdownTextExtractor textExtractor)
     {
         ArgumentNullException.ThrowIfNull(markdownDocument);
 
@@ -26,7 +27,7 @@ public static class MarkdownDocumentExtensions
             {
                 if (headingBlock is not null)
                 {
-                    result.Add(new MarkdownHeadedBlock(headingBlock, blocks));
+                    result.Add(new MarkdownHeadedBlock(textExtractor.ExtractText(headingBlock), blocks));
                 }
 
                 headingBlock = currentHeaderBlock;
@@ -40,7 +41,7 @@ public static class MarkdownDocumentExtensions
 
         if (headingBlock is not null)
         {
-            result.Add(new MarkdownHeadedBlock(headingBlock, blocks));
+            result.Add(new MarkdownHeadedBlock(textExtractor.ExtractText(headingBlock), blocks));
         }
 
         return result;
