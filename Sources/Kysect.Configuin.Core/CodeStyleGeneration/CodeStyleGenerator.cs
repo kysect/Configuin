@@ -51,7 +51,7 @@ public class CodeStyleGenerator : ICodeStyleGenerator
             return false;
         }
 
-        // TODO: Probably, most of this rules related to IDE1006
+        // TODO: #35 Probably, most of this rules related to IDE1006
         if (setting is CompositeRoslynOptionEditorConfigSetting)
             return false;
 

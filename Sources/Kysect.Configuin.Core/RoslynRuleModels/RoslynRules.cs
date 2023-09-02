@@ -4,6 +4,7 @@ public class RoslynRules
 {
     public IReadOnlyCollection<RoslynQualityRule> QualityRules { get; }
     public IReadOnlyCollection<RoslynStyleRule> StyleRules { get; }
+    // TODO: #42 This options is related to IDE0055
     public IReadOnlyCollection<RoslynStyleRuleOption> DotnetFormattingOptions { get; }
     public IReadOnlyCollection<RoslynStyleRuleOption> SharpFormattingOptions { get; }
 

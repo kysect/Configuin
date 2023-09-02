@@ -13,12 +13,12 @@ public class IniParser
             if (string.IsNullOrEmpty(line))
                 continue;
 
-            // TODO: support case when comment is not in string start. Like:
+            // TODO: #37 support case when comment is not in string start. Like:
             // key = value # some comment with symbol =
             if (line.StartsWith("#"))
                 continue;
 
-            // TODO: support categories in future
+            // TODO: #38 support categories in future
             if (line.StartsWith("["))
                 continue;
 
