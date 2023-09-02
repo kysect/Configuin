@@ -1,5 +1,4 @@
-﻿using Kysect.Configuin.Core.MarkdownParsing;
-using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
+﻿using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MsLearnDocumentation;
 
 namespace Kysect.Configuin.Tests.Tools;
