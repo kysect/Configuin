@@ -101,7 +101,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             roslynStyleRuleInformationTable.Title,
             roslynStyleRuleInformationTable.Category,
             overviewText,
-            // TODO: support this?
+            // TODO: #39 support this
             example: string.Empty,
             roslynStyleRuleOptions);
     }
@@ -136,10 +136,10 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         return ruleIds
             .Select(id => new RoslynQualityRule(
                 id,
-                // TODO: parse rule name
+                // TODO: #40 parse rule name
                 ruleName: string.Empty,
                 category.Value,
-                // TODO: parse description
+                // TODO: #41 parse description
                 description: string.Empty))
             .ToList();
     }
@@ -163,7 +163,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     {
         MarkdownHeadedBlock? overviewBlock = markdownHeadedBlocks.FirstOrDefault(h => h.HeaderText == "Overview");
         if (overviewBlock is null)
-            // TODO: IDE0055
+            // TODO: Rule IDE0055 does not contains this block
             //throw new ConfiguinException("Style rule page does not contains Overview block.");
             return string.Empty;
 
@@ -207,9 +207,9 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         CodeBlock? csharpCodeBlock = codeBlocks
             .OfType<FencedCodeBlock>()
             .FirstOrDefault(cb => cb.Info == "csharp");
-        // TODO: use null instead of empty line
-        string csharpCodeSample = csharpCodeBlock is null
-                                    ? ""
+
+        string? csharpCodeSample = csharpCodeBlock is null
+                                    ? null
                                     : _textExtractor.ExtractText(csharpCodeBlock);
 
         MsLearnPropertyValueDescriptionTableRow optionName = table.GetSingleValue("Option name");
