@@ -1,4 +1,6 @@
-﻿using Kysect.Configuin.Core.MsLearnDocumentation.Models;
+﻿using FluentAssertions;
+using Kysect.CommonLib.BaseTypes.Extensions;
+using Kysect.Configuin.Core.MsLearnDocumentation.Models;
 using Kysect.Configuin.Core.MsLearnDocumentation;
 using Kysect.Configuin.Core.RoslynRuleModels;
 using Kysect.Configuin.Core.EditorConfigParsing;
@@ -28,7 +30,13 @@ public class CodeStyleGeneratorTests
 
         CodeStyle codeStyle = sut.Generate(editorConfigSettings, roslynRules);
 
-        // TODO: add asserts
-        Assert.Pass();
+        ICodeStyleElement codeStyleElement = codeStyle.Elements.ElementAt(2);
+        codeStyleElement.Should().BeOfType<CodeStyleRoslynStyleRuleConfiguration>();
+        CodeStyleRoslynStyleRuleConfiguration roslynStyleRuleConfiguration = codeStyleElement.To<CodeStyleRoslynStyleRuleConfiguration>();
+        roslynStyleRuleConfiguration.Severity.Should().Be(RoslynRuleSeverity.Warning);
+        roslynStyleRuleConfiguration.Rule.RuleId.Should().Be(RoslynRuleId.Parse("IDE0003"));
+        roslynStyleRuleConfiguration.Options.Should().HaveCount(4);
+        roslynStyleRuleConfiguration.Options.ElementAt(0).Option.Name.Should().Be("dotnet_style_qualification_for_field");
+        roslynStyleRuleConfiguration.Options.ElementAt(0).SelectedValue.Should().Be("false:warning");
     }
 }
