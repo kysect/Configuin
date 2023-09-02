@@ -1,27 +1,21 @@
 using FluentAssertions;
 using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.Configuin.Core.MarkdownParsing;
 using Kysect.Configuin.Core.MarkdownParsing.Documents;
 using Kysect.Configuin.Core.MarkdownParsing.Tables;
 using Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
-using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
 using Kysect.Configuin.Core.MsLearnDocumentation.Tables;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
 using NUnit.Framework;
+using Kysect.Configuin.Tests.Tools;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MsLearnTableParserTests
 {
-    private MsLearnTableParser _parser;
-
-    [SetUp]
-    public void Setup()
-    {
-        _parser = new MsLearnTableParser();
-    }
+    private readonly MsLearnTableParser _msLearnTableParser = new MsLearnTableParser();
+    private readonly MarkdownTableParser _markdownTableParser = new MarkdownTableParser(TestImplementations.GetTextExtractor());
 
     [Test]
     public void Parse_KeyValueTable_ReturnExpectedResult()
@@ -44,7 +38,7 @@ public class MsLearnTableParserTests
 
 
         MarkdownTableContent table = ConvertToMarkdownTable(input);
-        MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
+        MsLearnPropertyValueDescriptionTable msLearnTableContent = _msLearnTableParser.Parse(table);
 
         msLearnTableContent.Should().BeEquivalentTo(expected);
     }
@@ -80,7 +74,7 @@ public class MsLearnTableParserTests
             });
 
         MarkdownTableContent table = ConvertToMarkdownTable(input);
-        MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
+        MsLearnPropertyValueDescriptionTable msLearnTableContent = _msLearnTableParser.Parse(table);
 
         msLearnTableContent.Should().BeEquivalentTo(expected);
     }
@@ -111,16 +105,15 @@ public class MsLearnTableParserTests
 
         MarkdownTableContent table = ConvertToMarkdownTable(input);
 
-        MsLearnPropertyValueDescriptionTable msLearnTableContent = _parser.Parse(table);
+        MsLearnPropertyValueDescriptionTable msLearnTableContent = _msLearnTableParser.Parse(table);
 
         msLearnTableContent.Should().BeEquivalentTo(expected);
     }
 
     private MarkdownTableContent ConvertToMarkdownTable(string content)
     {
-        var parser = new MarkdownTableParser(new PlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(content);
         Table table = markdownDocument.Single().To<Table>();
-        return parser.ParseToSimpleContent(table);
+        return _markdownTableParser.ParseToSimpleContent(table);
     }
 }

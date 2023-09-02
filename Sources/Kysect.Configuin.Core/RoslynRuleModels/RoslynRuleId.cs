@@ -62,6 +62,6 @@ public readonly struct RoslynRuleId
 
     public override string ToString()
     {
-        return $"{Type}{Id:D4}";
+        return $"{Type.ToAlias()}{Id:D4}";
     }
 }

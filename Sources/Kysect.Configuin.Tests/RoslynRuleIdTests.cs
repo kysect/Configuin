@@ -2,7 +2,7 @@
 using Kysect.Configuin.Core.RoslynRuleModels;
 using NUnit.Framework;
 
-namespace Kysect.Configuin.Tests.MsLearnDocumentation;
+namespace Kysect.Configuin.Tests;
 
 public class RoslynRuleIdTests
 {

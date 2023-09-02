@@ -25,6 +25,8 @@ public class RoslynRules
             .SelectMany(r => r.Options)
             .Concat(DotnetFormattingOptions)
             .Concat(SharpFormattingOptions)
+            // TODO: check duplicates
+            .DistinctBy(o => o.Name)
             .ToList();
     }
 }

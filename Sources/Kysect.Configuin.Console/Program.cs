@@ -31,18 +31,18 @@ IServiceProvider InitializeServiceProvider()
 void GenerateCodeStyle(IServiceProvider serviceProvider)
 {
     IEditorConfigContentProvider editorConfigContentProvider = serviceProvider.GetRequiredService<IEditorConfigContentProvider>();
-    IEditorConfigRuleParser editorConfigRuleParser = serviceProvider.GetRequiredService<IEditorConfigRuleParser>();
+    IEditorConfigSettingsParser editorConfigSettingsParser = serviceProvider.GetRequiredService<IEditorConfigSettingsParser>();
     IMsLearnDocumentationInfoProvider msLearnDocumentationInfoProvider = serviceProvider.GetRequiredService<IMsLearnDocumentationInfoProvider>();
     IMsLearnDocumentationParser msLearnDocumentationParser = serviceProvider.GetRequiredService<IMsLearnDocumentationParser>();
     ICodeStyleGenerator codeStyleGenerator = serviceProvider.GetRequiredService<ICodeStyleGenerator>();
     ICodeStyleWriter codeStyleWriter = serviceProvider.GetRequiredService<ICodeStyleWriter>();
 
     string editorConfigContent = editorConfigContentProvider.Provide();
-    EditorConfigRuleSet editorConfigRuleSet = editorConfigRuleParser.Parse(editorConfigContent);
+    EditorConfigSettings editorConfigSettings = editorConfigSettingsParser.Parse(editorConfigContent);
 
     MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = msLearnDocumentationInfoProvider.Provide();
     RoslynRules roslynRules = msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
 
-    CodeStyleInfo codeStyleInfo = codeStyleGenerator.Generate(editorConfigRuleSet, roslynRules);
-    codeStyleWriter.Write(codeStyleInfo);
+    CodeStyle codeStyle = codeStyleGenerator.Generate(editorConfigSettings, roslynRules);
+    codeStyleWriter.Write(codeStyle);
 }

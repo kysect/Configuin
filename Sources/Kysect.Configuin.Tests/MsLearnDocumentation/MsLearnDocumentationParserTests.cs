@@ -1,6 +1,4 @@
 ﻿using FluentAssertions;
-using Kysect.Configuin.Core.MarkdownParsing;
-using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MsLearnDocumentation;
 using Kysect.Configuin.Core.MsLearnDocumentation.Models;
 using Kysect.Configuin.Core.RoslynRuleModels;
@@ -11,9 +9,9 @@ namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MsLearnDocumentationParserTests
 {
-    private static readonly MsLearnRepositoryPathProvider MsLearnRepositoryPathProvider = new MsLearnRepositoryPathProvider(Constants.GetPathToMsDocsRoot());
+    private static readonly MsLearnRepositoryPathProvider MsLearnRepositoryPathProvider = TestImplementations.CreateRepositoryPathProvider();
 
-    private readonly MsLearnDocumentationParser _parser = new MsLearnDocumentationParser(new PlainTextExtractor(MarkdownPipelineProvider.GetDefault()));
+    private readonly MsLearnDocumentationParser _parser = new MsLearnDocumentationParser(TestImplementations.GetTextExtractor());
 
     [Test]
     public void ParseStyleRule_IDE0040_ReturnExpectedResult()
@@ -330,7 +328,7 @@ public class MsLearnDocumentationParserTests
     [Ignore("Need to fix all related problems")]
     public void Parse_MsDocsRepository_FinishWithoutError()
     {
-        var repositoryPathProvider = new MsLearnDocumentationInfoLocalProvider(Constants.GetPathToMsDocsRoot());
+        var repositoryPathProvider = TestImplementations.CreateDocumentationInfoLocalProvider();
 
         MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = repositoryPathProvider.Provide();
         RoslynRules roslynRules = _parser.Parse(msLearnDocumentationRawInfo);
