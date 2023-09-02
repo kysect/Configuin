@@ -41,8 +41,8 @@ public class PlainTextExtractor : IMarkdownTextExtractor
         // KB: HtmlRenderer change '"' to "&quot;". Decode will change in back
         return HttpUtility
             .HtmlDecode(result)
-            // TODO: To smth with this =_=
-            .Replace("\r\n", "\n", StringComparison.InvariantCultureIgnoreCase)
-            .Replace("\n", Environment.NewLine, StringComparison.InvariantCultureIgnoreCase);
+            // TODO: Do smth with this =_=
+            .Replace("\r\n", "\n")
+            .Replace("\n", Environment.NewLine);
     }
 }

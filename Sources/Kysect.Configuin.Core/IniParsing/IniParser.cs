@@ -13,17 +13,16 @@ public class IniParser
             if (string.IsNullOrEmpty(line))
                 continue;
 
-            // TODO: support case when comment is not in string start. Like:
+            // TODO: #37 support case when comment is not in string start. Like:
             // key = value # some comment with symbol =
             if (line.StartsWith("#"))
                 continue;
 
-            // TODO: support categories in future
+            // TODO: #38 support categories in future
             if (line.StartsWith("["))
                 continue;
 
-            // TODO: remove rule that force StringComparison for string comparing from project .editorconfig
-            if (!line.Contains('=', StringComparison.InvariantCultureIgnoreCase))
+            if (!line.Contains('='))
                 throw new ArgumentException($"Line {line} does not contain '='");
 
             string[] parts = line.Split('=');
