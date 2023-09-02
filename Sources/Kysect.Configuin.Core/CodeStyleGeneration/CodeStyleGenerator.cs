@@ -1,43 +1,37 @@
 ﻿using Kysect.CommonLib.Collections.Extensions;
 using Kysect.Configuin.Core.CodeStyleGeneration.Models;
 using Kysect.Configuin.Core.EditorConfigParsing;
-using Kysect.Configuin.Core.EditorConfigParsing.Rules;
+using Kysect.Configuin.Core.EditorConfigParsing.Settings;
 using Kysect.Configuin.Core.RoslynRuleModels;
 
 namespace Kysect.Configuin.Core.CodeStyleGeneration;
 
 public class CodeStyleGenerator : ICodeStyleGenerator
 {
-    public CodeStyleInfo Generate(EditorConfigRuleSet editorConfigRuleSet, RoslynRules roslynRules)
+    public CodeStyle Generate(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
     {
-        IReadOnlyCollection<IEditorConfigRule> notProcessedRules = editorConfigRuleSet.Rules;
-        IReadOnlyCollection<RoslynStyleRuleOption> optionsFromDocs = roslynRules.GetOptions();
+        IReadOnlyCollection<RoslynStyleRuleOption> roslynRuleOptions = roslynRules.GetOptions();
+        IReadOnlyCollection<IEditorConfigSetting> notProcessedSettings = editorConfigSettings.Settings;
 
-        notProcessedRules = notProcessedRules.Where(IsSupported).ToList();
+        notProcessedSettings = notProcessedSettings.Where(IsSupported).ToList();
 
-        // TODO: support in some way
-        notProcessedRules = notProcessedRules.Where(r => r is not GeneralEditorConfigRule).ToList();
-
-        // TODO: support in some way
-        notProcessedRules = notProcessedRules.Where(r => r is not CompositeRoslynOptionEditorConfigRule).ToList();
-
-        IReadOnlyCollection<RoslynOptionConfiguration> roslynOptionEditorConfigRules = notProcessedRules
-            .OfType<RoslynOptionEditorConfigRule>()
-            .Select(o => ParseOption(o, optionsFromDocs))
+        IReadOnlyCollection<CodeStyleRoslynOptionConfiguration> optionConfigurations = notProcessedSettings
+            .OfType<RoslynOptionEditorConfigSetting>()
+            .Select(o => ParseOptionSettings(o, roslynRuleOptions))
             .ToList();
 
-        notProcessedRules = notProcessedRules.Where(r => r is not RoslynOptionEditorConfigRule).ToList();
+        notProcessedSettings = notProcessedSettings.Where(r => r is not RoslynOptionEditorConfigSetting).ToList();
 
-        IReadOnlyCollection<ICodeStyleElement> elements = notProcessedRules
-            .OfType<RoslynSeverityEditorConfigRule>()
-            .Select(r => ParseRule(r, roslynOptionEditorConfigRules, roslynRules))
+        IReadOnlyCollection<ICodeStyleElement> ruleConfiguration = notProcessedSettings
+            .OfType<RoslynSeverityEditorConfigSetting>()
+            .Select(severitySetting => ParseRuleSettings(severitySetting, optionConfigurations, roslynRules))
             .ToList();
 
-        notProcessedRules = notProcessedRules.Where(r => r is not RoslynSeverityEditorConfigRule).ToList();
+        notProcessedSettings = notProcessedSettings.Where(r => r is not RoslynSeverityEditorConfigSetting).ToList();
 
-        if (notProcessedRules.Any())
+        if (notProcessedSettings.Any())
         {
-            string unsupportedTypes = notProcessedRules
+            string unsupportedTypes = notProcessedSettings
                 .Select(r => r.GetType())
                 .Distinct()
                 .ToSingleString();
@@ -45,62 +39,69 @@ public class CodeStyleGenerator : ICodeStyleGenerator
             throw new ConfiguinException($"Rule type is not supported: {unsupportedTypes}");
         }
 
-        return new CodeStyleInfo(elements);
+        return new CodeStyle(ruleConfiguration);
     }
 
-    private bool IsSupported(IEditorConfigRule rule)
+    private bool IsSupported(IEditorConfigSetting setting)
     {
-        // TODO: support parsing for this rule
-        if (rule is RoslynSeverityEditorConfigRule severityEditorConfigRule
-            && severityEditorConfigRule.RuleId.Equals(new RoslynRuleId(RoslynRuleType.StyleRule, 1006)))
+        // TODO: #35 support parsing for this rule 
+        if (setting is RoslynSeverityEditorConfigSetting severityEditorConfigRule
+            && severityEditorConfigRule.RuleId.Equals(RoslynRuleId.Parse("IDE1006")))
         {
             return false;
         }
 
+        // TODO: Probably, most of this rules related to IDE1006
+        if (setting is CompositeRoslynOptionEditorConfigSetting)
+            return false;
+
+        // TODO: Maybe we need to support it in some way
+        if (setting is GeneralEditorConfigSetting)
+            return false;
+
         return true;
     }
 
-    // TODO: Rework naming
-    private RoslynOptionConfiguration ParseOption(RoslynOptionEditorConfigRule optionEditorConfigRule, IReadOnlyCollection<RoslynStyleRuleOption> optionsFromDocs)
+    private CodeStyleRoslynOptionConfiguration ParseOptionSettings(RoslynOptionEditorConfigSetting optionEditorConfigSetting, IReadOnlyCollection<RoslynStyleRuleOption> styleRuleOptions)
     {
-        // TODO: check for duplicate?
-        RoslynStyleRuleOption? roslynStyleRuleOption = optionsFromDocs.FirstOrDefault(o => o.Name == optionEditorConfigRule.Key);
-        if (roslynStyleRuleOption is null)
-            throw new ConfiguinException($"Option {optionEditorConfigRule.Key} was not found in documentation");
+        RoslynStyleRuleOption? roslynStyleRuleOption = styleRuleOptions.SingleOrDefault(o => o.Name == optionEditorConfigSetting.Key);
 
-        return new RoslynOptionConfiguration(roslynStyleRuleOption, optionEditorConfigRule.Value);
+        if (roslynStyleRuleOption is null)
+            throw new ConfiguinException($"Option {optionEditorConfigSetting.Key} was not found in documentation");
+
+        return new CodeStyleRoslynOptionConfiguration(roslynStyleRuleOption, optionEditorConfigSetting.Value);
     }
 
-    private ICodeStyleElement ParseRule(
-        RoslynSeverityEditorConfigRule severityEditorConfigRule,
-        IReadOnlyCollection<RoslynOptionConfiguration> roslynOptionEditorConfigRules,
+    private ICodeStyleElement ParseRuleSettings(
+        RoslynSeverityEditorConfigSetting severityEditorConfigSetting,
+        IReadOnlyCollection<CodeStyleRoslynOptionConfiguration> optionConfigurations,
         RoslynRules roslynRules)
     {
-        RoslynStyleRule? roslynStyleRule = roslynRules.StyleRules.FirstOrDefault(s => s.RuleId.Equals(severityEditorConfigRule.RuleId));
+        RoslynStyleRule? roslynStyleRule = roslynRules.StyleRules.FirstOrDefault(s => s.RuleId.Equals(severityEditorConfigSetting.RuleId));
         if (roslynStyleRule is not null)
         {
             var options = roslynStyleRule
                 .Options
-                .Select(o => GetOption(roslynOptionEditorConfigRules, o.Name))
+                .Select(o => GetOptionConfiguration(optionConfigurations, o.Name))
                 .ToList();
 
-            return new RoslynStyleRuleConfiguration(roslynStyleRule, severityEditorConfigRule.Severity, options);
+            return new CodeStyleRoslynStyleRuleConfiguration(roslynStyleRule, severityEditorConfigSetting.Severity, options);
         }
 
-        RoslynQualityRule? roslynQualityRule = roslynRules.QualityRules.FirstOrDefault(q => q.RuleId.Equals(severityEditorConfigRule.RuleId));
+        RoslynQualityRule? roslynQualityRule = roslynRules.QualityRules.FirstOrDefault(q => q.RuleId.Equals(severityEditorConfigSetting.RuleId));
         if (roslynQualityRule is not null)
         {
-            return new RoslynQualityRuleConfiguration(roslynQualityRule, severityEditorConfigRule.Severity);
+            return new CodeStyleRoslynQualityRuleConfiguration(roslynQualityRule, severityEditorConfigSetting.Severity);
         }
 
-        throw new ConfiguinException($"Rule with id {severityEditorConfigRule.RuleId} was not found");
+        throw new ConfiguinException($"Rule with id {severityEditorConfigSetting.RuleId} was not found");
     }
 
-    private RoslynOptionConfiguration GetOption(
-        IReadOnlyCollection<RoslynOptionConfiguration> roslynOptionEditorConfigRules,
+    private CodeStyleRoslynOptionConfiguration GetOptionConfiguration(
+        IReadOnlyCollection<CodeStyleRoslynOptionConfiguration> optionConfigurations,
         string name)
     {
-        RoslynOptionConfiguration? option = roslynOptionEditorConfigRules.FirstOrDefault(o => o.Option.Name == name);
+        CodeStyleRoslynOptionConfiguration? option = optionConfigurations.FirstOrDefault(o => o.Option.Name == name);
         if (option is null)
             throw new ConfiguinException($"Option with name {name} was not found");
 

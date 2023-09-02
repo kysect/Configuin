@@ -30,8 +30,8 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         IReadOnlyCollection<RoslynStyleRuleOption> sharpFormattingOptions = ParseAdditionalFormattingOptions(rawInfo.SharpFormattingOptionsContent);
 
         return new RoslynRules(
-            rawInfo.QualityRuleInfos.SelectMany(ParseQualityRules).ToList(),
-            rawInfo.StyleRuleInfos.SelectMany(ParseStyleRules).ToList(),
+            rawInfo.QualityRuleFileContents.SelectMany(ParseQualityRules).ToList(),
+            rawInfo.StyleRuleFileContents.SelectMany(ParseStyleRules).ToList(),
             dotnetFormattingOptions,
             sharpFormattingOptions);
     }
