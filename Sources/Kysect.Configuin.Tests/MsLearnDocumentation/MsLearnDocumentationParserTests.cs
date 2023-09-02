@@ -2,6 +2,7 @@
 using Kysect.Configuin.Core.MsLearnDocumentation;
 using Kysect.Configuin.Core.MsLearnDocumentation.Models;
 using Kysect.Configuin.Core.RoslynRuleModels;
+using Kysect.Configuin.Tests.Resources;
 using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
@@ -18,44 +19,9 @@ public class MsLearnDocumentationParserTests
     {
         string fileText = GetIdeDescription("ide0040.md");
 
-        var codeSample = """
-                         // dotnet_style_require_accessibility_modifiers = always
-                         // dotnet_style_require_accessibility_modifiers = for_non_interface_members
-                         class MyClass
-                         {
-                             private const string thisFieldIsConst = "constant";
-                         }
+        RoslynStyleRule expected = WellKnownRoslynRuleDefinitions.IDE0040();
 
-                         // dotnet_style_require_accessibility_modifiers = never
-                         class MyClass
-                         {
-                             const string thisFieldIsConst = "constant";
-                         }
-                         """;
-
-        RoslynStyleRuleOptionValue[] expectedOptionValues =
-        {
-            new RoslynStyleRuleOptionValue("always", "Prefer accessibility modifiers to be specified."),
-            new RoslynStyleRuleOptionValue("for_non_interface_members", "Prefer accessibility modifiers except for public interface members."),
-            new RoslynStyleRuleOptionValue("never", "Do not prefer accessibility modifiers to be specified."),
-            new RoslynStyleRuleOptionValue("omit_if_default", "Prefer accessibility modifiers except if they are the default modifier.")
-        };
-
-        var expectedOption = new RoslynStyleRuleOption(
-            Name: "dotnet_style_require_accessibility_modifiers",
-            expectedOptionValues,
-            DefaultValue: "for_non_interface_members",
-            codeSample);
-
-        var expected = new RoslynStyleRule(
-            RoslynRuleId.Parse("IDE0040"),
-            "Add accessibility modifiers",
-            "Style",
-            "This style rule concerns requiring accessibility modifiers in declarations.",
-            string.Empty,
-            new[] { expectedOption });
-
-        var roslynStyleRules = _parser.ParseStyleRules(fileText);
+        IReadOnlyCollection<RoslynStyleRule> roslynStyleRules = _parser.ParseStyleRules(fileText);
 
         roslynStyleRules.Should().HaveCount(1)
             .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
@@ -167,12 +133,7 @@ public class MsLearnDocumentationParserTests
     {
         string fileText = GetPathToCa("ca1064.md");
 
-        // TODO: parse description
-        var expected = new RoslynQualityRule(
-            RoslynRuleId.Parse("CA1064"),
-            string.Empty,
-            "Design",
-            string.Empty);
+        RoslynQualityRule expected = WellKnownRoslynRuleDefinitions.CA1064();
 
         IReadOnlyCollection<RoslynQualityRule> qualityRule = _parser.ParseQualityRules(fileText);
 
