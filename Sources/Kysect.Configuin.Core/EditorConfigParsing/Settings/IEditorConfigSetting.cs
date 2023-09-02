@@ -17,14 +17,7 @@ public record GeneralEditorConfigSetting(
 
 public record RoslynOptionEditorConfigSetting(
     string Key,
-    string Value,
-    // TODO: ensure that this is supported (severity per option)
-    RoslynRuleSeverity? Severity) : IEditorConfigSetting
-{
-    public RoslynOptionEditorConfigSetting(string Key, string Value) : this(Key, Value, null)
-    {
-    }
-}
+    string Value) : IEditorConfigSetting;
 
 public record RoslynSeverityEditorConfigSetting(
     RoslynRuleId RuleId,

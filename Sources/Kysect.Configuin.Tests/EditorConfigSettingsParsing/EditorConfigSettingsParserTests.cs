@@ -57,8 +57,7 @@ public class EditorConfigSettingsParserTests
         string content = "csharp_style_var_when_type_is_apparent = true";
         var expected = new RoslynOptionEditorConfigSetting(
             Key: "csharp_style_var_when_type_is_apparent",
-            Value: "true",
-            Severity: null);
+            Value: "true");
 
         EditorConfigSettings editorConfigSettings = _parser.Parse(content);
 
@@ -73,8 +72,7 @@ public class EditorConfigSettingsParserTests
         string content = "csharp_style_var_when_type_is_apparent = true";
         var expected = new RoslynOptionEditorConfigSetting(
             Key: "csharp_style_var_when_type_is_apparent",
-            Value: "true",
-            Severity: null);
+            Value: "true");
 
         EditorConfigSettings editorConfigSettings = _parser.Parse(content);
 

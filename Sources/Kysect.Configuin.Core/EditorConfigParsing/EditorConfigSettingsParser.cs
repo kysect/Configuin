@@ -73,14 +73,6 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
 
     private static RoslynOptionEditorConfigSetting ParseOptionSetting(IniFileLine line)
     {
-        bool containsSeverityInValue = line.Value.Contains(':');
-        if (!containsSeverityInValue)
-            return new RoslynOptionEditorConfigSetting(line.Key, line.Value);
-
-        string[] valueParts = line.Value.Split(':', 2);
-        if (!Enum.TryParse(valueParts[1], true, out RoslynRuleSeverity severity))
-            throw new ArgumentException($"Cannot parse severity from {valueParts[1]}");
-
-        return new RoslynOptionEditorConfigSetting(line.Key, valueParts[0], severity);
+        return new RoslynOptionEditorConfigSetting(line.Key, line.Value);
     }
 }
