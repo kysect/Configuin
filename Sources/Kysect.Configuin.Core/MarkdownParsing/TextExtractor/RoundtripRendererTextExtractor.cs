@@ -9,11 +9,6 @@ public class RoundtripRendererTextExtractor : IMarkdownTextExtractor
 {
     private readonly MarkdownPipeline _markdownPipeline;
 
-    public static RoundtripRendererTextExtractor Create()
-    {
-        return new RoundtripRendererTextExtractor(MarkdownPipelineProvider.GetDefault());
-    }
-
     public RoundtripRendererTextExtractor(MarkdownPipeline markdownPipeline)
     {
         _markdownPipeline = markdownPipeline;

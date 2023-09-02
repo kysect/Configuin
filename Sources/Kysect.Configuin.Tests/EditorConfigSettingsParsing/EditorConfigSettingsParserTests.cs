@@ -1,24 +1,24 @@
 ﻿using FluentAssertions;
 using Kysect.Configuin.Core.EditorConfigParsing;
-using Kysect.Configuin.Core.EditorConfigParsing.Rules;
+using Kysect.Configuin.Core.EditorConfigParsing.Settings;
 using Kysect.Configuin.Core.RoslynRuleModels;
 using NUnit.Framework;
 
-namespace Kysect.Configuin.Tests.EditorConfigFileParsing;
+namespace Kysect.Configuin.Tests.EditorConfigSettingsParsing;
 
-public class EditorConfigRuleParserTests
+public class EditorConfigSettingsParserTests
 {
-    private readonly EditorConfigRuleParser _parser = new EditorConfigRuleParser();
+    private readonly EditorConfigSettingsParser _parser = new EditorConfigSettingsParser();
 
     [Test]
     public void Parse_TabWidth_ReturnGeneralEditorRule()
     {
         string content = "tab_width = 4";
-        var expected = new GeneralEditorConfigRule(Key: "tab_width", Value: "4");
+        var expected = new GeneralEditorConfigSetting(Key: "tab_width", Value: "4");
 
-        EditorConfigRuleSet editorConfigRuleSet = _parser.Parse(content);
+        EditorConfigSettings editorConfigSettings = _parser.Parse(content);
 
-        editorConfigRuleSet.Rules
+        editorConfigSettings.Settings
             .Should().HaveCount(1)
             .And.Contain(expected);
     }
@@ -27,11 +27,11 @@ public class EditorConfigRuleParserTests
     public void Parse_DotnetDiagnosticSeverity_ReturnRoslyntSeverityRule()
     {
         string content = "dotnet_diagnostic.IDE0001.severity = warning";
-        var expected = new RoslynSeverityEditorConfigRule(RoslynRuleId.Parse("IDE0001"), RoslynRuleSeverity.Warning);
+        var expected = new RoslynSeverityEditorConfigSetting(RoslynRuleId.Parse("IDE0001"), RoslynRuleSeverity.Warning);
 
-        EditorConfigRuleSet editorConfigRuleSet = _parser.Parse(content);
+        EditorConfigSettings editorConfigSettings = _parser.Parse(content);
 
-        editorConfigRuleSet.Rules
+        editorConfigSettings.Settings
             .Should().HaveCount(1)
             .And.Contain(expected);
     }
@@ -40,13 +40,13 @@ public class EditorConfigRuleParserTests
     public void Parse_KeyWithDots_ReturnCompositeOptionRule()
     {
         string content = "dotnet_naming_style.camel_case_style.capitalization = camel_case";
-        var expected = new CompositeRoslynOptionEditorConfigRule(
+        var expected = new CompositeRoslynOptionEditorConfigSetting(
             KeyParts: new[] { "dotnet_naming_style", "camel_case_style", "capitalization" },
             Value: "camel_case", Severity: null);
 
-        EditorConfigRuleSet editorConfigRuleSet = _parser.Parse(content);
+        EditorConfigSettings editorConfigSettings = _parser.Parse(content);
 
-        editorConfigRuleSet.Rules
+        editorConfigSettings.Settings
             .Should().HaveCount(1)
             .And.ContainEquivalentOf(expected);
     }
@@ -55,14 +55,14 @@ public class EditorConfigRuleParserTests
     public void Parse_StyleOption_ReturnOptionRule()
     {
         string content = "csharp_style_var_when_type_is_apparent = true";
-        var expected = new RoslynOptionEditorConfigRule(
+        var expected = new RoslynOptionEditorConfigSetting(
             Key: "csharp_style_var_when_type_is_apparent",
             Value: "true",
             Severity: null);
 
-        EditorConfigRuleSet editorConfigRuleSet = _parser.Parse(content);
+        EditorConfigSettings editorConfigSettings = _parser.Parse(content);
 
-        editorConfigRuleSet.Rules
+        editorConfigSettings.Settings
             .Should().HaveCount(1)
             .And.Contain(expected);
     }
@@ -71,14 +71,14 @@ public class EditorConfigRuleParserTests
     public void Parse_StyleOptionWithSeverity_ReturnOptionRuleWithSeverity()
     {
         string content = "csharp_style_var_when_type_is_apparent = true";
-        var expected = new RoslynOptionEditorConfigRule(
+        var expected = new RoslynOptionEditorConfigSetting(
             Key: "csharp_style_var_when_type_is_apparent",
             Value: "true",
             Severity: null);
 
-        EditorConfigRuleSet editorConfigRuleSet = _parser.Parse(content);
+        EditorConfigSettings editorConfigSettings = _parser.Parse(content);
 
-        editorConfigRuleSet.Rules
+        editorConfigSettings.Settings
             .Should().HaveCount(1)
             .And.Contain(expected);
     }
@@ -88,10 +88,10 @@ public class EditorConfigRuleParserTests
     {
         string fileText = File.ReadAllText(Path.Combine("Resources", "Editor-config-sample.ini"));
 
-        EditorConfigRuleSet editorConfigRuleSet = _parser.Parse(fileText);
+        EditorConfigSettings editorConfigSettings = _parser.Parse(fileText);
 
         // TODO: add more asserts
-        editorConfigRuleSet.Rules
+        editorConfigSettings.Settings
             .Should().HaveCount(393);
     }
 }

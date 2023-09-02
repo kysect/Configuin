@@ -6,5 +6,5 @@ namespace Kysect.Configuin.Core.CodeStyleGeneration;
 
 public interface ICodeStyleGenerator
 {
-    CodeStyleInfo Generate(EditorConfigRuleSet editorConfigRuleSet, RoslynRules roslynRules);
+    CodeStyle Generate(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules);
 }

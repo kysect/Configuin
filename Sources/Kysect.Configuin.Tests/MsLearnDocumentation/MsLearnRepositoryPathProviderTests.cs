@@ -3,7 +3,7 @@ using Kysect.Configuin.Core.MsLearnDocumentation;
 using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
-namespace Kysect.Configuin.Tests;
+namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MsLearnRepositoryPathProviderTests
 {

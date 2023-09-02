@@ -13,17 +13,14 @@ namespace Kysect.Configuin.Tests.CodeStyleGeneration;
 public class CodeStyleGeneratorTests
 {
     private readonly MsLearnDocumentationParser _msLearnDocumentationParser;
-    private readonly EditorConfigRuleParser _editorConfigRuleParser;
+    private readonly EditorConfigSettingsParser _editorConfigSettingsParser;
     private readonly MsLearnDocumentationInfoLocalProvider _repositoryPathProvider;
 
     public CodeStyleGeneratorTests()
     {
-        _editorConfigRuleParser = new EditorConfigRuleParser();
+        _editorConfigSettingsParser = new EditorConfigSettingsParser();
         _msLearnDocumentationParser = new MsLearnDocumentationParser(PlainTextExtractor.Create());
-
-        string pathToRoot = Constants.GetPathToMsDocsRoot();
-
-        _repositoryPathProvider = new MsLearnDocumentationInfoLocalProvider(pathToRoot);
+        _repositoryPathProvider = TestImplementations.CreateDocumentationInfoLocalProvider();
     }
 
     [Test]
@@ -35,9 +32,9 @@ public class CodeStyleGeneratorTests
         MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = _repositoryPathProvider.Provide();
         RoslynRules roslynRules = _msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
         string fileText = File.ReadAllText(pathToIniFile);
-        EditorConfigRuleSet editorConfigRuleSet = _editorConfigRuleParser.Parse(fileText);
+        EditorConfigSettings editorConfigSettings = _editorConfigSettingsParser.Parse(fileText);
 
-        CodeStyleInfo codeStyleInfo = sut.Generate(editorConfigRuleSet, roslynRules);
+        CodeStyle codeStyle = sut.Generate(editorConfigSettings, roslynRules);
 
         // TODO: add asserts
         Assert.Pass();

@@ -21,7 +21,7 @@ public static class MarkdownDocumentExtensions
 
         foreach (Block block in markdownDocument)
         {
-            // In some case MarkDig return HeadingBlock that is not actually heading. Like CA2153.
+            // TODO: In some case MarkDig return HeadingBlock that is not actually heading. Like CA2153.
             if (block is HeadingBlock currentHeaderBlock && currentHeaderBlock.HeaderChar == '#')
             {
                 if (headingBlock is not null)

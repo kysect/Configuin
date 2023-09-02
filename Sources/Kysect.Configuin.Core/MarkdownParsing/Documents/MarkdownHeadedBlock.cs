@@ -17,7 +17,6 @@ public class MarkdownHeadedBlock
     // TODO: remove this method and pass header text instead of header block
     public string GetHeaderText()
     {
-        var plainTextExtractor = new PlainTextExtractor(MarkdownPipelineProvider.GetDefault());
-        return plainTextExtractor.ExtractText(Header);
+        return PlainTextExtractor.Create().ExtractText(Header);
     }
 }

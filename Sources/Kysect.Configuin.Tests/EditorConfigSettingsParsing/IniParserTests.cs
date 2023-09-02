@@ -2,7 +2,7 @@
 using Kysect.Configuin.Core.IniParsing;
 using NUnit.Framework;
 
-namespace Kysect.Configuin.Tests.EditorConfigFileParsing;
+namespace Kysect.Configuin.Tests.EditorConfigSettingsParsing;
 
 public class IniParserTests
 {
