@@ -153,8 +153,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     private IReadOnlyCollection<RoslynRuleId> ParseQualityRuleTableIdRow(MsLearnPropertyValueDescriptionTableRow ruleId)
     {
-        // TODO: remove StringComparison
-        if (ruleId.Value.Contains("-", StringComparison.InvariantCultureIgnoreCase))
+        if (ruleId.Value.Contains("-"))
             return RoslynRuleIdRange.Parse(ruleId.Value).Enumerate().ToList();
 
         return new[] { RoslynRuleId.Parse(ruleId.Value) };
@@ -187,7 +186,6 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     private bool HeaderForOption(MarkdownHeadedBlock markdownHeadedBlock)
     {
         // TODO: do it in better way?
-        // TODO: remove StringComparison
         string headerText = markdownHeadedBlock.GetHeaderText();
 
         return headerText.StartsWith("dotnet_")

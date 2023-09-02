@@ -42,7 +42,7 @@ public class PlainTextExtractor : IMarkdownTextExtractor
         return HttpUtility
             .HtmlDecode(result)
             // TODO: To smth with this =_=
-            .Replace("\r\n", "\n", StringComparison.InvariantCultureIgnoreCase)
-            .Replace("\n", Environment.NewLine, StringComparison.InvariantCultureIgnoreCase);
+            .Replace("\r\n", "\n")
+            .Replace("\n", Environment.NewLine);
     }
 }

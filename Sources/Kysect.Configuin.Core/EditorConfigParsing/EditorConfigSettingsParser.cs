@@ -41,8 +41,7 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
         if (isSeveritySetting)
             return ParseSeveritySetting(line);
 
-        // TODO: remove rule that force StringComparison for string comparing from project .editorconfig
-        bool isCompositeKeyRule = line.Key.Contains('.', StringComparison.InvariantCultureIgnoreCase);
+        bool isCompositeKeyRule = line.Key.Contains('.');
         if (isCompositeKeyRule)
             return ParseCompositeKeySetting(line);
 
@@ -74,7 +73,7 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
 
     private static RoslynOptionEditorConfigSetting ParseOptionSetting(IniFileLine line)
     {
-        bool containsSeverityInValue = line.Value.Contains(':', StringComparison.InvariantCultureIgnoreCase);
+        bool containsSeverityInValue = line.Value.Contains(':');
         if (!containsSeverityInValue)
             return new RoslynOptionEditorConfigSetting(line.Key, line.Value);
 

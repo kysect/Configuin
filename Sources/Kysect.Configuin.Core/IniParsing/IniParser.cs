@@ -22,8 +22,7 @@ public class IniParser
             if (line.StartsWith("["))
                 continue;
 
-            // TODO: remove rule that force StringComparison for string comparing from project .editorconfig
-            if (!line.Contains('=', StringComparison.InvariantCultureIgnoreCase))
+            if (!line.Contains('='))
                 throw new ArgumentException($"Line {line} does not contain '='");
 
             string[] parts = line.Split('=');
