@@ -23,8 +23,11 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore Sources/Kysect.Configuin.sln
+      working-directory: ./Sources
+      run: dotnet restore
     - name: Build
-      run: dotnet build Sources/Kysect.Configuin.sln --no-restore
+      working-directory: ./Sources
+      run: dotnet build --no-restore
     - name: Test
-      run: dotnet test Sources/Kysect.Configuin.sln --no-build --verbosity normal
+      working-directory: ./Sources
+      run: dotnet test --no-build --verbosity normal
