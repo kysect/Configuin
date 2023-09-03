@@ -35,6 +35,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Resources\DotnetFormatOutput-one-report.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\DotnetFormatOutput-two-report.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\Editor-config-sample.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
