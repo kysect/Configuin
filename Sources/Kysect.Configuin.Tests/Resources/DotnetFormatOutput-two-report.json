@@ -1,0 +1,44 @@
+[
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "c3279463-891c-4ee4-803f-673841ac7714"
+      },
+      "Id": "68bef310-8f68-4b97-8100-6174c8844590"
+    },
+    "FileName": "PowerShellObjectMapperTests.cs",
+    "FilePath": "C:\\Coding\\Kysect.PowerShellRunner\\Sources\\Kysect.PowerShellRunner.Tests\\PowerShellObjectMapperTests.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 15,
+        "CharNumber": 51,
+        "DiagnosticId": "WHITESPACE",
+        "FormatDescription": "Fix whitespace formatting. Insert \u0027\\s\u0027."
+      },
+      {
+        "LineNumber": 15,
+        "CharNumber": 55,
+        "DiagnosticId": "WHITESPACE",
+        "FormatDescription": "Fix whitespace formatting. Insert \u0027\\s\u0027."
+      }
+    ]
+  },
+  {
+    "DocumentId": {
+      "ProjectId": {
+        "Id": "4e8d8acf-c523-4109-84bc-71112835d831"
+      },
+      "Id": "d19e8623-3ecd-45e1-884d-c132877c4cb7"
+    },
+    "FileName": "IPowerShellAccessor.cs",
+    "FilePath": "C:\\Coding\\Kysect.PowerShellRunner\\Sources\\Kysect.PowerShellRunner.Abstractions\\Accessors\\IPowerShellAccessor.cs",
+    "FileChanges": [
+      {
+        "LineNumber": 1,
+        "CharNumber": 1,
+        "DiagnosticId": "IMPORTS",
+        "FormatDescription": "Fix imports ordering."
+      }
+    ]
+  }
+]
