@@ -20,7 +20,7 @@ public class MsLearnTableParserTests
     [Test]
     public void Parse_KeyValueTable_ReturnExpectedResult()
     {
-        var input = """
+        string input = """
                     |                                     | Value                        |
                     |-------------------------------------|------------------------------|
                     | **Rule ID**                         | CA1000                       |
@@ -46,7 +46,7 @@ public class MsLearnTableParserTests
     [Test]
     public void Parse_KeyMultiValueTableContent_ReturnExpectedResult()
     {
-        var input = """
+        string input = """
                     | Property                 | Value                                                             |
                     | ------------------------ | ----------------------------------------------------------------- |
                     | **Rule ID**              | IDE0058                                                           |
@@ -82,7 +82,7 @@ public class MsLearnTableParserTests
     [Test]
     public void Parse_PropertyValueWithDescriptionTable_ReturnExpectedResult()
     {
-        var input = """
+        string input = """
                     | Property                 | Value                                                            | Description                      |
                     | ------------------------ | ---------------------------------------------------------------- | -------------------------------- |
                     | **Option name**          | dotnet_style_prefer_is_null_check_over_reference_equality_method |                                  |

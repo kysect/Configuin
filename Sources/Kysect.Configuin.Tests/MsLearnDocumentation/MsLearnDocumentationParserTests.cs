@@ -30,7 +30,7 @@ public class MsLearnDocumentationParserTests
     [Test]
     public void ParseStyleRule_IDE0003_0009_ReturnExpectedResult()
     {
-        string fileText = GetIdeDescription( "ide0003-ide0009.md");
+        string fileText = GetIdeDescription("ide0003-ide0009.md");
 
         var options = new RoslynStyleRuleOption[]
         {
@@ -171,7 +171,7 @@ public class MsLearnDocumentationParserTests
 
         var dotnet_sort_system_directives_first = new RoslynStyleRuleOption(
             "dotnet_sort_system_directives_first",
-            new []
+            new[]
             {
                 new RoslynStyleRuleOptionValue("true", "Sort System.* using directives alphabetically, and place them before other using directives."),
                 new RoslynStyleRuleOptionValue("false", "Do not place System.* using directives before other using directives.")
@@ -223,7 +223,7 @@ public class MsLearnDocumentationParserTests
         string fileContent = File.ReadAllText(pathToFile);
         var csharp_new_line_before_open_brace = new RoslynStyleRuleOption(
             "csharp_new_line_before_open_brace",
-            new []
+            new[]
             {
                 new RoslynStyleRuleOptionValue("all", "Require braces to be on a new line for all expressions (\"Allman\" style)."),
                 new RoslynStyleRuleOptionValue("none", "Require braces to be on the same line for all expressions (\"K&R\")."),
@@ -289,7 +289,7 @@ public class MsLearnDocumentationParserTests
     [Ignore("Need to fix all related problems")]
     public void Parse_MsDocsRepository_FinishWithoutError()
     {
-        var repositoryPathProvider = TestImplementations.CreateDocumentationInfoLocalProvider();
+        MsLearnDocumentationInfoLocalProvider repositoryPathProvider = TestImplementations.CreateDocumentationInfoLocalProvider();
 
         MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = repositoryPathProvider.Provide();
         RoslynRules roslynRules = _parser.Parse(msLearnDocumentationRawInfo);
