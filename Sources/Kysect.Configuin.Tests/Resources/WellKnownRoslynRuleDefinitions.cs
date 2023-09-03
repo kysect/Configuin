@@ -6,7 +6,7 @@ public static class WellKnownRoslynRuleDefinitions
 {
     public static RoslynStyleRule IDE0040()
     {
-        var codeSample = """
+        string codeSample = """
                          // dotnet_style_require_accessibility_modifiers = always
                          // dotnet_style_require_accessibility_modifiers = for_non_interface_members
                          class MyClass

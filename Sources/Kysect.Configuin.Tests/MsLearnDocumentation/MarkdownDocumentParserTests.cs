@@ -14,7 +14,7 @@ public class MarkdownDocumentParserTests
     [Test]
     public void SplitByHeaders_DocumentWithThreeHeaders_ReturnThreeParts()
     {
-        var input = """
+        string input = """
             ## When to suppress warnings
 
             It is safe to suppress violations from this rule if the design and performance benefits from implementing the interface are not critical.

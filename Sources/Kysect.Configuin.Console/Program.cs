@@ -20,7 +20,7 @@ IServiceProvider InitializeServiceProvider()
     HostApplicationBuilder builder = Host.CreateApplicationBuilder();
     builder.Configuration.AddJsonFile("appsettings.json");
 
-    var serviceCollection = builder.Services;
+    IServiceCollection serviceCollection = builder.Services;
 
     serviceCollection.AddOptionsWithValidation<ConfiguinConfiguration>(nameof(ConfiguinConfiguration));
 

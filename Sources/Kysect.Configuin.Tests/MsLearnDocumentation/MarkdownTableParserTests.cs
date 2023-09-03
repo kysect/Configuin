@@ -17,7 +17,7 @@ public class MarkdownTableParserTests
     [Test]
     public void ParseToSimpleContent_ForSimpleTable_ReturnExpectedResult()
     {
-        var input = """
+        string input = """
                     |                                     | Value                        |
                     |-------------------------------------|------------------------------|
                     | **Rule ID**                         | CA1000                       |
