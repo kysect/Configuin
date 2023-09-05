@@ -56,10 +56,9 @@ public class MarkdownCodeStyleFormatterTests
     [Test]
     public void FormatQualityRule_ForCA1064_ReturnExpected()
     {
-        // TODO: change CA1064 -> Exceptions should be public (CA1064)
         // TODO: add description
         const string expected = """
-                                ## CA1064
+                                ## Exceptions should be public (CA1064)
 
                                 Severity: Warning
 

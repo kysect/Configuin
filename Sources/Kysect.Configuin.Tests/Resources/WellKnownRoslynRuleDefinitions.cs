@@ -46,11 +46,11 @@ public static class WellKnownRoslynRuleDefinitions
 
     public static RoslynQualityRule CA1064()
     {
-        // TODO: parse description
         return new RoslynQualityRule(
             RoslynRuleId.Parse("CA1064"),
-            string.Empty,
+            "Exceptions should be public",
             "Design",
+            // TODO: parse description
             string.Empty);
     }
 }
