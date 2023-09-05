@@ -149,8 +149,7 @@ public class MsLearnDocumentationParserTests
         // TODO: parse description
         var expected = new RoslynQualityRule(
             RoslynRuleId.Parse("CA1865"),
-            // TODO: parse name?
-            ruleName: string.Empty,
+            "Use 'string.Method(char)' instead of 'string.Method(string)' for string with single char",
             category: "Performance",
             // TODO: parse description?
             description: string.Empty);

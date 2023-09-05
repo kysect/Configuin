@@ -124,6 +124,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
 
         MsLearnPropertyValueDescriptionTableRow ruleId = table.GetSingleValue("Rule ID");
+        MsLearnPropertyValueDescriptionTableRow title = table.GetSingleValue("Title");
         MsLearnPropertyValueDescriptionTableRow category = table.GetSingleValue("Category");
         // TODO: add this fields to model
         MsLearnPropertyValueDescriptionTableRow breakingChanges = table.GetSingleValue("Fix is breaking or non-breaking");
@@ -136,8 +137,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         return ruleIds
             .Select(id => new RoslynQualityRule(
                 id,
-                // TODO: #40 parse rule name
-                ruleName: string.Empty,
+                title.Value,
                 category.Value,
                 // TODO: #41 parse description
                 description: string.Empty))
