@@ -21,7 +21,7 @@ public class MsLearnTableParserTests
     public void Parse_KeyValueTable_ReturnExpectedResult()
     {
         string input = """
-                    |                                     | Value                        |
+                    | Property                            | Value                        |
                     |-------------------------------------|------------------------------|
                     | **Rule ID**                         | CA1000                       |
                     | **Category**                        | [Design](design-warnings.md) |

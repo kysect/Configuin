@@ -50,7 +50,7 @@ public class MarkdownCodeStyleFormatter : ICodeStyleFormatter
     {
         var builder = new MarkdownStringBuilder();
 
-        builder.AddH2(rule.Rule.RuleId.ToString());
+        builder.AddH2($"{rule.Rule.Title} ({rule.Rule.RuleId})");
         builder.AddEmptyLine();
         builder.AddText($"Severity: {rule.Severity}");
 
