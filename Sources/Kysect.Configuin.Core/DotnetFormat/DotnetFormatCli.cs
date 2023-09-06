@@ -8,17 +8,12 @@ public class DotnetFormatCli
 
     public void Validate()
     {
-        ExecuteCommand("dotnet format -h");
+        _cmdProcess.ExecuteCommand("dotnet format -h").ThrowIfAnyError();
     }
 
     public void GenerateWarnings(string pathToSolution, string pathToJson)
     {
 
-        ExecuteCommand($"dotnet format \"{pathToSolution}\" --verify-no-changes --report \"{pathToJson}\"");
-    }
-
-    private void ExecuteCommand(string command)
-    {
-        _cmdProcess.ExecuteCommand(command).Wait();
+        _cmdProcess.ExecuteCommand($"dotnet format \"{pathToSolution}\" --verify-no-changes --report \"{pathToJson}\"").ThrowIfAnyError();
     }
 }

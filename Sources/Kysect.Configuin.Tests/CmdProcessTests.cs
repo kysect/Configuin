@@ -1,4 +1,5 @@
-﻿using Kysect.Configuin.Core.CliExecution;
+﻿using FluentAssertions;
+using Kysect.Configuin.Core.CliExecution;
 using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests;
@@ -10,9 +11,8 @@ public class CmdProcessTests
     {
         var cmdProcess = new CmdProcess();
 
-        Assert.Throws<AggregateException>(() =>
-        {
-            cmdProcess.ExecuteCommand("qwerasdf1234").Wait();
-        });
+        CmdExecutionResult cmdExecutionResult = cmdProcess.ExecuteCommand("qwerasdf1234");
+
+        cmdExecutionResult.ExitCode.Should().NotBe(0);
     }
 }
