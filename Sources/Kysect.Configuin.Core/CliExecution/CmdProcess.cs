@@ -1,36 +1,12 @@
-﻿using Kysect.CommonLib.BaseTypes.Extensions;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Kysect.Configuin.Core.CliExecution;
 
 public class CmdProcess
 {
-    public async Task ExecuteCommand(string command)
+    public CmdExecutionResult ExecuteCommand(string command)
     {
-        var exceptions = new List<Exception>();
-
         using var process = new Process();
-
-        process.Exited += (sender, _) =>
-        {
-            if (sender is null)
-            {
-                exceptions.Add(new NullReferenceException(nameof(sender)));
-                return;
-            }
-
-            int exitCode = sender.To<Process>().ExitCode;
-            if (exitCode != 0)
-            {
-                exceptions.Add(new CmdProcessException($"Application return exit code {exitCode}."));
-            }
-        };
-
-        process.ErrorDataReceived += (sender, args) =>
-        {
-            if (args.Data is not null)
-                exceptions.Add(new CmdProcessException());
-        };
 
         var startInfo = new ProcessStartInfo
         {
@@ -42,15 +18,28 @@ public class CmdProcess
 
         process.StartInfo = startInfo;
         process.Start();
-        await process.WaitForExitAsync();
+        process.WaitForExit();
 
-        string errors = await process.StandardError.ReadToEndAsync();
-        if (!string.IsNullOrEmpty(errors))
-            exceptions.Add(new CmdProcessException(errors));
-
+        int exitCode = process.ExitCode;
+        IReadOnlyCollection<string> errors = GetErrors(process);
         process.Close();
 
-        if (exceptions.Count > 0)
-            throw new AggregateException("Failed to execute cmd command", exceptions);
+        return new CmdExecutionResult(exitCode, errors);
+    }
+
+    private IReadOnlyCollection<string> GetErrors(Process process)
+    {
+        var errors = new List<string>();
+
+        // TODO: fixed error stream reading
+        // Line splitting triggered by char limit =_=
+        while (!process.StandardError.EndOfStream)
+        {
+            string? line = process.StandardError.ReadLine();
+            if (line is not null)
+                errors.Add(line);
+        }
+
+        return errors;
     }
 }
