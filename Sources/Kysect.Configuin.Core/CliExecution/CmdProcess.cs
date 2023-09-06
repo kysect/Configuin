@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Kysect.Configuin.Core.CliExecution;
 
@@ -8,13 +9,7 @@ public class CmdProcess
     {
         using var process = new Process();
 
-        var startInfo = new ProcessStartInfo
-        {
-            WindowStyle = ProcessWindowStyle.Hidden,
-            RedirectStandardError = true,
-            FileName = "cmd.exe",
-            Arguments = $"/C {command}"
-        };
+        ProcessStartInfo startInfo = CreateProcessStartInfo(command);
 
         process.StartInfo = startInfo;
         process.Start();
@@ -25,6 +20,33 @@ public class CmdProcess
         process.Close();
 
         return new CmdExecutionResult(exitCode, errors);
+    }
+
+    private ProcessStartInfo CreateProcessStartInfo(string command)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            return new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                RedirectStandardError = true,
+                FileName = "cmd.exe",
+                Arguments = $"/C {command}"
+            };
+        }
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            return new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                RedirectStandardError = true,
+                FileName = "sh",
+                Arguments = $"-c {command}"
+            };
+        }
+
+        throw new NotSupportedException(RuntimeInformation.OSDescription);
     }
 
     private IReadOnlyCollection<string> GetErrors(Process process)
