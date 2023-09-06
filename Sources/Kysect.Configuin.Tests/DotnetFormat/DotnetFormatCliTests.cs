@@ -13,6 +13,7 @@ public class DotnetFormatCliTests
     }
 
     [Test]
+    [Ignore("This test require infrastructure")]
     public void Validate_FinishedWithoutErrors()
     {
         _dotnetFormatCli.Validate();
