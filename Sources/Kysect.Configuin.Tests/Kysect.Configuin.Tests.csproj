@@ -13,7 +13,6 @@
     <PackageReference Include="codeessentials.Extensions.Logging.Demystifier" />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Kysect.CommonLib" />
-    <PackageReference Include="Kysect.Editorconfig" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />
