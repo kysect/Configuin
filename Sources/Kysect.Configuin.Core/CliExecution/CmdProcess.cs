@@ -1,15 +1,27 @@
-﻿using System.Diagnostics;
+﻿using Kysect.CommonLib.Logging;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Kysect.Configuin.Core.CliExecution;
 
 public class CmdProcess
 {
+    private readonly ILogger _logger;
+
+    public CmdProcess(ILogger logger)
+    {
+        _logger = logger;
+    }
+
     public CmdExecutionResult ExecuteCommand(string command)
     {
+
         using var process = new Process();
 
         ProcessStartInfo startInfo = CreateProcessStartInfo(command);
+
+        _logger.LogTrace("Execute cmd command {command} {arguments}", startInfo.FileName, startInfo.Arguments);
 
         process.StartInfo = startInfo;
         process.Start();
@@ -17,9 +29,18 @@ public class CmdProcess
 
         int exitCode = process.ExitCode;
         IReadOnlyCollection<string> errors = GetErrors(process);
+        var cmdExecutionResult = new CmdExecutionResult(exitCode, errors);
+
+        if (cmdExecutionResult.IsAnyError())
+        {
+            _logger.LogError("Finished with {exitCode} and {errorCount} errors.", exitCode, errors.Count);
+            foreach (string error in cmdExecutionResult.Errors)
+                _logger.LogTabError(1, error);
+        }
+
         process.Close();
 
-        return new CmdExecutionResult(exitCode, errors);
+        return cmdExecutionResult;
     }
 
     private ProcessStartInfo CreateProcessStartInfo(string command)

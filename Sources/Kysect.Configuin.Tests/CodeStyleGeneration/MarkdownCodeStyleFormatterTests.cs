@@ -3,13 +3,14 @@ using Kysect.Configuin.Core.CodeStyleGeneration.Markdown;
 using Kysect.Configuin.Core.CodeStyleGeneration.Models;
 using Kysect.Configuin.Core.RoslynRuleModels;
 using Kysect.Configuin.Tests.Resources;
+using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.CodeStyleGeneration;
 
 public class MarkdownCodeStyleFormatterTests
 {
-    private readonly MarkdownCodeStyleFormatter _formatter = new MarkdownCodeStyleFormatter();
+    private readonly MarkdownCodeStyleFormatter _formatter = new MarkdownCodeStyleFormatter(TestLogger.ProviderForTests());
 
     [Test]
     public void FormatStyleRule_ForIDE0040_ReturnExpected()

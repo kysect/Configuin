@@ -8,24 +8,31 @@ using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
 using Kysect.Configuin.Core.RoslynRuleModels;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
+using Microsoft.Extensions.Logging;
 
 namespace Kysect.Configuin.Core.MsLearnDocumentation;
 
 public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 {
+    private readonly ILogger _logger;
+
     private readonly MarkdownTableParser _markdownTableParser;
     private readonly MsLearnTableParser _msLearnTableParser;
     private readonly IMarkdownTextExtractor _textExtractor;
 
-    public MsLearnDocumentationParser(IMarkdownTextExtractor textExtractor)
+    public MsLearnDocumentationParser(IMarkdownTextExtractor textExtractor, ILogger logger)
     {
         _textExtractor = textExtractor;
+        _logger = logger;
+
         _markdownTableParser = new MarkdownTableParser(textExtractor);
         _msLearnTableParser = new MsLearnTableParser();
     }
 
     public RoslynRules Parse(MsLearnDocumentationRawInfo rawInfo)
     {
+        _logger.LogInformation("Parsing roslyn rules from MS Learn");
+
         IReadOnlyCollection<RoslynStyleRuleOption> dotnetFormattingOptions = ParseAdditionalFormattingOptions(rawInfo.DotnetFormattingOptionsContent);
         IReadOnlyCollection<RoslynStyleRuleOption> sharpFormattingOptions = ParseAdditionalFormattingOptions(rawInfo.SharpFormattingOptionsContent);
 
@@ -163,9 +170,13 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     {
         MarkdownHeadedBlock? overviewBlock = markdownHeadedBlocks.FirstOrDefault(h => h.HeaderText == "Overview");
         if (overviewBlock is null)
+        {
             // TODO: Rule IDE0055 does not contains this block
             //throw new ConfiguinException("Style rule page does not contains Overview block.");
+
+            _logger.LogWarning("Skip overview parsing for IDE0055");
             return string.Empty;
+        }
 
         string overviewText = overviewBlock
             .Content

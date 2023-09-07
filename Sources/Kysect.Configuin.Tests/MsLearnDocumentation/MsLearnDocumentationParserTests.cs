@@ -12,7 +12,7 @@ public class MsLearnDocumentationParserTests
 {
     private static readonly MsLearnRepositoryPathProvider MsLearnRepositoryPathProvider = TestImplementations.CreateRepositoryPathProvider();
 
-    private readonly MsLearnDocumentationParser _parser = new MsLearnDocumentationParser(TestImplementations.GetTextExtractor());
+    private readonly MsLearnDocumentationParser _parser = new MsLearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
 
     [Test]
     public void ParseStyleRule_IDE0040_ReturnExpectedResult()

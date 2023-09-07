@@ -9,11 +9,23 @@ public interface IEditorConfigSetting
 public record CompositeRoslynOptionEditorConfigSetting(
     IReadOnlyCollection<string> KeyParts,
     string Value,
-    RoslynRuleSeverity? Severity) : IEditorConfigSetting;
+    RoslynRuleSeverity? Severity) : IEditorConfigSetting
+{
+    public string ToDisplayString()
+    {
+        return $"{string.Join('.', KeyParts)} = {Value} (Severity: {Severity})";
+    }
+}
 
 public record GeneralEditorConfigSetting(
     string Key,
-    string Value) : IEditorConfigSetting;
+    string Value) : IEditorConfigSetting
+{
+    public string ToDisplayString()
+    {
+        return $"{Key} = {Value}";
+    }
+}
 
 public record RoslynOptionEditorConfigSetting(
     string Key,

@@ -2,13 +2,14 @@
 using Kysect.Configuin.Core.EditorConfigParsing;
 using Kysect.Configuin.Core.EditorConfigParsing.Settings;
 using Kysect.Configuin.Core.RoslynRuleModels;
+using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.EditorConfigSettingsParsing;
 
 public class EditorConfigSettingsParserTests
 {
-    private readonly EditorConfigSettingsParser _parser = new EditorConfigSettingsParser();
+    private readonly EditorConfigSettingsParser _parser = new EditorConfigSettingsParser(TestLogger.ProviderForTests());
 
     [Test]
     public void Parse_TabWidth_ReturnGeneralEditorRule()
