@@ -14,7 +14,7 @@ public class TemporaryFileMoverTests
 
     public TemporaryFileMoverTests()
     {
-        _sut = new TemporaryFileMover(Path.Combine(TestGenerated, "TempDir"), TestLogger.ProviderForTests());
+        _sut = new TemporaryFileMover(TestLogger.ProviderForTests());
     }
 
     [SetUp]
@@ -38,7 +38,7 @@ public class TemporaryFileMoverTests
         IFileMoveUndoOperation undoAction = _sut.MoveFile(fileForMove, targetPath);
         File.Exists(targetPath).Should().BeTrue();
 
-        undoAction.Execute();
+        undoAction.Dispose();
         File.Exists(targetPath).Should().BeFalse();
     }
 
@@ -56,7 +56,7 @@ public class TemporaryFileMoverTests
         File.Exists(targetFile).Should().BeTrue();
         File.ReadAllText(targetFile).Should().Be(fileForMove);
 
-        undoAction.Execute();
+        undoAction.Dispose();
 
         File.Exists(targetFile).Should().BeTrue();
         File.ReadAllText(targetFile).Should().Be(targetFile);

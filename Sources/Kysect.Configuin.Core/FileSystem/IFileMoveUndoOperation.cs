@@ -1,6 +1,5 @@
 ﻿namespace Kysect.Configuin.Core.FileSystem;
 
-public interface IFileMoveUndoOperation
+public interface IFileMoveUndoOperation : IDisposable
 {
-    void Execute();
 }
