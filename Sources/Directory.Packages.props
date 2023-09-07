@@ -3,6 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="codeessentials.Extensions.Logging.Demystifier" Version="1.1.66" />
     <PackageVersion Include="Kysect.CommonLib" Version="0.1.6" />
     <PackageVersion Include="Kysect.Editorconfig" Version="1.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
@@ -11,8 +12,13 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Options" Version="7.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="7.0.0" />
+    <PackageVersion Include="Serilog" Version="3.0.1" />
+    <PackageVersion Include="Serilog.Extensions.Logging" Version="7.0.0" />
+    <PackageVersion Include="Serilog.Settings.Configuration" Version="7.0.1" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageVersion Include="Markdig" Version="0.33.0" />
     <PackageVersion Include="FluentAssertions" Version="[6.12.0, )" />

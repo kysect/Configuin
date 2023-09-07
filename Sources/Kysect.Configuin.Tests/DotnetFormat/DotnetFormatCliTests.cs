@@ -1,4 +1,5 @@
 ﻿using Kysect.Configuin.Core.DotnetFormat;
+using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.DotnetFormat;
@@ -9,7 +10,7 @@ public class DotnetFormatCliTests
 
     public DotnetFormatCliTests()
     {
-        _dotnetFormatCli = new DotnetFormatCli();
+        _dotnetFormatCli = new DotnetFormatCli(TestLogger.ProviderForTests());
     }
 
     [Test]

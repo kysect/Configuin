@@ -1,12 +1,22 @@
 ﻿using Kysect.CommonLib.Exceptions;
 using Kysect.Configuin.Core.CodeStyleGeneration.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Kysect.Configuin.Core.CodeStyleGeneration.Markdown;
 
 public class MarkdownCodeStyleFormatter : ICodeStyleFormatter
 {
+    private readonly ILogger _logger;
+
+    public MarkdownCodeStyleFormatter(ILogger logger)
+    {
+        _logger = logger;
+    }
+
     public string Format(CodeStyle codeStyle)
     {
+        _logger.LogInformation("Formatting code style to markdown.");
+
         var strings = codeStyle.Elements
             .Select(FormatRule)
             .ToList();

@@ -8,7 +8,10 @@ using Kysect.Configuin.Core.MsLearnDocumentation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Kysect.Configuin.Console;
 
@@ -22,6 +25,7 @@ public class DependencyBuilder
         IServiceCollection serviceCollection = builder.Services;
 
         serviceCollection.AddOptionsWithValidation<ConfiguinConfiguration>(nameof(ConfiguinConfiguration));
+        serviceCollection.AddSingleton(CreateLogger);
 
         serviceCollection.AddSingleton<IEditorConfigContentProvider>(sp =>
         {
@@ -39,15 +43,33 @@ public class DependencyBuilder
             return new MsLearnDocumentationInfoLocalProvider(options.Value.MsLearnRepositoryPath);
         });
 
-        serviceCollection.AddSingleton<IMsLearnDocumentationParser>(_ => new MsLearnDocumentationParser(PlainTextExtractor.Create()));
+        serviceCollection.AddSingleton<IMsLearnDocumentationParser>(sp =>
+        {
+            ILogger logger = sp.GetRequiredService<ILogger>();
+            return new MsLearnDocumentationParser(PlainTextExtractor.Create(), logger);
+        });
         serviceCollection.AddSingleton<ICodeStyleGenerator, CodeStyleGenerator>();
         serviceCollection.AddSingleton<ICodeStyleWriter>(sp =>
         {
             IOptions<ConfiguinConfiguration> options = sp.GetRequiredService<IOptions<ConfiguinConfiguration>>();
+            ILogger logger = sp.GetRequiredService<ILogger>();
 
-            return new MarkdownCodeStyleWriter(options.Value.OutputPath);
+            return new MarkdownCodeStyleWriter(options.Value.OutputPath, logger);
         });
 
         return serviceCollection.BuildServiceProvider();
+    }
+
+    public static ILogger CreateLogger(IServiceProvider serviceProvider)
+    {
+        LoggerConfiguration loggerConfiguration = new LoggerConfiguration()
+            .MinimumLevel.Verbose()
+            .WriteTo.Console();
+
+        ILoggerFactory loggerFactory = new LoggerFactory()
+            .DemystifyExceptions()
+            .AddSerilog(loggerConfiguration.CreateLogger());
+
+        return loggerFactory.CreateLogger("Tests");
     }
 }

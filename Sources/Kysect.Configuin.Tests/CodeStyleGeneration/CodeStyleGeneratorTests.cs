@@ -13,22 +13,27 @@ namespace Kysect.Configuin.Tests.CodeStyleGeneration;
 
 public class CodeStyleGeneratorTests
 {
-    private readonly MsLearnDocumentationParser _msLearnDocumentationParser = new(TestImplementations.GetTextExtractor());
-    private readonly EditorConfigSettingsParser _editorConfigSettingsParser = new();
+    private readonly MsLearnDocumentationParser _msLearnDocumentationParser = new MsLearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
+    private readonly EditorConfigSettingsParser _editorConfigSettingsParser = new EditorConfigSettingsParser(TestLogger.ProviderForTests());
     private readonly MsLearnDocumentationInfoLocalProvider _repositoryPathProvider = TestImplementations.CreateDocumentationInfoLocalProvider();
+    private readonly CodeStyleGenerator _sut;
+
+    public CodeStyleGeneratorTests()
+    {
+        _sut = new CodeStyleGenerator(TestLogger.ProviderForTests());
+    }
 
     [Test]
     public void Generate_ForAllMsLearnDocumentation_FinishWithoutErrors()
     {
         string pathToIniFile = Path.Combine("Resources", "Editor-config-sample.ini");
-        var sut = new CodeStyleGenerator();
 
         MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = _repositoryPathProvider.Provide();
         RoslynRules roslynRules = _msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
         string fileText = File.ReadAllText(pathToIniFile);
         EditorConfigSettings editorConfigSettings = _editorConfigSettingsParser.Parse(fileText);
 
-        CodeStyle codeStyle = sut.Generate(editorConfigSettings, roslynRules);
+        CodeStyle codeStyle = _sut.Generate(editorConfigSettings, roslynRules);
 
         ICodeStyleElement codeStyleElement = codeStyle.Elements.ElementAt(2);
         codeStyleElement.Should().BeOfType<CodeStyleRoslynStyleRuleConfiguration>();
