@@ -1,17 +1,21 @@
 ﻿using Kysect.Configuin.Core.EditorConfigParsing.Settings;
 using Kysect.Configuin.Core.IniParsing;
 using Kysect.Configuin.Core.RoslynRuleModels;
+using Microsoft.Extensions.Logging;
 
 namespace Kysect.Configuin.Core.EditorConfigParsing;
 
 public class EditorConfigSettingsParser : IEditorConfigSettingsParser
 {
-    private readonly IniParser _iniParser = new IniParser();
+    private readonly ILogger _logger;
 
+    private readonly IniParser _iniParser = new IniParser();
     private readonly HashSet<string> _generalRuleKeys;
 
-    public EditorConfigSettingsParser()
+    public EditorConfigSettingsParser(ILogger logger)
     {
+        _logger = logger;
+
         // TODO: Investigate other rules
         _generalRuleKeys = new HashSet<string>
         {
@@ -23,6 +27,8 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
 
     public EditorConfigSettings Parse(string content)
     {
+        _logger.LogInformation("Parse .editorconfig file");
+
         IReadOnlyCollection<IniFileLine> iniFileLines = _iniParser.Parse(content);
 
         var rules = iniFileLines

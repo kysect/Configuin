@@ -29,4 +29,9 @@ public class CmdExecutionResult
             throw new CmdProcessException($"Return {ExitCode} exit code.");
         }
     }
+
+    public bool IsAnyError()
+    {
+        return Errors.Any() || ExitCode != 0;
+    }
 }

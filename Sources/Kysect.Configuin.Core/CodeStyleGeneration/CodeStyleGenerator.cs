@@ -3,22 +3,34 @@ using Kysect.Configuin.Core.CodeStyleGeneration.Models;
 using Kysect.Configuin.Core.EditorConfigParsing;
 using Kysect.Configuin.Core.EditorConfigParsing.Settings;
 using Kysect.Configuin.Core.RoslynRuleModels;
+using Microsoft.Extensions.Logging;
 
 namespace Kysect.Configuin.Core.CodeStyleGeneration;
 
 public class CodeStyleGenerator : ICodeStyleGenerator
 {
+    private readonly ILogger _logger;
+
+    public CodeStyleGenerator(ILogger logger)
+    {
+        _logger = logger;
+    }
+
     public CodeStyle Generate(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
     {
+        _logger.LogInformation("Start code style generating.");
+
         IReadOnlyCollection<RoslynStyleRuleOption> roslynRuleOptions = roslynRules.GetOptions();
         IReadOnlyCollection<IEditorConfigSetting> notProcessedSettings = editorConfigSettings.Settings;
 
+        _logger.LogInformation("Try parse {count} settings", notProcessedSettings.Count);
         notProcessedSettings = notProcessedSettings.Where(IsSupported).ToList();
 
         IReadOnlyCollection<CodeStyleRoslynOptionConfiguration> optionConfigurations = notProcessedSettings
             .OfType<RoslynOptionEditorConfigSetting>()
             .Select(o => ParseOptionSettings(o, roslynRuleOptions))
             .ToList();
+        _logger.LogInformation("Parsed {count} option configurations", optionConfigurations.Count);
 
         notProcessedSettings = notProcessedSettings.Where(r => r is not RoslynOptionEditorConfigSetting).ToList();
 
@@ -26,6 +38,7 @@ public class CodeStyleGenerator : ICodeStyleGenerator
             .OfType<RoslynSeverityEditorConfigSetting>()
             .Select(severitySetting => ParseRuleSettings(severitySetting, optionConfigurations, roslynRules))
             .ToList();
+        _logger.LogInformation("Parsed {count} rule severity", ruleConfiguration.Count);
 
         notProcessedSettings = notProcessedSettings.Where(r => r is not RoslynSeverityEditorConfigSetting).ToList();
 
@@ -48,16 +61,23 @@ public class CodeStyleGenerator : ICodeStyleGenerator
         if (setting is RoslynSeverityEditorConfigSetting severityEditorConfigRule
             && severityEditorConfigRule.RuleId.Equals(RoslynRuleId.Parse("IDE1006")))
         {
+            _logger.LogWarning("Rule IDE0055 is not supported and will be skipped.");
             return false;
         }
 
         // TODO: #35 Probably, most of this rules related to IDE1006
-        if (setting is CompositeRoslynOptionEditorConfigSetting)
+        if (setting is CompositeRoslynOptionEditorConfigSetting compositeSetting)
+        {
+            _logger.LogWarning("{setting} is not supported and will be skipped.", compositeSetting.ToDisplayString());
             return false;
+        }
 
         // TODO: Maybe we need to support it in some way
-        if (setting is GeneralEditorConfigSetting)
+        if (setting is GeneralEditorConfigSetting generalSetting)
+        {
+            _logger.LogWarning("{option} is not supported and will be skipped.", generalSetting.ToDisplayString());
             return false;
+        }
 
         return true;
     }
