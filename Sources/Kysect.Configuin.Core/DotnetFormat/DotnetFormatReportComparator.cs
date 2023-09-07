@@ -16,13 +16,19 @@ public class DotnetFormatReportComparator
 
     public CollectionDiff<DotnetFormatFileReport> Compare(string left, string right)
     {
-        _logger.LogInformation("Comparing dotnet format report between {left} and {right}", left, right);
+        _logger.LogInformation("Loading warnings for {left} and {right}", left, right);
 
         IReadOnlyCollection<DotnetFormatFileReport> leftReports = JsonSerializer.Deserialize<IReadOnlyCollection<DotnetFormatFileReport>>(left).ThrowIfNull();
         IReadOnlyCollection<DotnetFormatFileReport> rightReports = JsonSerializer.Deserialize<IReadOnlyCollection<DotnetFormatFileReport>>(right).ThrowIfNull();
 
-        var diff = CollectionDiff.Create(leftReports, rightReports, DotnetFormatFileReportComparator.Instance);
-        _logger.LogInformation("Same: {same}, added: {added}, removed: {removed}", diff.Same, diff.Added, diff.Removed);
+        return Compare(leftReports, rightReports);
+    }
+
+    public CollectionDiff<DotnetFormatFileReport> Compare(IReadOnlyCollection<DotnetFormatFileReport> left, IReadOnlyCollection<DotnetFormatFileReport> right)
+    {
+        _logger.LogInformation("Comparing dotnet format report");
+        var diff = CollectionDiff.Create(left, right, DotnetFormatFileReportComparator.Instance);
+        _logger.LogInformation("Same: {same}, added: {added}, removed: {removed}", diff.Same.Count, diff.Added.Count, diff.Removed.Count);
         return diff;
     }
 

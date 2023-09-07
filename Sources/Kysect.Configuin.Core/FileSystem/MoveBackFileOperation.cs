@@ -15,7 +15,7 @@ public class MoveBackFileOperation : IFileMoveUndoOperation
         _logger = logger;
     }
 
-    public void Execute()
+    public void Dispose()
     {
         _logger.LogInformation("Undo file move. Move backup file from {source} to {target}", _source, _target);
         File.Move(_source, _target, overwrite: true);

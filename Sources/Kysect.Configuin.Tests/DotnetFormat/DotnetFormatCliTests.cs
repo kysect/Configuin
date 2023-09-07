@@ -21,11 +21,12 @@ public class DotnetFormatCliTests
     }
 
     [Test]
-    [Ignore("This test require infrastructure")]
+    //[Ignore("This test require infrastructure")]
     public void GenerateWarnings_CreateReportFile()
     {
-        const string pathToSln = "./../../../../";
+        //const string pathToSln = "./../../../../";
+        const string pathToSln = "C:\\Coding\\Kysect.PowerShellRunner\\Sources\\Kysect.PowerShellRunner.sln";
 
-        _dotnetFormatCli.GenerateWarnings(pathToSln, "sample.json");
+        _dotnetFormatCli.Format(pathToSln, "sample.json");
     }
 }
