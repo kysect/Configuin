@@ -15,6 +15,19 @@ public class MsLearnDocumentationParserTests
     private readonly MsLearnDocumentationParser _parser = new MsLearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
 
     [Test]
+    public void ParseStyleRule_IDE0001_ReturnExpectedResult()
+    {
+        string fileText = GetIdeDescription("ide0001.md");
+
+        RoslynStyleRule expected = WellKnownRoslynRuleDefinitions.IDE0001();
+
+        IReadOnlyCollection<RoslynStyleRule> roslynStyleRules = _parser.ParseStyleRules(fileText);
+
+        roslynStyleRules.Should().HaveCount(1)
+            .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
+    }
+
+    [Test]
     public void ParseStyleRule_IDE0040_ReturnExpectedResult()
     {
         string fileText = GetIdeDescription("ide0040.md");
@@ -110,7 +123,7 @@ public class MsLearnDocumentationParserTests
             "Remove this or Me qualification",
             "Style",
             overview,
-            string.Empty,
+            null,
             options);
 
         var ide0009 = new RoslynStyleRule(
@@ -118,7 +131,7 @@ public class MsLearnDocumentationParserTests
             "Add this or Me qualification",
             "Style",
             overview,
-            string.Empty,
+            null,
             options);
 
         IReadOnlyCollection<RoslynStyleRule> roslynStyleRules = _parser.ParseStyleRules(fileText);

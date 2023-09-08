@@ -4,6 +4,28 @@ namespace Kysect.Configuin.Tests.Resources;
 
 public static class WellKnownRoslynRuleDefinitions
 {
+    public static RoslynStyleRule IDE0001()
+    {
+        return new RoslynStyleRule(
+            ruleId: RoslynRuleId.Parse("IDE0001"),
+            title: "Simplify name",
+            category: "Style",
+            overview: "This rule concerns the use of simplified type names in declarations and executable code, when possible. You can remove unnecessary name qualification to simplify code and improve readability.",
+            example: """
+                     using System.IO;
+                     class C
+                     {
+                         // IDE0001: 'System.IO.FileInfo' can be simplified to 'FileInfo'
+                         System.IO.FileInfo file;
+                     
+                         // Fixed code
+                         FileInfo file;
+                     }
+                     """,
+            options: Array.Empty<RoslynStyleRuleOption>());
+    }
+
+
     public static RoslynStyleRule IDE0040()
     {
         string codeSample = """
@@ -40,7 +62,7 @@ public static class WellKnownRoslynRuleDefinitions
             "Add accessibility modifiers",
             "Style",
             "This style rule concerns requiring accessibility modifiers in declarations.",
-            string.Empty,
+            null,
             new[] { expectedOption });
     }
 

@@ -43,14 +43,21 @@ public class MarkdownCodeStyleFormatter : ICodeStyleFormatter
         builder.AddText($"Severity: {rule.Severity}");
         builder.AddEmptyLine();
         builder.AddText(rule.Rule.Overview);
-        builder.AddEmptyLine();
+        if (rule.Rule.Example is not null)
+        {
+            builder.AddEmptyLine();
+            builder.AddCode(rule.Rule.Example);
+        }
 
         foreach (CodeStyleRoslynOptionConfiguration optionConfiguration in rule.Options)
         {
-            builder.AddH3($"{optionConfiguration.Option.Name} = {optionConfiguration.SelectedValue}");
             builder.AddEmptyLine();
+            builder.AddH3($"{optionConfiguration.Option.Name} = {optionConfiguration.SelectedValue}");
             if (optionConfiguration.Option.CsharpCodeSample is not null)
+            {
+                builder.AddEmptyLine();
                 builder.AddCode(optionConfiguration.Option.CsharpCodeSample);
+            }
         }
 
         return builder.Build();
