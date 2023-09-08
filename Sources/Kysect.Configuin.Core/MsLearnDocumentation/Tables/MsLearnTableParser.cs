@@ -1,5 +1,5 @@
-﻿using Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
-using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
+﻿using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
+using Kysect.Configuin.Markdown.Tables.Models;
 
 namespace Kysect.Configuin.Core.MsLearnDocumentation.Tables;
 

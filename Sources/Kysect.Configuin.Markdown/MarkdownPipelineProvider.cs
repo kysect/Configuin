@@ -1,6 +1,6 @@
 ﻿using Markdig;
 
-namespace Kysect.Configuin.Core.MarkdownParsing;
+namespace Kysect.Configuin.Markdown;
 
 public class MarkdownPipelineProvider
 {

@@ -1,8 +1,8 @@
-﻿using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
+﻿using Kysect.Configuin.Markdown.TextExtractor;
 using Markdig.Parsers;
 using Markdig.Syntax;
 
-namespace Kysect.Configuin.Core.MarkdownParsing.Documents;
+namespace Kysect.Configuin.Markdown.Documents;
 
 public static class MarkdownDocumentExtensions
 {
