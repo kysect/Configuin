@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Kysect.Configuin.Core.CodeStyleGeneration.Markdown;
 using Kysect.Configuin.Core.CodeStyleGeneration.Models;
-using Kysect.Configuin.Core.RoslynRuleModels;
+using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Resources;
 using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;

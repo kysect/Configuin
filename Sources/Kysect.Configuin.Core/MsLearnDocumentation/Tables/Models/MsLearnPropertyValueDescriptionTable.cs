@@ -1,4 +1,6 @@
-﻿namespace Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
+﻿using Kysect.Configuin.Common;
+
+namespace Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
 
 public class MsLearnPropertyValueDescriptionTable
 {

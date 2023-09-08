@@ -1,4 +1,4 @@
-using Kysect.Configuin.Core.RoslynRuleModels;
+using Kysect.Configuin.RoslynModels;
 
 namespace Kysect.Configuin.Core.MsLearnDocumentation.Models;
 
