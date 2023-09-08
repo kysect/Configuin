@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin.Tests", "K
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.DotnetFormatIntegration", "Kysect.Configuin.DotnetFormatIntegration\Kysect.Configuin.DotnetFormatIntegration.csproj", "{5C32B523-21C8-4A0D-B7FD-A017DE804F5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.RoslynModels", "Kysect.Configuin.RoslynModels\Kysect.Configuin.RoslynModels.csproj", "{A2CEC1A3-8065-48C9-A9C2-E36EF2C2C51E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{5C32B523-21C8-4A0D-B7FD-A017DE804F5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C32B523-21C8-4A0D-B7FD-A017DE804F5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C32B523-21C8-4A0D-B7FD-A017DE804F5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2CEC1A3-8065-48C9-A9C2-E36EF2C2C51E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2CEC1A3-8065-48C9-A9C2-E36EF2C2C51E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2CEC1A3-8065-48C9-A9C2-E36EF2C2C51E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2CEC1A3-8065-48C9-A9C2-E36EF2C2C51E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-﻿namespace Kysect.Configuin.Core.RoslynRuleModels;
+﻿namespace Kysect.Configuin.RoslynModels;
 
 public class RoslynQualityRule
 {

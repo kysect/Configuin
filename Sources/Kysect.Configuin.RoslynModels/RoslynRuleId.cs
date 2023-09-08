@@ -1,6 +1,6 @@
 ﻿using Kysect.Configuin.Common;
 
-namespace Kysect.Configuin.Core.RoslynRuleModels;
+namespace Kysect.Configuin.RoslynModels;
 
 public readonly struct RoslynRuleId
 {

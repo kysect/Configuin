@@ -1,3 +1,4 @@
+using Kysect.Configuin.Common;
 using Kysect.Configuin.Core.MarkdownParsing.Documents;
 using Kysect.Configuin.Core.MarkdownParsing.Tables;
 using Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
@@ -5,7 +6,7 @@ using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MsLearnDocumentation.Models;
 using Kysect.Configuin.Core.MsLearnDocumentation.Tables;
 using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
-using Kysect.Configuin.Core.RoslynRuleModels;
+using Kysect.Configuin.RoslynModels;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
 using Microsoft.Extensions.Logging;

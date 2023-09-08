@@ -9,14 +9,10 @@
   <ItemGroup>
     <PackageReference Include="Kysect.CommonLib" />
     <PackageReference Include="Kysect.Editorconfig" />
-    <PackageReference Include="Markdig" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kysect.Configuin.Common\Kysect.Configuin.Common.csproj" />
-    <ProjectReference Include="..\Kysect.Configuin.DotnetFormatIntegration\Kysect.Configuin.DotnetFormatIntegration.csproj" />
-    <ProjectReference Include="..\Kysect.Configuin.RoslynModels\Kysect.Configuin.RoslynModels.csproj" />
   </ItemGroup>
 
 </Project>

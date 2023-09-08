@@ -1,6 +1,6 @@
 ﻿using Kysect.CommonLib.Exceptions;
 
-namespace Kysect.Configuin.Core.RoslynRuleModels;
+namespace Kysect.Configuin.RoslynModels;
 
 public enum RoslynRuleType
 {

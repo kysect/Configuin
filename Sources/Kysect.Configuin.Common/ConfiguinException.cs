@@ -1,4 +1,4 @@
-﻿namespace Kysect.Configuin.Core;
+﻿namespace Kysect.Configuin.Common;
 
 public class ConfiguinException : Exception
 {

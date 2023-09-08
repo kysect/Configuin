@@ -1,6 +1,6 @@
 ﻿using Kysect.Configuin.Core.EditorConfigParsing.Settings;
 using Kysect.Configuin.Core.IniParsing;
-using Kysect.Configuin.Core.RoslynRuleModels;
+using Kysect.Configuin.RoslynModels;
 using Microsoft.Extensions.Logging;
 
 namespace Kysect.Configuin.Core.EditorConfigParsing;
