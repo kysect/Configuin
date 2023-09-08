@@ -65,10 +65,12 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             .ToList();
 
         string overviewText = GetStyleOverviewText(markdownHeadedBlocks);
+        string? csharpCodeSample = FindIdeExample(markdownHeadedBlocks);
+
         IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = ParseOptions(markdownHeadedBlocks);
 
         return roslynStyleRuleInformationTables
-            .Select(table => ConvertToRule(table, overviewText, roslynStyleRuleOptions))
+            .Select(table => ConvertToRule(table, overviewText, csharpCodeSample, roslynStyleRuleOptions))
             .ToList();
     }
 
@@ -101,6 +103,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     private RoslynStyleRule ConvertToRule(
         RoslynStyleRuleInformationTable roslynStyleRuleInformationTable,
         string overviewText,
+        string? example,
         IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions)
     {
         return new RoslynStyleRule(
@@ -108,8 +111,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             roslynStyleRuleInformationTable.Title,
             roslynStyleRuleInformationTable.Category,
             overviewText,
-            // TODO: #39 support this
-            example: string.Empty,
+            example: example,
             roslynStyleRuleOptions);
     }
 
@@ -186,6 +188,15 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         return overviewText;
     }
 
+    private string? FindIdeExample(IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks)
+    {
+        MarkdownHeadedBlock? exampleBlock = markdownHeadedBlocks.FirstOrDefault(h => h.HeaderText == "Example");
+        if (exampleBlock is null)
+            return null;
+
+        return TryExtractCsharpCodeBlock(exampleBlock);
+    }
+
     private IReadOnlyCollection<RoslynStyleRuleOption> ParseOptions(IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks)
     {
         return markdownHeadedBlocks
@@ -214,14 +225,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         MarkdownTableContent markdownTableContent = _markdownTableParser.ParseToSimpleContent(tables.Single());
         MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
 
-        var codeBlocks = optionBlock.Content.OfType<CodeBlock>().ToList();
-        CodeBlock? csharpCodeBlock = codeBlocks
-            .OfType<FencedCodeBlock>()
-            .FirstOrDefault(cb => cb.Info == "csharp");
-
-        string? csharpCodeSample = csharpCodeBlock is null
-                                    ? null
-                                    : _textExtractor.ExtractText(csharpCodeBlock);
+        string? csharpCodeSample = TryExtractCsharpCodeBlock(optionBlock);
 
         MsLearnPropertyValueDescriptionTableRow optionName = table.GetSingleValue("Option name");
         IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> optionValues = table.FindValues("Option values");
@@ -232,5 +236,17 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             optionValues.Select(v => new RoslynStyleRuleOptionValue(v.Value, v.Description)).ToList(),
             defaultValue?.Value,
             csharpCodeSample);
+    }
+
+    private string? TryExtractCsharpCodeBlock(MarkdownHeadedBlock block)
+    {
+        FencedCodeBlock? codeBlock = block.Content
+            .OfType<FencedCodeBlock>()
+            .FirstOrDefault(cb => cb.Info == "csharp");
+
+        if (codeBlock is null)
+            return null;
+
+        return _textExtractor.ExtractText(codeBlock);
     }
 }
