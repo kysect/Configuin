@@ -1,4 +1,4 @@
-﻿namespace Kysect.Configuin.Core.CliExecution;
+﻿namespace Kysect.Configuin.DotnetFormatIntegration;
 
 public class CmdProcessException : Exception
 {

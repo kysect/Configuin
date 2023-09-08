@@ -1,7 +1,6 @@
-﻿using Kysect.Configuin.Core.CliExecution;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
-namespace Kysect.Configuin.Core.DotnetFormat;
+namespace Kysect.Configuin.DotnetFormatIntegration;
 
 public class DotnetFormatCli
 {
