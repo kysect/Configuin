@@ -13,6 +13,42 @@ public class MarkdownCodeStyleFormatterTests
     private readonly MarkdownCodeStyleFormatter _formatter = new MarkdownCodeStyleFormatter(TestLogger.ProviderForTests());
 
     [Test]
+    public void FormatStyleRule_ForIDE0001_ReturnExpected()
+    {
+        const string expected = """
+                                ## Simplify name (IDE0001)
+                                
+                                Severity: Warning
+                                
+                                This rule concerns the use of simplified type names in declarations and executable code, when possible. You can remove unnecessary name qualification to simplify code and improve readability.
+                                
+                                ```csharp
+                                using System.IO;
+                                class C
+                                {
+                                    // IDE0001: 'System.IO.FileInfo' can be simplified to 'FileInfo'
+                                    System.IO.FileInfo file;
+                                
+                                    // Fixed code
+                                    FileInfo file;
+                                }
+                                ```
+                                
+                                """;
+
+        RoslynStyleRule ide0040 = WellKnownRoslynRuleDefinitions.IDE0001();
+
+        var styleRoslynStyleRuleConfiguration = new CodeStyleRoslynStyleRuleConfiguration(
+            ide0040,
+            RoslynRuleSeverity.Warning,
+            Options: Array.Empty<CodeStyleRoslynOptionConfiguration>());
+
+        string formatterRule = _formatter.FormatStyleRule(styleRoslynStyleRuleConfiguration);
+
+        formatterRule.Should().Be(expected);
+    }
+
+    [Test]
     public void FormatStyleRule_ForIDE0040_ReturnExpected()
     {
         const string expected = """
