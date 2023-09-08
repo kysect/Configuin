@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
+// TODO: extract all rule descriptions to WellKnownRoslynRuleDefinitions
 public class MsLearnDocumentationParserTests
 {
     private static readonly MsLearnRepositoryPathProvider MsLearnRepositoryPathProvider = TestImplementations.CreateRepositoryPathProvider();
@@ -159,13 +160,11 @@ public class MsLearnDocumentationParserTests
     {
         string fileText = GetPathToCa("ca1865-ca1867.md");
 
-        // TODO: parse description
         var expected = new RoslynQualityRule(
             RoslynRuleId.Parse("CA1865"),
             "Use 'string.Method(char)' instead of 'string.Method(string)' for string with single char",
             category: "Performance",
-            // TODO: parse description?
-            description: string.Empty);
+            description: "The overload that takes a char parameter performs better than the overload that takes a string parameter.");
 
         IReadOnlyCollection<RoslynQualityRule> qualityRules = _parser.ParseQualityRules(fileText);
 
@@ -296,9 +295,7 @@ public class MsLearnDocumentationParserTests
         codeStyleRefactoringOptions.ElementAt(0).Should().BeEquivalentTo(dotnet_style_operator_placement_when_wrapping);
     }
 
-    // TODO: remove ignore
     [Test]
-    [Ignore("Need to fix all related problems")]
     public void Parse_MsDocsRepository_FinishWithoutError()
     {
         MsLearnDocumentationInfoLocalProvider repositoryPathProvider = TestImplementations.CreateDocumentationInfoLocalProvider();

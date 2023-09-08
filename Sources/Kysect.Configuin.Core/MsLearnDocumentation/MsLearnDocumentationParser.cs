@@ -143,13 +143,14 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
         IReadOnlyCollection<RoslynRuleId> ruleIds = ParseQualityRuleTableIdRow(ruleId);
 
+        string description = ParseCaRuleDescription(markdownHeadedBlocks);
+
         return ruleIds
             .Select(id => new RoslynQualityRule(
                 id,
                 title.Value,
                 category.Value,
-                // TODO: #41 parse description
-                description: string.Empty))
+                description))
             .ToList();
     }
 
@@ -158,6 +159,20 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(dotnetFormattingFileContent);
         IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders(_textExtractor);
         return ParseOptions(markdownHeadedBlocks);
+    }
+
+    private string ParseCaRuleDescription(IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks)
+    {
+        MarkdownHeadedBlock? headedBlock = markdownHeadedBlocks.FirstOrDefault(b => b.HeaderText == "Rule description");
+        if (headedBlock is null)
+            throw new ConfiguinException("Quality rule page does not contains Rule description block.");
+
+        string overviewText = headedBlock
+            .Content
+            .Select(_textExtractor.ExtractText)
+            .Aggregate((a, b) => $"{a}{Environment.NewLine}{b}");
+
+        return overviewText;
     }
 
     private IReadOnlyCollection<RoslynRuleId> ParseQualityRuleTableIdRow(MsLearnPropertyValueDescriptionTableRow ruleId)
