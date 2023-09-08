@@ -1,5 +1,4 @@
-﻿using Kysect.CommonLib.Logging;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -25,6 +24,8 @@ public class CmdProcess
 
         process.StartInfo = startInfo;
         process.Start();
+        // TODO: hack. Without it process will waiting for someone read the stream or write it to parent terminal
+        process.StandardError.ReadToEnd();
         process.WaitForExit();
 
         int exitCode = process.ExitCode;
@@ -32,11 +33,7 @@ public class CmdProcess
         var cmdExecutionResult = new CmdExecutionResult(exitCode, errors);
 
         if (cmdExecutionResult.IsAnyError())
-        {
-            _logger.LogError("Finished with {exitCode} and {errorCount} errors.", exitCode, errors.Count);
-            foreach (string error in cmdExecutionResult.Errors)
-                _logger.LogTabError(1, error);
-        }
+            _logger.LogError("Cmd execution finished with exit code {exitCode}.", exitCode);
 
         process.Close();
 
@@ -76,12 +73,12 @@ public class CmdProcess
 
         // TODO: fixed error stream reading
         // Line splitting triggered by char limit =_=
-        while (!process.StandardError.EndOfStream)
-        {
-            string? line = process.StandardError.ReadLine();
-            if (line is not null)
-                errors.Add(line);
-        }
+        //while (!process.StandardError.EndOfStream)
+        //{
+        //    string? line = process.StandardError.ReadLine();
+        //    if (line is not null)
+        //        errors.Add(line);
+        //}
 
         return errors;
     }

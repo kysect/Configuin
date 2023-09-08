@@ -13,7 +13,7 @@ public class DeleteFileOperation : IFileMoveUndoOperation
         _logger = logger;
     }
 
-    public void Execute()
+    public void Dispose()
     {
         _logger.LogInformation("Undo file move. Delete {path}", _path);
         File.Delete(_path);

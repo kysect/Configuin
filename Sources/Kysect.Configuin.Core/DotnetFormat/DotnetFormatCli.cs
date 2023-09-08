@@ -20,9 +20,10 @@ public class DotnetFormatCli
         _cmdProcess.ExecuteCommand("dotnet format -h").ThrowIfAnyError();
     }
 
-    public void GenerateWarnings(string pathToSolution, string pathToJson)
+    public void Format(string pathToSolution, string pathToJson)
     {
         _logger.LogInformation("Generate warnings for {pathToSolution} and write result to {pathToJson}", pathToSolution, pathToJson);
-        _cmdProcess.ExecuteCommand($"dotnet format \"{pathToSolution}\" --verify-no-changes --report \"{pathToJson}\"").ThrowIfAnyError();
+        // TODO: handle exceptions in some way?
+        _cmdProcess.ExecuteCommand($"dotnet format \"{pathToSolution}\" --verify-no-changes --report \"{pathToJson}\"");
     }
 }

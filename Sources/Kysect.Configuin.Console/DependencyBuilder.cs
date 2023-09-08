@@ -2,7 +2,9 @@
 using Kysect.Configuin.Console.Configuration;
 using Kysect.Configuin.Core.CodeStyleGeneration;
 using Kysect.Configuin.Core.CodeStyleGeneration.Markdown;
+using Kysect.Configuin.Core.DotnetFormat;
 using Kysect.Configuin.Core.EditorConfigParsing;
+using Kysect.Configuin.Core.FileSystem;
 using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MsLearnDocumentation;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +27,7 @@ public class DependencyBuilder
         IServiceCollection serviceCollection = builder.Services;
 
         serviceCollection.AddOptionsWithValidation<ConfiguinConfiguration>(nameof(ConfiguinConfiguration));
+        serviceCollection.AddOptionsWithValidation<EditorConfigApplyConfiguration>(nameof(EditorConfigApplyConfiguration));
         serviceCollection.AddSingleton(CreateLogger);
 
         serviceCollection.AddSingleton<IEditorConfigContentProvider>(sp =>
@@ -56,6 +59,10 @@ public class DependencyBuilder
 
             return new MarkdownCodeStyleWriter(options.Value.OutputPath, logger);
         });
+
+        serviceCollection.AddSingleton<DotnetFormatWarningGenerator>();
+        serviceCollection.AddSingleton<TemporaryFileMover>();
+        serviceCollection.AddSingleton<DotnetFormatReportComparator>();
 
         return serviceCollection.BuildServiceProvider();
     }
