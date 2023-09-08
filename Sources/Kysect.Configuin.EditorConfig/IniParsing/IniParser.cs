@@ -1,4 +1,4 @@
-﻿namespace Kysect.Configuin.Core.IniParsing;
+﻿namespace Kysect.Configuin.EditorConfig.IniParsing;
 
 public class IniParser
 {

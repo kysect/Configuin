@@ -1,4 +1,4 @@
-﻿namespace Kysect.Configuin.Core.EditorConfigParsing;
+﻿namespace Kysect.Configuin.EditorConfig;
 
 public interface IEditorConfigContentProvider
 {

@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Kysect.Configuin.Core.EditorConfigParsing;
-using Kysect.Configuin.Core.EditorConfigParsing.Settings;
+using Kysect.Configuin.EditorConfig;
+using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
