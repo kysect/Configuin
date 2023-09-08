@@ -1,7 +1,7 @@
-﻿using Kysect.Configuin.Core.MsLearnDocumentation.Models;
+﻿using Kysect.Configuin.MsLearn.Models;
 using Kysect.Configuin.RoslynModels;
 
-namespace Kysect.Configuin.Core.MsLearnDocumentation;
+namespace Kysect.Configuin.MsLearn;
 
 public interface IMsLearnDocumentationParser
 {

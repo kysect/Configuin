@@ -1,6 +1,6 @@
 ﻿using Kysect.Configuin.Common;
 
-namespace Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
+namespace Kysect.Configuin.MsLearn.Tables.Models;
 
 public class MsLearnPropertyValueDescriptionTable
 {

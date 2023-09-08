@@ -1,4 +1,4 @@
-﻿namespace Kysect.Configuin.Core.MsLearnDocumentation;
+﻿namespace Kysect.Configuin.MsLearn;
 
 public class MsLearnRepositoryPathProvider
 {

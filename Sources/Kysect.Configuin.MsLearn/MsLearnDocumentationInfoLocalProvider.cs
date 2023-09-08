@@ -1,6 +1,6 @@
-﻿using Kysect.Configuin.Core.MsLearnDocumentation.Models;
+﻿using Kysect.Configuin.MsLearn.Models;
 
-namespace Kysect.Configuin.Core.MsLearnDocumentation;
+namespace Kysect.Configuin.MsLearn;
 
 public class MsLearnDocumentationInfoLocalProvider : IMsLearnDocumentationInfoProvider
 {
