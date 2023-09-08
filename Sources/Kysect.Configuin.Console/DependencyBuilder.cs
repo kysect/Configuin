@@ -1,4 +1,4 @@
-﻿using Kysect.Configuin.Common;
+﻿using Kysect.CommonLib.DependencyInjection;
 using Kysect.Configuin.Console.Configuration;
 using Kysect.Configuin.Core.CodeStyleGeneration;
 using Kysect.Configuin.Core.CodeStyleGeneration.Markdown;

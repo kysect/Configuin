@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="codeessentials.Extensions.Logging.Demystifier" />
     <PackageReference Include="Kysect.CommonLib" />
+    <PackageReference Include="Kysect.CommonLib.DependencyInjection" />
     <PackageReference Include="Kysect.Editorconfig" />
     <PackageReference Include="Microsoft.Extensions.Configuration" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
