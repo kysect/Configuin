@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Kysect.Configuin.Core.CliExecution;
+namespace Kysect.Configuin.DotnetFormatIntegration;
 
 public class CmdProcess
 {

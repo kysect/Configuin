@@ -1,4 +1,4 @@
-﻿namespace Kysect.Configuin.Core.CliExecution;
+﻿namespace Kysect.Configuin.DotnetFormatIntegration;
 
 public class CmdExecutionResult
 {
@@ -25,9 +25,7 @@ public class CmdExecutionResult
         }
 
         if (ExitCode != 0)
-        {
             throw new CmdProcessException($"Return {ExitCode} exit code.");
-        }
     }
 
     public bool IsAnyError()

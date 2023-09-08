@@ -2,11 +2,11 @@
 using Kysect.Configuin.Console.Configuration;
 using Kysect.Configuin.Core.CodeStyleGeneration;
 using Kysect.Configuin.Core.CodeStyleGeneration.Markdown;
-using Kysect.Configuin.Core.DotnetFormat;
 using Kysect.Configuin.Core.EditorConfigParsing;
 using Kysect.Configuin.Core.FileSystem;
 using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
 using Kysect.Configuin.Core.MsLearnDocumentation;
+using Kysect.Configuin.DotnetFormatIntegration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

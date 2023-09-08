@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Kysect.Configuin.Common;
+﻿namespace Kysect.Configuin.Common;
 
 public static class StringExtensions
 {

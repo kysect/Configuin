@@ -1,4 +1,4 @@
-﻿using Kysect.Configuin.Core.DotnetFormat;
+﻿using Kysect.Configuin.DotnetFormatIntegration;
 using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
