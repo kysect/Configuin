@@ -1,8 +1,8 @@
 ﻿using Kysect.CommonLib.Collections.Extensions;
 using Kysect.Configuin.Common;
 using Kysect.Configuin.Core.CodeStyleGeneration.Models;
-using Kysect.Configuin.Core.EditorConfigParsing;
-using Kysect.Configuin.Core.EditorConfigParsing.Settings;
+using Kysect.Configuin.EditorConfig;
+using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
 using Microsoft.Extensions.Logging;
 

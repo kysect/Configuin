@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Kysect.Configuin.Core.IniParsing;
+using Kysect.Configuin.EditorConfig.IniParsing;
 using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.EditorConfigSettingsParsing;

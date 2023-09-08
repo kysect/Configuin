@@ -1,6 +1,6 @@
-﻿using Kysect.Configuin.Core.EditorConfigParsing.Settings;
+﻿using Kysect.Configuin.EditorConfig.Settings;
 
-namespace Kysect.Configuin.Core.EditorConfigParsing;
+namespace Kysect.Configuin.EditorConfig;
 
 public class EditorConfigSettings
 {

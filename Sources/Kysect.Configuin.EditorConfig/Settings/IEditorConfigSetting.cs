@@ -1,6 +1,6 @@
 ﻿using Kysect.Configuin.RoslynModels;
 
-namespace Kysect.Configuin.Core.EditorConfigParsing.Settings;
+namespace Kysect.Configuin.EditorConfig.Settings;
 
 public interface IEditorConfigSetting
 {
