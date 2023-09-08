@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.RoslynMode
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.Markdown", "Kysect.Configuin.Markdown\Kysect.Configuin.Markdown.csproj", "{BA63EE03-27FE-4502-B2D6-42A45D4B10AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.MsLearn", "Kysect.Configuin.MsLearn\Kysect.Configuin.MsLearn.csproj", "{CFA77552-71E7-4018-916D-067AAD509A15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{BA63EE03-27FE-4502-B2D6-42A45D4B10AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA63EE03-27FE-4502-B2D6-42A45D4B10AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA63EE03-27FE-4502-B2D6-42A45D4B10AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFA77552-71E7-4018-916D-067AAD509A15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA77552-71E7-4018-916D-067AAD509A15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA77552-71E7-4018-916D-067AAD509A15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA77552-71E7-4018-916D-067AAD509A15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

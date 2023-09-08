@@ -1,6 +1,6 @@
 using Kysect.Configuin.RoslynModels;
 
-namespace Kysect.Configuin.Core.MsLearnDocumentation.Models;
+namespace Kysect.Configuin.MsLearn.Models;
 
 public record RoslynStyleRuleInformationTable(
     RoslynRuleId RuleId,

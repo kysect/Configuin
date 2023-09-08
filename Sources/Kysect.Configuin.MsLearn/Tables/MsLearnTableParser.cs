@@ -1,7 +1,7 @@
-﻿using Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
-using Kysect.Configuin.Markdown.Tables.Models;
+﻿using Kysect.Configuin.Markdown.Tables.Models;
+using Kysect.Configuin.MsLearn.Tables.Models;
 
-namespace Kysect.Configuin.Core.MsLearnDocumentation.Tables;
+namespace Kysect.Configuin.MsLearn.Tables;
 
 public class MsLearnTableParser
 {

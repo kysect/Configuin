@@ -1,4 +1,4 @@
-﻿namespace Kysect.Configuin.Core.MsLearnDocumentation.Tables.Models;
+﻿namespace Kysect.Configuin.MsLearn.Tables.Models;
 
 public record MsLearnPropertyValueDescriptionTableRow(string Value, string Description)
 {
