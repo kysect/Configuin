@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.Configuin.Core.MarkdownParsing.Documents;
-using Kysect.Configuin.Core.MarkdownParsing.Tables;
-using Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
+using Kysect.Configuin.Markdown.Documents;
+using Kysect.Configuin.Markdown.Tables;
+using Kysect.Configuin.Markdown.Tables.Models;
 using Kysect.Configuin.Tests.Tools;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;

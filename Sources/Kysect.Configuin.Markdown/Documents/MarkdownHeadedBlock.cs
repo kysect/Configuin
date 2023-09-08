@@ -1,6 +1,6 @@
 ﻿using Markdig.Syntax;
 
-namespace Kysect.Configuin.Core.MarkdownParsing.Documents;
+namespace Kysect.Configuin.Markdown.Documents;
 
 public class MarkdownHeadedBlock
 {

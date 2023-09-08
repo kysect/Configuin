@@ -1,4 +1,4 @@
-﻿namespace Kysect.Configuin.Core.MarkdownParsing.Tables.Models;
+﻿namespace Kysect.Configuin.Markdown.Tables.Models;
 
 public class MarkdownTableContent
 {

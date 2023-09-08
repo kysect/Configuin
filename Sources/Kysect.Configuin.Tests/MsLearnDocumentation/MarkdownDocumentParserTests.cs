@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Kysect.Configuin.Core.MarkdownParsing.Documents;
-using Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
+using Kysect.Configuin.Markdown.Documents;
+using Kysect.Configuin.Markdown.TextExtractor;
 using Kysect.Configuin.Tests.Tools;
 using Markdig.Syntax;
 using NUnit.Framework;

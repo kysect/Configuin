@@ -1,6 +1,6 @@
 ﻿using Markdig.Syntax;
 
-namespace Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
+namespace Kysect.Configuin.Markdown.TextExtractor;
 
 public interface IMarkdownTextExtractor
 {

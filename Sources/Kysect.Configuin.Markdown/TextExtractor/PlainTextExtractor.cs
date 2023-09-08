@@ -4,7 +4,7 @@ using Markdig.Syntax;
 using System.Text;
 using System.Web;
 
-namespace Kysect.Configuin.Core.MarkdownParsing.TextExtractor;
+namespace Kysect.Configuin.Markdown.TextExtractor;
 
 public class PlainTextExtractor : IMarkdownTextExtractor
 {
