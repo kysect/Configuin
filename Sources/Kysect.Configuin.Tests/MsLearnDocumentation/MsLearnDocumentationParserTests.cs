@@ -8,7 +8,6 @@ using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
-// TODO: extract all rule descriptions to WellKnownRoslynRuleDefinitions
 public class MsLearnDocumentationParserTests
 {
     private static readonly MsLearnRepositoryPathProvider MsLearnRepositoryPathProvider = TestImplementations.CreateRepositoryPathProvider();
@@ -45,95 +44,8 @@ public class MsLearnDocumentationParserTests
     public void ParseStyleRule_IDE0003_0009_ReturnExpectedResult()
     {
         string fileText = GetIdeDescription("ide0003-ide0009.md");
-
-        var options = new RoslynStyleRuleOption[]
-        {
-            // TODO: add dots to end of lines into source code and fix test
-            new RoslynStyleRuleOption(
-                "dotnet_style_qualification_for_field",
-                new []
-                {
-                    new RoslynStyleRuleOptionValue("true", "Prefer fields to be prefaced with this. in C# or Me. in Visual Basic"),
-                    new RoslynStyleRuleOptionValue("false", "Prefer fields not to be prefaced with this. or Me."),
-                },
-                "false",
-                """
-                // dotnet_style_qualification_for_field = true
-                this.capacity = 0;
-                
-                // dotnet_style_qualification_for_field = false
-                capacity = 0;
-                """),
-
-            new RoslynStyleRuleOption(
-                "dotnet_style_qualification_for_property",
-                new []
-                {
-                    new RoslynStyleRuleOptionValue("true", "Prefer properties to be prefaced with this. in C# or Me. in Visual Basic."),
-                    new RoslynStyleRuleOptionValue("false", "Prefer properties not to be prefaced with this. or Me.."),
-                },
-                "false",
-                """
-                // dotnet_style_qualification_for_property = true
-                this.ID = 0;
-                
-                // dotnet_style_qualification_for_property = false
-                ID = 0;
-                """),
-
-            new RoslynStyleRuleOption(
-                "dotnet_style_qualification_for_method",
-                new []
-                {
-                    new RoslynStyleRuleOptionValue("true", "Prefer methods to be prefaced with this. in C# or Me. in Visual Basic."),
-                    new RoslynStyleRuleOptionValue("false", "Prefer methods not to be prefaced with this. or Me.."),
-                },
-                "false",
-                """
-                // dotnet_style_qualification_for_method = true
-                this.Display();
-                
-                // dotnet_style_qualification_for_method = false
-                Display();
-                """),
-
-            new RoslynStyleRuleOption(
-                "dotnet_style_qualification_for_event",
-                new []
-                {
-                    new RoslynStyleRuleOptionValue("true", "Prefer events to be prefaced with this. in C# or Me. in Visual Basic."),
-                    new RoslynStyleRuleOptionValue("false", "Prefer events not to be prefaced with this. or Me.."),
-                },
-                "false",
-                """
-                // dotnet_style_qualification_for_event = true
-                this.Elapsed += Handler;
-                
-                // dotnet_style_qualification_for_event = false
-                Elapsed += Handler;
-                """),
-        };
-
-        string overview = """
-                          These two rules define whether or not you prefer the use of this (C#) and Me. (Visual Basic) qualifiers. To enforce that the qualifiers aren't present, set the severity of IDE0003 to warning or error. To enforce that the qualifiers are present, set the severity of IDE0009 to warning or error.
-                          For example, if you prefer qualifiers for fields and properties but not for methods or events, then you can enable IDE0009 and set the options dotnet_style_qualification_for_field and dotnet_style_qualification_for_property to true. However, this configuration would not flag methods and events that do have this and Me qualifiers. To also enforce that methods and events don't have qualifiers, enable IDE0003.
-                          """;
-
-        var ide0003 = new RoslynStyleRule(
-            RoslynRuleId.Parse("IDE0003"),
-            "Remove this or Me qualification",
-            "Style",
-            overview,
-            null,
-            options);
-
-        var ide0009 = new RoslynStyleRule(
-            RoslynRuleId.Parse("IDE0009"),
-            "Add this or Me qualification",
-            "Style",
-            overview,
-            null,
-            options);
+        RoslynStyleRule ide0003 = WellKnownRoslynRuleDefinitions.Ide0003();
+        RoslynStyleRule ide0009 = WellKnownRoslynRuleDefinitions.Ide0009();
 
         IReadOnlyCollection<RoslynStyleRule> roslynStyleRules = _parser.ParseStyleRules(fileText);
 
@@ -160,11 +72,7 @@ public class MsLearnDocumentationParserTests
     {
         string fileText = GetPathToCa("ca1865-ca1867.md");
 
-        var expected = new RoslynQualityRule(
-            RoslynRuleId.Parse("CA1865"),
-            "Use 'string.Method(char)' instead of 'string.Method(string)' for string with single char",
-            category: "Performance",
-            description: "The overload that takes a char parameter performs better than the overload that takes a string parameter.");
+        RoslynQualityRule expected = WellKnownRoslynRuleDefinitions.CA1865();
 
         IReadOnlyCollection<RoslynQualityRule> qualityRules = _parser.ParseQualityRules(fileText);
 
@@ -180,51 +88,9 @@ public class MsLearnDocumentationParserTests
 
         IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = _parser.ParseAdditionalFormattingOptions(fileContent);
 
-        var dotnet_sort_system_directives_first = new RoslynStyleRuleOption(
-            "dotnet_sort_system_directives_first",
-            new[]
-            {
-                new RoslynStyleRuleOptionValue("true", "Sort System.* using directives alphabetically, and place them before other using directives."),
-                new RoslynStyleRuleOptionValue("false", "Do not place System.* using directives before other using directives.")
-            },
-            "true",
-            """
-            // dotnet_sort_system_directives_first = true
-            using System.Collections.Generic;
-            using System.Threading.Tasks;
-            using Octokit;
-            
-            // dotnet_sort_system_directives_first = false
-            using System.Collections.Generic;
-            using Octokit;
-            using System.Threading.Tasks;
-            """);
-
-        var dotnet_separate_import_directive_groups = new RoslynStyleRuleOption(
-            "dotnet_separate_import_directive_groups",
-            new[]
-            {
-                new RoslynStyleRuleOptionValue("true", "Place a blank line between using directive groups."),
-                new RoslynStyleRuleOptionValue("false", "Do not place a blank line between using directive groups.")
-            },
-            "false",
-            """
-            // dotnet_separate_import_directive_groups = true
-            using System.Collections.Generic;
-            using System.Threading.Tasks;
-            
-            using Octokit;
-            
-            // dotnet_separate_import_directive_groups = false
-            using System.Collections.Generic;
-            using System.Threading.Tasks;
-            using Octokit;
-            """);
-
-
         roslynStyleRuleOptions.Should().HaveCount(2);
-        roslynStyleRuleOptions.ElementAt(0).Should().BeEquivalentTo(dotnet_sort_system_directives_first);
-        roslynStyleRuleOptions.ElementAt(1).Should().BeEquivalentTo(dotnet_separate_import_directive_groups);
+        roslynStyleRuleOptions.ElementAt(0).Should().BeEquivalentTo(WellKnownRoslynRuleOptionsDefinitions.dotnet_sort_system_directives_first());
+        roslynStyleRuleOptions.ElementAt(1).Should().BeEquivalentTo(WellKnownRoslynRuleOptionsDefinitions.dotnet_separate_import_directive_groups());
     }
 
     [Test]
@@ -232,37 +98,11 @@ public class MsLearnDocumentationParserTests
     {
         string pathToFile = MsLearnRepositoryPathProvider.GetPathToSharpFormattingFile();
         string fileContent = File.ReadAllText(pathToFile);
-        var csharp_new_line_before_open_brace = new RoslynStyleRuleOption(
-            "csharp_new_line_before_open_brace",
-            new[]
-            {
-                new RoslynStyleRuleOptionValue("all", "Require braces to be on a new line for all expressions (\"Allman\" style)."),
-                new RoslynStyleRuleOptionValue("none", "Require braces to be on the same line for all expressions (\"K&R\")."),
-                new RoslynStyleRuleOptionValue("accessors, anonymous_methods, anonymous_types, control_blocks, events, indexers,lambdas, local_functions, methods, object_collection_array_initializers, properties, types", "Require braces to be on a new line for the specified code element (\"Allman\" style)."),
-            },
-            "all",
-            """
-            // csharp_new_line_before_open_brace = all
-            void MyMethod()
-            {
-                if (...)
-                {
-                    ...
-                }
-            }
-            
-            // csharp_new_line_before_open_brace = none
-            void MyMethod() {
-                if (...) {
-                    ...
-                }
-            }
-            """);
 
         IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = _parser.ParseAdditionalFormattingOptions(fileContent);
 
         roslynStyleRuleOptions.Should().HaveCount(37);
-        roslynStyleRuleOptions.ElementAt(0).Should().BeEquivalentTo(csharp_new_line_before_open_brace);
+        roslynStyleRuleOptions.ElementAt(0).Should().BeEquivalentTo(WellKnownRoslynRuleOptionsDefinitions.csharp_new_line_before_open_brace());
     }
 
     [Test]
@@ -271,28 +111,11 @@ public class MsLearnDocumentationParserTests
     {
         string pathToFile = string.Empty;
         string fileContent = File.ReadAllText(pathToFile);
-        var dotnet_style_operator_placement_when_wrapping = new RoslynStyleRuleOption(
-            "dotnet_style_operator_placement_when_wrapping",
-            new[]
-            {
-                new RoslynStyleRuleOptionValue("end_of_line", "Place operator at the end of a line."),
-                new RoslynStyleRuleOptionValue("beginning_of_line", "Place operator on a new line."),
-            },
-            "beginning_of_line",
-            """
-            // dotnet_style_operator_placement_when_wrapping = end_of_line
-            if (true && 
-                true)
-            
-            // dotnet_style_operator_placement_when_wrapping = beginning_of_line
-            if (true
-                && true)
-            """);
 
         IReadOnlyCollection<RoslynStyleRuleOption> codeStyleRefactoringOptions = _parser.ParseAdditionalFormattingOptions(fileContent);
 
         codeStyleRefactoringOptions.Should().HaveCount(1);
-        codeStyleRefactoringOptions.ElementAt(0).Should().BeEquivalentTo(dotnet_style_operator_placement_when_wrapping);
+        codeStyleRefactoringOptions.ElementAt(0).Should().BeEquivalentTo(WellKnownRoslynRuleOptionsDefinitions.dotnet_style_operator_placement_when_wrapping);
     }
 
     [Test]
