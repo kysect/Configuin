@@ -21,7 +21,7 @@ public class DotnetFormatCliTests
     }
 
     [Test]
-    //[Ignore("This test require infrastructure")]
+    [Ignore("This test require infrastructure")]
     public void GenerateWarnings_CreateReportFile()
     {
         //const string pathToSln = "./../../../../";
