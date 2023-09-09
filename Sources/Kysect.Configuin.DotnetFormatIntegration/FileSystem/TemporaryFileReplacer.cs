@@ -2,7 +2,7 @@
 using Kysect.CommonLib.FileSystem.Extensions;
 using Microsoft.Extensions.Logging;
 
-namespace Kysect.Configuin.Core.FileSystem;
+namespace Kysect.Configuin.DotnetFormatIntegration.FileSystem;
 
 public class TemporaryFileMover
 {

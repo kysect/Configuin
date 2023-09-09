@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Kysect.CommonLib.Collections.Diff;
-using Kysect.Configuin.DotnetFormatIntegration;
+using Kysect.Configuin.DotnetFormatIntegration.Cli;
 using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 

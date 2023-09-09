@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Kysect.CommonLib.FileSystem.Extensions;
-using Kysect.Configuin.Core.FileSystem;
+using Kysect.Configuin.DotnetFormatIntegration.FileSystem;
 using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
