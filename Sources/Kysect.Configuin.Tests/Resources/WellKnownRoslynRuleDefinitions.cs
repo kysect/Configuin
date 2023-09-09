@@ -7,11 +7,11 @@ public static class WellKnownRoslynRuleDefinitions
     public static RoslynStyleRule IDE0001()
     {
         return new RoslynStyleRule(
-            ruleId: RoslynRuleId.Parse("IDE0001"),
-            title: "Simplify name",
-            category: "Style",
-            overview: "This rule concerns the use of simplified type names in declarations and executable code, when possible. You can remove unnecessary name qualification to simplify code and improve readability.",
-            example: """
+            RuleId: RoslynRuleId.Parse("IDE0001"),
+            Title: "Simplify name",
+            Category: "Style",
+            Overview: "This rule concerns the use of simplified type names in declarations and executable code, when possible. You can remove unnecessary name qualification to simplify code and improve readability.",
+            Example: """
                      using System.IO;
                      class C
                      {
@@ -22,7 +22,7 @@ public static class WellKnownRoslynRuleDefinitions
                          FileInfo file;
                      }
                      """,
-            options: Array.Empty<RoslynStyleRuleOption>());
+            Options: Array.Empty<RoslynStyleRuleOption>());
     }
 
 
