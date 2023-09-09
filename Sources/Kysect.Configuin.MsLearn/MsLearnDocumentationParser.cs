@@ -34,14 +34,42 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     {
         _logger.LogInformation("Parsing roslyn rules from MS Learn");
 
+        var roslynQualityRules = rawInfo.QualityRuleFileContents.SelectMany(ParseQualityRules).ToList();
+        var roslynStyleRules = rawInfo.StyleRuleFileContents.SelectMany(ParseStyleRules).ToList();
+
+        roslynStyleRules = ParseIde0055FormatOptions(roslynStyleRules, rawInfo);
+
+        return new RoslynRules(roslynQualityRules, roslynStyleRules);
+    }
+
+    private List<RoslynStyleRule> ParseIde0055FormatOptions(
+        List<RoslynStyleRule> roslynStyleRules,
+        MsLearnDocumentationRawInfo rawInfo)
+    {
+        _logger.LogDebug("Parsing IDE0055 options");
+
+        int ruleIde0055Index = roslynStyleRules.FindIndex(r => r.RuleId.Equals(RoslynRuleId.Parse("IDE0055")));
+        if (ruleIde0055Index == -1)
+        {
+            _logger.LogWarning("Rule IDE0055 was not found. Cannot add format options.");
+            return roslynStyleRules;
+        }
+
+        _logger.LogDebug("Parse dotnet format options");
         IReadOnlyCollection<RoslynStyleRuleOption> dotnetFormattingOptions = ParseAdditionalFormattingOptions(rawInfo.DotnetFormattingOptionsContent);
+        _logger.LogDebug("Parse C# format options");
         IReadOnlyCollection<RoslynStyleRuleOption> sharpFormattingOptions = ParseAdditionalFormattingOptions(rawInfo.SharpFormattingOptionsContent);
 
-        return new RoslynRules(
-            rawInfo.QualityRuleFileContents.SelectMany(ParseQualityRules).ToList(),
-            rawInfo.StyleRuleFileContents.SelectMany(ParseStyleRules).ToList(),
-            dotnetFormattingOptions,
-            sharpFormattingOptions);
+        roslynStyleRules[ruleIde0055Index] = roslynStyleRules[ruleIde0055Index] with
+        {
+            Options = roslynStyleRules[ruleIde0055Index]
+                .Options
+                .Concat(dotnetFormattingOptions)
+                .Concat(sharpFormattingOptions)
+                .ToList()
+        };
+
+        return roslynStyleRules;
     }
 
     public IReadOnlyCollection<RoslynStyleRule> ParseStyleRules(string info)
@@ -79,26 +107,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     {
         MarkdownTableContent markdownTableContent = _markdownTableParser.ParseToSimpleContent(tableBlock);
         MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
-
-        MsLearnPropertyValueDescriptionTableRow ruleId = table.GetSingleValue("Rule ID");
-        MsLearnPropertyValueDescriptionTableRow title = table.GetSingleValue("Title");
-        MsLearnPropertyValueDescriptionTableRow category = table.GetSingleValue("Category");
-        MsLearnPropertyValueDescriptionTableRow subcategory = table.GetSingleValue("Subcategory");
-        MsLearnPropertyValueDescriptionTableRow applicableLanguages = table.GetSingleValue("Applicable languages");
-        // TODO: return as optional parameter. Not all rules contains it
-        //MsLearnPropertyValueDescriptionTableRow introducedVersion = table.GetSingleValue("Introduced version");
-        var options = table
-            .FindValues("Options")
-            .Select(o => o.Value)
-            .ToList();
-
-        return new RoslynStyleRuleInformationTable(
-            RoslynRuleId.Parse(ruleId.Value),
-            title.Value,
-            category.Value,
-            subcategory.Value,
-            applicableLanguages.Value,
-            options);
+        return RoslynStyleRuleInformationTable.Create(table);
     }
 
     private RoslynStyleRule ConvertToRule(
@@ -112,7 +121,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             roslynStyleRuleInformationTable.Title,
             roslynStyleRuleInformationTable.Category,
             overviewText,
-            example: example,
+            Example: example,
             roslynStyleRuleOptions);
     }
 
@@ -142,7 +151,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         // TODO: docs contains both .NET7 and .NET8 =_=
         //MsLearnPropertyValueDescriptionTableRow isDefault = table.GetSingleValue("Enabled by default in .NET 8");
 
-        IReadOnlyCollection<RoslynRuleId> ruleIds = ParseQualityRuleTableIdRow(ruleId);
+        IReadOnlyCollection<RoslynRuleId> ruleIds = RoslynRuleIdRange.Parse(ruleId.Value).Enumerate().ToList();
 
         string description = ParseCaRuleDescription(markdownHeadedBlocks);
 
@@ -168,20 +177,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         if (headedBlock is null)
             throw new ConfiguinException("Quality rule page does not contains Rule description block.");
 
-        string overviewText = headedBlock
-            .Content
-            .Select(_textExtractor.ExtractText)
-            .Aggregate((a, b) => $"{a}{Environment.NewLine}{b}");
-
-        return overviewText;
-    }
-
-    private IReadOnlyCollection<RoslynRuleId> ParseQualityRuleTableIdRow(MsLearnPropertyValueDescriptionTableRow ruleId)
-    {
-        if (ruleId.Value.Contains("-"))
-            return RoslynRuleIdRange.Parse(ruleId.Value).Enumerate().ToList();
-
-        return new[] { RoslynRuleId.Parse(ruleId.Value) };
+        return ConvertBlockToText(headedBlock);
     }
 
     private string GetStyleOverviewText(IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks)
@@ -196,12 +192,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             return string.Empty;
         }
 
-        string overviewText = overviewBlock
-            .Content
-            .Select(_textExtractor.ExtractText)
-            .Aggregate((a, b) => $"{a}{Environment.NewLine}{b}");
-
-        return overviewText;
+        return ConvertBlockToText(overviewBlock);
     }
 
     private string? FindIdeExample(IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks)
@@ -264,5 +255,13 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             return null;
 
         return _textExtractor.ExtractText(codeBlock);
+    }
+
+    private string ConvertBlockToText(MarkdownHeadedBlock block)
+    {
+        return block
+            .Content
+            .Select(_textExtractor.ExtractText)
+            .Aggregate((a, b) => $"{a}{Environment.NewLine}{b}");
     }
 }
