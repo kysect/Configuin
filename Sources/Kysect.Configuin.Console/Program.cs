@@ -1,4 +1,4 @@
-﻿using Kysect.Configuin.Console;
+﻿using Kysect.Configuin.ConfigurationRoot;
 
 IServiceProvider s = DependencyBuilder.InitializeServiceProvider();
 var configuinCommands = new ConfiguinCommands(s);

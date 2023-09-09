@@ -1,6 +1,6 @@
 ﻿using Kysect.CommonLib.Collections.Diff;
 using Kysect.CommonLib.Logging;
-using Kysect.Configuin.Console.Configuration;
+using Kysect.Configuin.ConfigurationRoot.Configuration;
 using Kysect.Configuin.Core.CodeStyleGeneration;
 using Kysect.Configuin.Core.CodeStyleGeneration.Models;
 using Kysect.Configuin.Core.FileSystem;
@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Kysect.Configuin.Console;
+namespace Kysect.Configuin.ConfigurationRoot;
 
 public class ConfiguinCommands
 {
