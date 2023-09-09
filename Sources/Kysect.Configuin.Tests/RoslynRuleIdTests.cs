@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Kysect.Configuin.Core.RoslynRuleModels;
+using Kysect.Configuin.RoslynModels;
 using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests;

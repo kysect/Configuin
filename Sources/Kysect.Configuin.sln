@@ -3,21 +3,34 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.33808.371
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.Common", "Kysect.Configuin.Common\Kysect.Configuin.Common.csproj", "{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin.Common", "Kysect.Configuin.Common\Kysect.Configuin.Common.csproj", "{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.Core", "Kysect.Configuin.Core\Kysect.Configuin.Core.csproj", "{9A306F6A-8983-499F-AD12-078547D68E39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin.Core", "Kysect.Configuin.Core\Kysect.Configuin.Core.csproj", "{9A306F6A-8983-499F-AD12-078547D68E39}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin.Console", "Kysect.Configuin.Console\Kysect.Configuin.Console.csproj", "{75527607-A165-4390-8892-B16818C3D410}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin.Tests", "Kysect.Configuin.Tests\Kysect.Configuin.Tests.csproj", "{A372318C-EDE6-4C65-BB9A-0B54B144CB8B}"
 EndProject
-
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.DotnetFormatIntegration", "Kysect.Configuin.DotnetFormatIntegration\Kysect.Configuin.DotnetFormatIntegration.csproj", "{5C32B523-21C8-4A0D-B7FD-A017DE804F5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.RoslynModels", "Kysect.Configuin.RoslynModels\Kysect.Configuin.RoslynModels.csproj", "{A2CEC1A3-8065-48C9-A9C2-E36EF2C2C51E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.Markdown", "Kysect.Configuin.Markdown\Kysect.Configuin.Markdown.csproj", "{BA63EE03-27FE-4502-B2D6-42A45D4B10AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.MsLearn", "Kysect.Configuin.MsLearn\Kysect.Configuin.MsLearn.csproj", "{CFA77552-71E7-4018-916D-067AAD509A15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.EditorConfig", "Kysect.Configuin.EditorConfig\Kysect.Configuin.EditorConfig.csproj", "{AF0452EC-1E00-4490-9B1A-C3FA9810B2C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9A306F6A-8983-499F-AD12-078547D68E39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9A306F6A-8983-499F-AD12-078547D68E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A306F6A-8983-499F-AD12-078547D68E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -30,10 +43,26 @@ Global
 		{A372318C-EDE6-4C65-BB9A-0B54B144CB8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A372318C-EDE6-4C65-BB9A-0B54B144CB8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A372318C-EDE6-4C65-BB9A-0B54B144CB8B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C32B523-21C8-4A0D-B7FD-A017DE804F5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C32B523-21C8-4A0D-B7FD-A017DE804F5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C32B523-21C8-4A0D-B7FD-A017DE804F5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C32B523-21C8-4A0D-B7FD-A017DE804F5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2CEC1A3-8065-48C9-A9C2-E36EF2C2C51E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2CEC1A3-8065-48C9-A9C2-E36EF2C2C51E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2CEC1A3-8065-48C9-A9C2-E36EF2C2C51E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2CEC1A3-8065-48C9-A9C2-E36EF2C2C51E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA63EE03-27FE-4502-B2D6-42A45D4B10AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA63EE03-27FE-4502-B2D6-42A45D4B10AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA63EE03-27FE-4502-B2D6-42A45D4B10AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA63EE03-27FE-4502-B2D6-42A45D4B10AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFA77552-71E7-4018-916D-067AAD509A15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA77552-71E7-4018-916D-067AAD509A15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA77552-71E7-4018-916D-067AAD509A15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA77552-71E7-4018-916D-067AAD509A15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF0452EC-1E00-4490-9B1A-C3FA9810B2C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF0452EC-1E00-4490-9B1A-C3FA9810B2C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF0452EC-1E00-4490-9B1A-C3FA9810B2C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF0452EC-1E00-4490-9B1A-C3FA9810B2C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

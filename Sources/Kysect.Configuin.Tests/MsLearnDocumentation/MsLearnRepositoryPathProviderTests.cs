@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Kysect.Configuin.Core.MsLearnDocumentation;
+using Kysect.Configuin.MsLearn;
 using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
