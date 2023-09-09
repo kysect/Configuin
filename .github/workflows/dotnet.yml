@@ -25,14 +25,14 @@ jobs:
     - name: Restore dependencies
       working-directory: ./Sources
       run: dotnet restore
+    - name: Check dotnet-format
+      working-directory: ./Sources
+      run: dotnet format --verify-no-changes
+    
     - name: Build
       working-directory: ./Sources
       run: dotnet build --no-restore
 
-    - name: Check dotnet-format
-      working-directory: ./Sources
-      run: dotnet format --verify-no-changes
-  
     - name: Test
       working-directory: ./Sources
       run: dotnet test --no-build --verbosity normal
