@@ -4,4 +4,5 @@ IServiceProvider s = DependencyBuilder.InitializeServiceProvider();
 var configuinCommands = new ConfiguinCommands(s);
 
 //configuinCommands.GenerateCodeStyle();
-configuinCommands.GetEditorConfigWarningUpdates();
+//configuinCommands.GetEditorConfigWarningUpdates();
+configuinCommands.GetMissedConfiguration();

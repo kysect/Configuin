@@ -2,7 +2,7 @@
 
 namespace Kysect.Configuin.RoslynModels;
 
-public readonly struct RoslynRuleId
+public readonly struct RoslynRuleId : IComparable<RoslynRuleId>
 {
     public RoslynRuleType Type { get; }
     public int Id { get; }
@@ -63,5 +63,13 @@ public readonly struct RoslynRuleId
     public override string ToString()
     {
         return $"{Type.ToAlias()}{Id:D4}";
+    }
+
+    public int CompareTo(RoslynRuleId other)
+    {
+        int typeComparison = Type.CompareTo(other.Type);
+        if (typeComparison != 0)
+            return typeComparison;
+        return Id.CompareTo(other.Id);
     }
 }

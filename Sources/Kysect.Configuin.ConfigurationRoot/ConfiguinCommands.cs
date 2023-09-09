@@ -1,4 +1,5 @@
-﻿using Kysect.Configuin.CodeStyleDoc;
+﻿using Kysect.CommonLib.Logging;
+using Kysect.Configuin.CodeStyleDoc;
 using Kysect.Configuin.CodeStyleDoc.Models;
 using Kysect.Configuin.ConfigurationRoot.Configuration;
 using Kysect.Configuin.DotnetFormatIntegration;
@@ -7,6 +8,7 @@ using Kysect.Configuin.MsLearn;
 using Kysect.Configuin.MsLearn.Models;
 using Kysect.Configuin.RoslynModels;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Kysect.Configuin.ConfigurationRoot;
@@ -48,5 +50,42 @@ public class ConfiguinCommands
             editorConfigApplyConfiguration.SolutionPath,
             editorConfigApplyConfiguration.NewEditorConfig,
             editorConfigApplyConfiguration.SourceEditorConfig);
+    }
+
+    public void GetMissedConfiguration()
+    {
+        IEditorConfigContentProvider editorConfigContentProvider = _serviceProvider.GetRequiredService<IEditorConfigContentProvider>();
+        IEditorConfigSettingsParser editorConfigSettingsParser = _serviceProvider.GetRequiredService<IEditorConfigSettingsParser>();
+        IMsLearnDocumentationInfoProvider msLearnDocumentationInfoProvider = _serviceProvider.GetRequiredService<IMsLearnDocumentationInfoProvider>();
+        IMsLearnDocumentationParser msLearnDocumentationParser = _serviceProvider.GetRequiredService<IMsLearnDocumentationParser>();
+        ILogger logger = _serviceProvider.GetRequiredService<ILogger>();
+        var editorConfigAnalyzer = new EditorConfigAnalyzer();
+
+        string editorConfigContent = editorConfigContentProvider.Provide();
+        EditorConfigSettings editorConfigSettings = editorConfigSettingsParser.Parse(editorConfigContent);
+        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = msLearnDocumentationInfoProvider.Provide();
+        RoslynRules roslynRules = msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
+        EditorConfigMissedConfiguration editorConfigMissedConfiguration = editorConfigAnalyzer.GetMissedConfigurations(editorConfigSettings, roslynRules);
+
+        if (editorConfigMissedConfiguration.StyleRuleSeverity.Any())
+        {
+            logger.LogInformation("Missed style rules:");
+            foreach (RoslynRuleId roslynRuleId in editorConfigMissedConfiguration.StyleRuleSeverity)
+                logger.LogTabInformation(1, roslynRuleId.ToString());
+        }
+
+        if (editorConfigMissedConfiguration.QualityRuleSeverity.Any())
+        {
+            logger.LogInformation("Missed quality rules:");
+            foreach (RoslynRuleId roslynRuleId in editorConfigMissedConfiguration.QualityRuleSeverity)
+                logger.LogTabInformation(1, roslynRuleId.ToString());
+        }
+
+        if (editorConfigMissedConfiguration.StyleRuleOptions.Any())
+        {
+            logger.LogInformation("Missed options:");
+            foreach (string styleRuleOption in editorConfigMissedConfiguration.StyleRuleOptions)
+                logger.LogTabInformation(1, styleRuleOption);
+        }
     }
 }
