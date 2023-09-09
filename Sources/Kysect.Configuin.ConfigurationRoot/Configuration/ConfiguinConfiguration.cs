@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Kysect.Configuin.Console.Configuration;
+namespace Kysect.Configuin.ConfigurationRoot.Configuration;
 
 public class ConfiguinConfiguration
 {

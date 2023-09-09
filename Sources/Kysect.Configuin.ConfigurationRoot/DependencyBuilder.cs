@@ -1,5 +1,5 @@
 ﻿using Kysect.CommonLib.DependencyInjection;
-using Kysect.Configuin.Console.Configuration;
+using Kysect.Configuin.ConfigurationRoot.Configuration;
 using Kysect.Configuin.Core.CodeStyleGeneration;
 using Kysect.Configuin.Core.CodeStyleGeneration.Markdown;
 using Kysect.Configuin.Core.FileSystem;
@@ -15,7 +15,7 @@ using Microsoft.Extensions.Options;
 using Serilog;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
-namespace Kysect.Configuin.Console;
+namespace Kysect.Configuin.ConfigurationRoot;
 
 public class DependencyBuilder
 {
