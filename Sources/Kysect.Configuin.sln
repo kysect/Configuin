@@ -5,8 +5,6 @@ VisualStudioVersion = 17.7.33808.371
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin.Common", "Kysect.Configuin.Common\Kysect.Configuin.Common.csproj", "{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin.Core", "Kysect.Configuin.Core\Kysect.Configuin.Core.csproj", "{9A306F6A-8983-499F-AD12-078547D68E39}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin.Console", "Kysect.Configuin.Console\Kysect.Configuin.Console.csproj", "{75527607-A165-4390-8892-B16818C3D410}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin.Tests", "Kysect.Configuin.Tests\Kysect.Configuin.Tests.csproj", "{A372318C-EDE6-4C65-BB9A-0B54B144CB8B}"
@@ -35,10 +33,6 @@ Global
 		{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0B65BDF-5E19-4AC0-A5A7-B69DCC0BDCE2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A306F6A-8983-499F-AD12-078547D68E39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A306F6A-8983-499F-AD12-078547D68E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A306F6A-8983-499F-AD12-078547D68E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A306F6A-8983-499F-AD12-078547D68E39}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75527607-A165-4390-8892-B16818C3D410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{75527607-A165-4390-8892-B16818C3D410}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75527607-A165-4390-8892-B16818C3D410}.Release|Any CPU.ActiveCfg = Release|Any CPU

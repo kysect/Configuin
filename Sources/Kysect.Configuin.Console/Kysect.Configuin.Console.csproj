@@ -22,7 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Kysect.Configuin.Common\Kysect.Configuin.Common.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.ConfigurationRoot\Kysect.Configuin.ConfigurationRoot.csproj" />
-    <ProjectReference Include="..\Kysect.Configuin.Core\Kysect.Configuin.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
