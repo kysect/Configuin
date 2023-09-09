@@ -1,4 +1,4 @@
-﻿namespace Kysect.Configuin.DotnetFormatIntegration;
+﻿namespace Kysect.Configuin.DotnetFormatIntegration.Cli;
 
 public record DotnetFormatFileChanges(int LineNumber, int CharNumber, string DiagnosticId, string FormatDescription);
 

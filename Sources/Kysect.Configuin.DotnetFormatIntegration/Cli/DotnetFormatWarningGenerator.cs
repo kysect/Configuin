@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace Kysect.Configuin.DotnetFormatIntegration;
+namespace Kysect.Configuin.DotnetFormatIntegration.Cli;
 
 public class DotnetFormatWarningGenerator
 {

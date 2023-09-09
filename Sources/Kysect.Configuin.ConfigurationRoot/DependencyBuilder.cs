@@ -2,8 +2,9 @@
 using Kysect.Configuin.ConfigurationRoot.Configuration;
 using Kysect.Configuin.Core.CodeStyleGeneration;
 using Kysect.Configuin.Core.CodeStyleGeneration.Markdown;
-using Kysect.Configuin.Core.FileSystem;
 using Kysect.Configuin.DotnetFormatIntegration;
+using Kysect.Configuin.DotnetFormatIntegration.Cli;
+using Kysect.Configuin.DotnetFormatIntegration.FileSystem;
 using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.Markdown.TextExtractor;
 using Kysect.Configuin.MsLearn;
@@ -63,6 +64,7 @@ public class DependencyBuilder
         serviceCollection.AddSingleton<DotnetFormatWarningGenerator>();
         serviceCollection.AddSingleton<TemporaryFileMover>();
         serviceCollection.AddSingleton<DotnetFormatReportComparator>();
+        serviceCollection.AddSingleton<DotnetFormatPreviewGenerator>();
 
         return serviceCollection.BuildServiceProvider();
     }

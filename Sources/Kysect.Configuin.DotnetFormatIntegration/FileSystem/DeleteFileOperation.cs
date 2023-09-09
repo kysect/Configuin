@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Kysect.Configuin.Core.FileSystem;
+namespace Kysect.Configuin.DotnetFormatIntegration.FileSystem;
 
 public class DeleteFileOperation : IFileMoveUndoOperation
 {

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Kysect.Configuin.DotnetFormatIntegration;
+using Kysect.Configuin.DotnetFormatIntegration.Cli;
 using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
