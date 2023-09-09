@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Kysect.Configuin.Core.CodeStyleGeneration.Markdown;
+namespace Kysect.Configuin.CodeStyleDoc.Markdown;
 
 public class MarkdownStringBuilder
 {

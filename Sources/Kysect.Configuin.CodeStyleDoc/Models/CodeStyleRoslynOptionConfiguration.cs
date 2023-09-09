@@ -1,5 +1,5 @@
 ﻿using Kysect.Configuin.RoslynModels;
 
-namespace Kysect.Configuin.Core.CodeStyleGeneration.Models;
+namespace Kysect.Configuin.CodeStyleDoc.Models;
 
 public record CodeStyleRoslynOptionConfiguration(RoslynStyleRuleOption Option, string SelectedValue);

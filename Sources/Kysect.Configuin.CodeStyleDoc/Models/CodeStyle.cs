@@ -1,3 +1,3 @@
-﻿namespace Kysect.Configuin.Core.CodeStyleGeneration.Models;
+﻿namespace Kysect.Configuin.CodeStyleDoc.Models;
 
 public record CodeStyle(IReadOnlyCollection<ICodeStyleElement> Elements);

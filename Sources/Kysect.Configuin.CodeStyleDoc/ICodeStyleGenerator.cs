@@ -1,8 +1,8 @@
-﻿using Kysect.Configuin.Core.CodeStyleGeneration.Models;
+﻿using Kysect.Configuin.CodeStyleDoc.Models;
 using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.RoslynModels;
 
-namespace Kysect.Configuin.Core.CodeStyleGeneration;
+namespace Kysect.Configuin.CodeStyleDoc;
 
 public interface ICodeStyleGenerator
 {

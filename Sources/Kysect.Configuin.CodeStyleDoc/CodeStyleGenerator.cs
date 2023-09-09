@@ -1,12 +1,12 @@
 ﻿using Kysect.CommonLib.Collections.Extensions;
+using Kysect.Configuin.CodeStyleDoc.Models;
 using Kysect.Configuin.Common;
-using Kysect.Configuin.Core.CodeStyleGeneration.Models;
 using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
 using Microsoft.Extensions.Logging;
 
-namespace Kysect.Configuin.Core.CodeStyleGeneration;
+namespace Kysect.Configuin.CodeStyleDoc;
 
 public class CodeStyleGenerator : ICodeStyleGenerator
 {
