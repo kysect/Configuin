@@ -25,6 +25,35 @@ public static class WellKnownRoslynRuleDefinitions
             Options: Array.Empty<RoslynStyleRuleOption>());
     }
 
+    public static RoslynStyleRule Ide0003()
+    {
+        var ide0003 = new RoslynStyleRule(
+            RoslynRuleId.Parse("IDE0003"),
+            "Remove this or Me qualification",
+            "Style",
+            """
+            These two rules define whether or not you prefer the use of this (C#) and Me. (Visual Basic) qualifiers. To enforce that the qualifiers aren't present, set the severity of IDE0003 to warning or error. To enforce that the qualifiers are present, set the severity of IDE0009 to warning or error.
+            For example, if you prefer qualifiers for fields and properties but not for methods or events, then you can enable IDE0009 and set the options dotnet_style_qualification_for_field and dotnet_style_qualification_for_property to true. However, this configuration would not flag methods and events that do have this and Me qualifiers. To also enforce that methods and events don't have qualifiers, enable IDE0003.
+            """,
+            null,
+            Ide0003_0009Options());
+        return ide0003;
+    }
+
+    public static RoslynStyleRule Ide0009()
+    {
+        var ide0009 = new RoslynStyleRule(
+            RoslynRuleId.Parse("IDE0009"),
+            "Add this or Me qualification",
+            "Style",
+            """
+            These two rules define whether or not you prefer the use of this (C#) and Me. (Visual Basic) qualifiers. To enforce that the qualifiers aren't present, set the severity of IDE0003 to warning or error. To enforce that the qualifiers are present, set the severity of IDE0009 to warning or error.
+            For example, if you prefer qualifiers for fields and properties but not for methods or events, then you can enable IDE0009 and set the options dotnet_style_qualification_for_field and dotnet_style_qualification_for_property to true. However, this configuration would not flag methods and events that do have this and Me qualifiers. To also enforce that methods and events don't have qualifiers, enable IDE0003.
+            """,
+            null,
+            Ide0003_0009Options());
+        return ide0009;
+    }
 
     public static RoslynStyleRule IDE0040()
     {
@@ -76,5 +105,26 @@ public static class WellKnownRoslynRuleDefinitions
                          An internal exception is only visible inside its own internal scope. After the exception falls outside the internal scope, only the base exception can be used to catch the exception. If the internal exception is inherited from xref:System.Exception, xref:System.SystemException, or xref:System.ApplicationException, the external code will not have sufficient information to know what to do with the exception.
                          But, if the code has a public exception that later is used as the base for an internal exception, it is reasonable to assume the code further out will be able to do something intelligent with the base exception. The public exception will have more information than what is provided by xref:System.Exception, xref:System.SystemException, or xref:System.ApplicationException.
                          """);
+    }
+
+    public static RoslynQualityRule CA1865()
+    {
+        return new RoslynQualityRule(
+            ruleId: RoslynRuleId.Parse("CA1865"),
+            title: "Use 'string.Method(char)' instead of 'string.Method(string)' for string with single char",
+            category: "Performance",
+            description: "The overload that takes a char parameter performs better than the overload that takes a string parameter.");
+    }
+
+    public static RoslynStyleRuleOption[] Ide0003_0009Options()
+    {
+        var options = new RoslynStyleRuleOption[]
+        {
+            WellKnownRoslynRuleOptionsDefinitions.dotnet_style_qualification_for_field(),
+            WellKnownRoslynRuleOptionsDefinitions.dotnet_style_qualification_for_property(),
+            WellKnownRoslynRuleOptionsDefinitions.dotnet_style_qualification_for_method(),
+            WellKnownRoslynRuleOptionsDefinitions.dotnet_style_qualification_for_event()
+        };
+        return options;
     }
 }
