@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Kysect.Configuin.Core.CodeStyleGeneration.Markdown;
-using Kysect.Configuin.Core.CodeStyleGeneration.Models;
+using Kysect.Configuin.CodeStyleDoc.Markdown;
+using Kysect.Configuin.CodeStyleDoc.Models;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Resources;
 using Kysect.Configuin.Tests.Tools;

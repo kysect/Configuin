@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="codeessentials.Extensions.Logging.Demystifier" />
+	<PackageReference Include="Kysect.CommonLib" />
+	<PackageReference Include="Kysect.CommonLib.DependencyInjection" />
+	<PackageReference Include="Kysect.Editorconfig" />
+	<PackageReference Include="Microsoft.Extensions.Configuration" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+	<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+	<PackageReference Include="Serilog" />
+	<PackageReference Include="Serilog.Extensions.Logging" />
+	<PackageReference Include="Serilog.Settings.Configuration" />
+	<PackageReference Include="Serilog.Sinks.Console" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kysect.Configuin.CodeStyleDoc\Kysect.Configuin.CodeStyleDoc.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.Common\Kysect.Configuin.Common.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.DotnetFormatIntegration\Kysect.Configuin.DotnetFormatIntegration.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.EditorConfig\Kysect.Configuin.EditorConfig.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.Markdown\Kysect.Configuin.Markdown.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.MsLearn\Kysect.Configuin.MsLearn.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.RoslynModels\Kysect.Configuin.RoslynModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

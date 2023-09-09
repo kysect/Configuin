@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.Configuin.Core.CodeStyleGeneration;
-using Kysect.Configuin.Core.CodeStyleGeneration.Models;
+using Kysect.Configuin.CodeStyleDoc;
+using Kysect.Configuin.CodeStyleDoc.Models;
 using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.MsLearn;
 using Kysect.Configuin.MsLearn.Models;
