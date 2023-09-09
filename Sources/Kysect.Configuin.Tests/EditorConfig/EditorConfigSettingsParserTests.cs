@@ -5,7 +5,7 @@ using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
-namespace Kysect.Configuin.Tests.EditorConfigSettingsParsing;
+namespace Kysect.Configuin.Tests.EditorConfig;
 
 public class EditorConfigSettingsParserTests
 {
