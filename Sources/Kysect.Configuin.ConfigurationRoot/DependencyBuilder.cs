@@ -1,7 +1,7 @@
 ﻿using Kysect.CommonLib.DependencyInjection;
+using Kysect.Configuin.CodeStyleDoc;
+using Kysect.Configuin.CodeStyleDoc.Markdown;
 using Kysect.Configuin.ConfigurationRoot.Configuration;
-using Kysect.Configuin.Core.CodeStyleGeneration;
-using Kysect.Configuin.Core.CodeStyleGeneration.Markdown;
 using Kysect.Configuin.DotnetFormatIntegration;
 using Kysect.Configuin.DotnetFormatIntegration.Cli;
 using Kysect.Configuin.DotnetFormatIntegration.FileSystem;

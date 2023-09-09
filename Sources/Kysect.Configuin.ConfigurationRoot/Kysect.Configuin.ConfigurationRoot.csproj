@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kysect.Configuin.CodeStyleDoc\Kysect.Configuin.CodeStyleDoc.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.Core\Kysect.Configuin.Core.csproj" />
   </ItemGroup>
 

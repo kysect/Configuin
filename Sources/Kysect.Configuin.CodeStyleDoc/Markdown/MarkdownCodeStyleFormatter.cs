@@ -1,8 +1,8 @@
 ﻿using Kysect.CommonLib.Exceptions;
-using Kysect.Configuin.Core.CodeStyleGeneration.Models;
+using Kysect.Configuin.CodeStyleDoc.Models;
 using Microsoft.Extensions.Logging;
 
-namespace Kysect.Configuin.Core.CodeStyleGeneration.Markdown;
+namespace Kysect.Configuin.CodeStyleDoc.Markdown;
 
 public class MarkdownCodeStyleFormatter : ICodeStyleFormatter
 {
