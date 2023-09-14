@@ -1,4 +1,5 @@
-﻿using Kysect.Configuin.EditorConfig.Settings;
+﻿using Kysect.CommonLib.Collections.Extensions;
+using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
 
 namespace Kysect.Configuin.EditorConfig;
@@ -56,6 +57,22 @@ public class EditorConfigAnalyzer
             if (!values.Any(v => v.Value.Equals(value, StringComparison.InvariantCultureIgnoreCase)))
                 result.Add(new EditorConfigInvalidOptionValue(key, value, values));
         }
+
+        return result;
+    }
+
+    public IReadOnlyCollection<RoslynRuleId> GetIncorrectOptionSeverity(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
+    {
+        var ruleIds = new HashSet<RoslynRuleId>();
+        ruleIds.AddEach(roslynRules.StyleRules.Select(r => r.RuleId));
+        ruleIds.AddEach(roslynRules.QualityRules.Select(r => r.RuleId));
+
+        var result = new List<RoslynRuleId>();
+        foreach ((RoslynRuleId roslynRuleId, RoslynRuleSeverity _) in editorConfigSettings.Settings.OfType<RoslynSeverityEditorConfigSetting>())
+        {
+            if (!ruleIds.Contains(roslynRuleId))
+                result.Add(roslynRuleId);
+        }    
 
         return result;
     }

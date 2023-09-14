@@ -53,9 +53,11 @@ internal sealed class AnalyzeEditorConfigCommand : Command<AnalyzeEditorConfigCo
 
         EditorConfigMissedConfiguration editorConfigMissedConfiguration = editorConfigAnalyzer.GetMissedConfigurations(editorConfigSettings, roslynRules);
         IReadOnlyCollection<EditorConfigInvalidOptionValue> incorrectOptionValues = editorConfigAnalyzer.GetIncorrectOptionValues(editorConfigSettings, roslynRules);
+        IReadOnlyCollection<RoslynRuleId> incorrectOptionSeverity = editorConfigAnalyzer.GetIncorrectOptionSeverity(editorConfigSettings, roslynRules);
 
         reporter.ReportMissedConfigurations(editorConfigMissedConfiguration);
         reporter.ReportIncorrectOptionValues(incorrectOptionValues);
+        reporter.ReportIncorrectOptionSeverity(incorrectOptionSeverity);
 
         return 0;
     }
