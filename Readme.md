@@ -4,15 +4,21 @@ Configuin - это утилита для работы с .editorconfig'ом.
 
 ## Возможности
 
-- Генерация документации к editorconfig (по документации из MS learn)
-- [in progress] Сравнение двух editorconfig
+- Генерация документации к editorconfig
+- Предпросмотр изменений от editorconfig'а
 - [in progress] Анализатор .editorconfig'а
+- [in progress] Сравнение двух editorconfig
 - [in progress] Форматирование editorconfig'а
-- [in progress] Предпросмотр изменений от editorconfig'а
 
-### Генерация документации к editorconfig
+### Генерация документации к .editorconfig
 
-Configuin парсит описание Roslyn, которые есть на сайте MS Learn, парсит .editorconfig файл предоставленный пользователем и генерирует документ с подробным описанием строк. Например, .editorconfig файл может содержать:
+Configuin парсит описание Roslyn, которые есть на сайте MS Learn, парсит .editorconfig файл предоставленный пользователем и генерирует документ с подробным описанием строк. Пример вызова:
+
+```
+Kysect.Configuin.Console.exe generate-codestyle-doc "C:\Project\.editorconfig" -o "output.md" -d "C:\Coding\dotnet-docs"
+```
+
+Например, .editorconfig файл может содержать:
 ```ini
 dotnet_diagnostic.IDE0040.severity = warning
 dotnet_style_require_accessibility_modifiers = always:warning
@@ -46,6 +52,10 @@ class MyClass
 ```
 
 ### Предпросмотр изменений от editorconfig'а
+
+```
+Kysect.Configuin.Console.exe preview -s "C:\Project\" -t "C:\Project\.editorconfig" -e "C:\.editorconfig"
+```
 
 Configuin генерирует список изменений, который будут получены, если к проекту применить .editorconfig.
 
@@ -87,15 +97,19 @@ Configuin генерирует список изменений, который �
 [18:25:16 INF]          error CA1032: Add the following constructor to ReflectionException: public ReflectionException(string message)
 ```
 
-### [in progress] Сравнение двух editorconfig
-
-Configuin сравнивает два .editorconfig файла и генерирует diff между ними.
-
 ### [in progress] Анализатор .editorconfig'а
+
+```
+Kysect.Configuin.Console.exe analyze "C:\Project\.editorconfig" -d "C:\Coding\dotnet-docs"
+```
 
 Configuin анализирует editorconfig файл и:
 - Находит несуществующие правила
 - Находит не корректные значения
 - Генерирует список существующих правил, которые не указаны в .editorconfig
+
+### [in progress] Сравнение двух editorconfig
+
+Configuin сравнивает два .editorconfig файла и генерирует diff между ними.
 
 ### [in progress] Форматирование editorconfig'а
