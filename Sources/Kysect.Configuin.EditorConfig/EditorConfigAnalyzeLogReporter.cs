@@ -49,4 +49,13 @@ public class EditorConfigAnalyzeLogReporter : IEditorConfigAnalyzeReporter
             _logger.LogTabInformation(1, $"Option {editorConfigInvalidOptionValue.Key} has value {editorConfigInvalidOptionValue.Value} but available values: [{availableOptions}]");
         }
     }
+
+    public void ReportIncorrectOptionSeverity(IReadOnlyCollection<RoslynRuleId> incorrectOptionSeverity)
+    {
+        if (incorrectOptionSeverity.Any())
+            _logger.LogInformation("Some .editorconfig configuration reference to incorrect rule ids.");
+
+        foreach (RoslynRuleId ruleId in incorrectOptionSeverity)
+            _logger.LogTabInformation(1, ruleId.ToString());
+    }
 }

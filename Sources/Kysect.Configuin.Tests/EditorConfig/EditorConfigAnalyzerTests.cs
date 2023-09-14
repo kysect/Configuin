@@ -116,4 +116,21 @@ public class EditorConfigAnalyzerTests
         invalidOptionValues.Should().HaveCount(1)
             .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
     }
+
+    [Test]
+    public void GetIncorrectOptionSeverity_ForInvalidSeverityConfiguration_ReturnInvalidRuleIds()
+    {
+        var editorConfigSettings = new EditorConfigSettings(new IEditorConfigSetting[]
+        {
+            new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.IDE0040().RuleId, RoslynRuleSeverity.Warning),
+            new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.CA1064().RuleId, RoslynRuleSeverity.Warning),
+        });
+
+        var roslynRules = new RoslynRules(new[] { WellKnownRoslynRuleDefinitions.CA1064() }, Array.Empty<RoslynStyleRule>());
+
+        IReadOnlyCollection<RoslynRuleId> incorrectOptionSeverity = _editorConfigAnalyzer.GetIncorrectOptionSeverity(editorConfigSettings, roslynRules);
+
+        incorrectOptionSeverity.Should().HaveCount(1)
+            .And.Subject.ElementAt(0).Should().BeEquivalentTo(WellKnownRoslynRuleDefinitions.IDE0040().RuleId);
+    }
 }
