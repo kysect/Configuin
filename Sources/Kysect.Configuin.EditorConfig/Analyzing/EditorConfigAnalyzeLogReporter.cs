@@ -3,7 +3,7 @@ using Kysect.CommonLib.Logging;
 using Kysect.Configuin.RoslynModels;
 using Microsoft.Extensions.Logging;
 
-namespace Kysect.Configuin.EditorConfig;
+namespace Kysect.Configuin.EditorConfig.Analyzing;
 
 public class EditorConfigAnalyzeLogReporter : IEditorConfigAnalyzeReporter
 {
