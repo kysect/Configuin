@@ -2,5 +2,5 @@
 
 public interface IEditorConfigContentProvider
 {
-    string Provide();
+    string Provide(string filePath);
 }

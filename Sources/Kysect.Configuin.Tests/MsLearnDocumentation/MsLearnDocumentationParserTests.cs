@@ -121,9 +121,9 @@ public class MsLearnDocumentationParserTests
     [Test]
     public void Parse_MsDocsRepository_FinishWithoutError()
     {
-        MsLearnDocumentationInfoLocalProvider repositoryPathProvider = TestImplementations.CreateDocumentationInfoLocalProvider();
+        MsLearnDocumentationInfoLocalReader repositoryPathReader = TestImplementations.CreateDocumentationInfoLocalProvider();
 
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = repositoryPathProvider.Provide();
+        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = repositoryPathReader.Provide(Constants.GetPathToMsDocsRoot());
         RoslynRules roslynRules = _parser.Parse(msLearnDocumentationRawInfo);
 
         // TODO: add asserts
