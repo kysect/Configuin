@@ -2,6 +2,6 @@
 
 public record RoslynStyleRuleOption(
     string Name,
-    IReadOnlyCollection<RoslynStyleRuleOptionValue> Options,
+    IReadOnlyCollection<RoslynStyleRuleOptionValue> Values,
     string? DefaultValue,
     string? CsharpCodeSample);
