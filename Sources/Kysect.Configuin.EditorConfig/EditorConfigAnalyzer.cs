@@ -41,4 +41,22 @@ public class EditorConfigAnalyzer
 
         return new EditorConfigMissedConfiguration(missedStyleRules, missedQualityRules, missedOptions);
     }
+
+    public IReadOnlyCollection<EditorConfigInvalidOptionValue> GetIncorrectOptionValues(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
+    {
+        var result = new List<EditorConfigInvalidOptionValue>();
+
+        var optionAvailableValues = roslynRules.GetOptions().ToDictionary(o => o.Name, o => o.Values);
+
+        foreach ((string key, string value) in editorConfigSettings.Settings.OfType<RoslynOptionEditorConfigSetting>())
+        {
+            if (!optionAvailableValues.TryGetValue(key, out IReadOnlyCollection<RoslynStyleRuleOptionValue>? values))
+                values = Array.Empty<RoslynStyleRuleOptionValue>();
+
+            if (!values.Any(v => v.Value.Equals(value, StringComparison.InvariantCultureIgnoreCase)))
+                result.Add(new EditorConfigInvalidOptionValue(key, value, values));
+        }
+
+        return result;
+    }
 }
