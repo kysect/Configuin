@@ -5,9 +5,9 @@ namespace Kysect.Configuin.Tests.Tools;
 
 public static class TestImplementations
 {
-    public static MsLearnDocumentationInfoLocalProvider CreateDocumentationInfoLocalProvider()
+    public static MsLearnDocumentationInfoLocalReader CreateDocumentationInfoLocalProvider()
     {
-        return new MsLearnDocumentationInfoLocalProvider(Constants.GetPathToMsDocsRoot());
+        return new MsLearnDocumentationInfoLocalReader();
     }
 
     public static MsLearnRepositoryPathProvider CreateRepositoryPathProvider()

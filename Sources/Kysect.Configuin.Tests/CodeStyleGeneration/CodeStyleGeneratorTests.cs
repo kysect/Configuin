@@ -15,7 +15,7 @@ public class CodeStyleGeneratorTests
 {
     private readonly MsLearnDocumentationParser _msLearnDocumentationParser = new MsLearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
     private readonly EditorConfigSettingsParser _editorConfigSettingsParser = new EditorConfigSettingsParser(TestLogger.ProviderForTests());
-    private readonly MsLearnDocumentationInfoLocalProvider _repositoryPathProvider = TestImplementations.CreateDocumentationInfoLocalProvider();
+    private readonly MsLearnDocumentationInfoLocalReader _repositoryPathReader = TestImplementations.CreateDocumentationInfoLocalProvider();
     private readonly CodeStyleGenerator _sut;
 
     public CodeStyleGeneratorTests()
@@ -28,7 +28,7 @@ public class CodeStyleGeneratorTests
     {
         string pathToIniFile = Path.Combine("Resources", "Editor-config-sample.ini");
 
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = _repositoryPathProvider.Provide();
+        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = _repositoryPathReader.Provide(Constants.GetPathToMsDocsRoot());
         RoslynRules roslynRules = _msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
         string fileText = File.ReadAllText(pathToIniFile);
         EditorConfigSettings editorConfigSettings = _editorConfigSettingsParser.Parse(fileText);
