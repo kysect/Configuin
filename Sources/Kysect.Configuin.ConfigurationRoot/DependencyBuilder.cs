@@ -19,7 +19,7 @@ namespace Kysect.Configuin.ConfigurationRoot;
 
 public class DependencyBuilder
 {
-    public static IServiceProvider InitializeServiceProvider()
+    public static IServiceCollection InitializeServiceProvider()
     {
         HostApplicationBuilder builder = Host.CreateApplicationBuilder();
         builder.Configuration.AddJsonFile("appsettings.json");
@@ -47,7 +47,7 @@ public class DependencyBuilder
         serviceCollection.AddSingleton<DotnetFormatReportComparator>();
         serviceCollection.AddSingleton<DotnetFormatPreviewGenerator>();
 
-        return serviceCollection.BuildServiceProvider();
+        return serviceCollection;
     }
 
     public static ILogger CreateLogger(IServiceProvider serviceProvider)
