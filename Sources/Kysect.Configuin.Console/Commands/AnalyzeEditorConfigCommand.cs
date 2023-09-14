@@ -45,34 +45,18 @@ internal sealed class AnalyzeEditorConfigCommand : Command<AnalyzeEditorConfigCo
         settings.MsLearnRepositoryPath.ThrowIfNull();
 
         var editorConfigAnalyzer = new EditorConfigAnalyzer();
+        IEditorConfigAnalyzeReporter reporter = new EditorConfigAnalyzeLogReporter(_logger);
 
         string editorConfigContent = _editorConfigContentProvider.Provide(settings.EditorConfigPath);
         EditorConfigSettings editorConfigSettings = _editorConfigSettingsParser.Parse(editorConfigContent);
         MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = _msLearnDocumentationInfoReader.Provide(settings.MsLearnRepositoryPath);
         RoslynRules roslynRules = _msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
+
         EditorConfigMissedConfiguration editorConfigMissedConfiguration = editorConfigAnalyzer.GetMissedConfigurations(editorConfigSettings, roslynRules);
+        IReadOnlyCollection<EditorConfigInvalidOptionValue> incorrectOptionValues = editorConfigAnalyzer.GetIncorrectOptionValues(editorConfigSettings, roslynRules);
 
-        if (editorConfigMissedConfiguration.StyleRuleSeverity.Any())
-        {
-            _logger.LogInformation("Missed style rules:");
-            foreach (RoslynRuleId roslynRuleId in editorConfigMissedConfiguration.StyleRuleSeverity)
-                _logger.LogTabInformation(1, roslynRuleId.ToString());
-        }
-
-        if (editorConfigMissedConfiguration.QualityRuleSeverity.Any())
-        {
-            _logger.LogInformation("Missed quality rules:");
-            foreach (RoslynRuleId roslynRuleId in editorConfigMissedConfiguration.QualityRuleSeverity)
-                _logger.LogTabInformation(1, roslynRuleId.ToString());
-        }
-
-        if (editorConfigMissedConfiguration.StyleRuleOptions.Any())
-        {
-            _logger.LogInformation("Missed options:");
-            foreach (string styleRuleOption in editorConfigMissedConfiguration.StyleRuleOptions)
-                _logger.LogTabInformation(1, styleRuleOption);
-        }
-
+        reporter.ReportMissedConfigurations(editorConfigMissedConfiguration);
+        reporter.ReportIncorrectOptionValues(incorrectOptionValues);
         return 0;
     }
 }
