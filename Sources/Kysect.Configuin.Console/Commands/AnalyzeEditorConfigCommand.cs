@@ -1,5 +1,4 @@
 ﻿using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.CommonLib.Logging;
 using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.MsLearn;
 using Kysect.Configuin.MsLearn.Models;
@@ -57,6 +56,7 @@ internal sealed class AnalyzeEditorConfigCommand : Command<AnalyzeEditorConfigCo
 
         reporter.ReportMissedConfigurations(editorConfigMissedConfiguration);
         reporter.ReportIncorrectOptionValues(incorrectOptionValues);
+
         return 0;
     }
 }
