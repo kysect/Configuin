@@ -29,6 +29,13 @@ public class EditorConfigTemplateGenerator
             }
         }
 
+        foreach (RoslynQualityRule qualityRule in rules.QualityRules)
+        {
+            builder.AddDoubleCommentString($"{qualityRule.Title} ({qualityRule.RuleId})");
+            builder.AddDoubleCommentString(qualityRule.Description);
+            builder.AddCommentString($"dotnet_diagnostic.{qualityRule.RuleId}.severity = ");
+        }
+
         return builder.Build();
     }
 }
