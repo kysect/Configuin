@@ -4,5 +4,5 @@ namespace Kysect.Configuin.CodeStyleDoc;
 
 public interface ICodeStyleWriter
 {
-    void Write(CodeStyle codeStyle);
+    void Write(string filePath, CodeStyle codeStyle);
 }

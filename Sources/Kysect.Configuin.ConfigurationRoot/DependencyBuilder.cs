@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Serilog;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -31,21 +30,9 @@ public class DependencyBuilder
         serviceCollection.AddOptionsWithValidation<EditorConfigApplyConfiguration>(nameof(EditorConfigApplyConfiguration));
         serviceCollection.AddSingleton(CreateLogger);
 
-        serviceCollection.AddSingleton<IEditorConfigContentProvider>(sp =>
-        {
-            IOptions<ConfiguinConfiguration> options = sp.GetRequiredService<IOptions<ConfiguinConfiguration>>();
-
-            return new EditorConfigFileContentProvider(options.Value.EditorConfigFile);
-        });
-
+        serviceCollection.AddSingleton<IEditorConfigContentProvider, EditorConfigFileContentProvider>();
         serviceCollection.AddSingleton<IEditorConfigSettingsParser, EditorConfigSettingsParser>();
-
-        serviceCollection.AddSingleton<IMsLearnDocumentationInfoProvider>(sp =>
-        {
-            IOptions<ConfiguinConfiguration> options = sp.GetRequiredService<IOptions<ConfiguinConfiguration>>();
-
-            return new MsLearnDocumentationInfoLocalProvider(options.Value.MsLearnRepositoryPath);
-        });
+        serviceCollection.AddSingleton<IMsLearnDocumentationInfoReader, MsLearnDocumentationInfoLocalReader>();
 
         serviceCollection.AddSingleton<IMsLearnDocumentationParser>(sp =>
         {
@@ -53,13 +40,7 @@ public class DependencyBuilder
             return new MsLearnDocumentationParser(PlainTextExtractor.Create(), logger);
         });
         serviceCollection.AddSingleton<ICodeStyleGenerator, CodeStyleGenerator>();
-        serviceCollection.AddSingleton<ICodeStyleWriter>(sp =>
-        {
-            IOptions<ConfiguinConfiguration> options = sp.GetRequiredService<IOptions<ConfiguinConfiguration>>();
-            ILogger logger = sp.GetRequiredService<ILogger>();
-
-            return new MarkdownCodeStyleWriter(options.Value.OutputPath, logger);
-        });
+        serviceCollection.AddSingleton<ICodeStyleWriter, MarkdownCodeStyleWriter>();
 
         serviceCollection.AddSingleton<DotnetFormatWarningGenerator>();
         serviceCollection.AddSingleton<TemporaryFileMover>();

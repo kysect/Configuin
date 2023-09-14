@@ -24,21 +24,23 @@ public class ConfiguinCommands
 
     public void GenerateCodeStyle()
     {
+        IOptions<ConfiguinConfiguration> configurationOption = _serviceProvider.GetRequiredService<IOptions<ConfiguinConfiguration>>();
+
         IEditorConfigContentProvider editorConfigContentProvider = _serviceProvider.GetRequiredService<IEditorConfigContentProvider>();
         IEditorConfigSettingsParser editorConfigSettingsParser = _serviceProvider.GetRequiredService<IEditorConfigSettingsParser>();
-        IMsLearnDocumentationInfoProvider msLearnDocumentationInfoProvider = _serviceProvider.GetRequiredService<IMsLearnDocumentationInfoProvider>();
+        IMsLearnDocumentationInfoReader msLearnDocumentationInfoReader = _serviceProvider.GetRequiredService<IMsLearnDocumentationInfoReader>();
         IMsLearnDocumentationParser msLearnDocumentationParser = _serviceProvider.GetRequiredService<IMsLearnDocumentationParser>();
         ICodeStyleGenerator codeStyleGenerator = _serviceProvider.GetRequiredService<ICodeStyleGenerator>();
         ICodeStyleWriter codeStyleWriter = _serviceProvider.GetRequiredService<ICodeStyleWriter>();
 
-        string editorConfigContent = editorConfigContentProvider.Provide();
+        string editorConfigContent = editorConfigContentProvider.Provide(configurationOption.Value.EditorConfigFile);
         EditorConfigSettings editorConfigSettings = editorConfigSettingsParser.Parse(editorConfigContent);
 
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = msLearnDocumentationInfoProvider.Provide();
+        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = msLearnDocumentationInfoReader.Provide(configurationOption.Value.MsLearnRepositoryPath);
         RoslynRules roslynRules = msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
 
         CodeStyle codeStyle = codeStyleGenerator.Generate(editorConfigSettings, roslynRules);
-        codeStyleWriter.Write(codeStyle);
+        codeStyleWriter.Write(configurationOption.Value.OutputPath, codeStyle);
     }
 
     public void GetEditorConfigWarningUpdates()
@@ -54,16 +56,18 @@ public class ConfiguinCommands
 
     public void GetMissedConfiguration()
     {
+        IOptions<ConfiguinConfiguration> configurationOption = _serviceProvider.GetRequiredService<IOptions<ConfiguinConfiguration>>();
+
         IEditorConfigContentProvider editorConfigContentProvider = _serviceProvider.GetRequiredService<IEditorConfigContentProvider>();
         IEditorConfigSettingsParser editorConfigSettingsParser = _serviceProvider.GetRequiredService<IEditorConfigSettingsParser>();
-        IMsLearnDocumentationInfoProvider msLearnDocumentationInfoProvider = _serviceProvider.GetRequiredService<IMsLearnDocumentationInfoProvider>();
+        IMsLearnDocumentationInfoReader msLearnDocumentationInfoReader = _serviceProvider.GetRequiredService<IMsLearnDocumentationInfoReader>();
         IMsLearnDocumentationParser msLearnDocumentationParser = _serviceProvider.GetRequiredService<IMsLearnDocumentationParser>();
         ILogger logger = _serviceProvider.GetRequiredService<ILogger>();
         var editorConfigAnalyzer = new EditorConfigAnalyzer();
 
-        string editorConfigContent = editorConfigContentProvider.Provide();
+        string editorConfigContent = editorConfigContentProvider.Provide(configurationOption.Value.EditorConfigFile);
         EditorConfigSettings editorConfigSettings = editorConfigSettingsParser.Parse(editorConfigContent);
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = msLearnDocumentationInfoProvider.Provide();
+        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = msLearnDocumentationInfoReader.Provide(configurationOption.Value.MsLearnRepositoryPath);
         RoslynRules roslynRules = msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
         EditorConfigMissedConfiguration editorConfigMissedConfiguration = editorConfigAnalyzer.GetMissedConfigurations(editorConfigSettings, roslynRules);
 
