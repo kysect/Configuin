@@ -72,7 +72,7 @@ public class EditorConfigAnalyzer
         {
             if (!ruleIds.Contains(roslynRuleId))
                 result.Add(roslynRuleId);
-        }    
+        }
 
         return result;
     }
