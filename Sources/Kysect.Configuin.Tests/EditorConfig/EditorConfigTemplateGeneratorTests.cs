@@ -24,6 +24,7 @@ public class EditorConfigTemplateGeneratorTests
                           ## Add accessibility modifiers (IDE0040)
                           ## This style rule concerns requiring accessibility modifiers in declarations.
                           # dotnet_diagnostic.IDE0040.severity = 
+                          
                           ## IDE0040 options:
                           ## dotnet_style_require_accessibility_modifiers
                           ## - always - Prefer accessibility modifiers to be specified.
@@ -44,6 +45,7 @@ public class EditorConfigTemplateGeneratorTests
                           ## }
                           # dotnet_style_require_accessibility_modifiers = 
                           
+                          
                           """;
 
         string generateTemplate = _editorConfigTemplateGenerator.GenerateTemplate(roslynRules);
@@ -61,6 +63,7 @@ public class EditorConfigTemplateGeneratorTests
                           ## But, if the code has a public exception that later is used as the base for an internal exception, it is reasonable to assume the code further out will be able to do something intelligent with the base exception. The public exception will have more information than what is provided by xref:System.Exception, xref:System.SystemException, or xref:System.ApplicationException.
                           # dotnet_diagnostic.CA1064.severity = 
 
+                          
                           """;
 
         string generateTemplate = _editorConfigTemplateGenerator.GenerateTemplate(roslynRules);
