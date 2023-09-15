@@ -22,7 +22,7 @@ public class EditorConfigTemplateGeneratorTests
         RoslynRules roslynRules = RoslynRulesBuilder.New()
             .AddStyle(WellKnownRoslynRuleDefinitions.IDE0040())
             .Build();
-        
+
         string expected = """
                           ## Add accessibility modifiers (IDE0040)
                           ## This style rule concerns requiring accessibility modifiers in declarations.
@@ -62,7 +62,7 @@ public class EditorConfigTemplateGeneratorTests
         RoslynRules roslynRules = RoslynRulesBuilder.New()
             .AddQuality(WellKnownRoslynRuleDefinitions.CA1064())
             .Build();
-        
+
         string expected = """
                           ## Exceptions should be public (CA1064)
                           ## An internal exception is only visible inside its own internal scope. After the exception falls outside the internal scope, only the base exception can be used to catch the exception. If the internal exception is inherited from xref:System.Exception, xref:System.SystemException, or xref:System.ApplicationException, the external code will not have sufficient information to know what to do with the exception.
