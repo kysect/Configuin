@@ -28,7 +28,7 @@ public class EditorConfigTemplateGeneratorTests
                           ## This style rule concerns requiring accessibility modifiers in declarations.
                           # dotnet_diagnostic.IDE0040.severity = 
                           
-                          ## IDE0040 options:
+                          ## Options:
                           ## dotnet_style_require_accessibility_modifiers
                           ## - always - Prefer accessibility modifiers to be specified.
                           ## - for_non_interface_members - Prefer accessibility modifiers except for public interface members.
