@@ -6,6 +6,7 @@ using Kysect.Configuin.DotnetFormatIntegration;
 using Kysect.Configuin.DotnetFormatIntegration.Cli;
 using Kysect.Configuin.DotnetFormatIntegration.FileSystem;
 using Kysect.Configuin.EditorConfig;
+using Kysect.Configuin.EditorConfig.Template;
 using Kysect.Configuin.Markdown.TextExtractor;
 using Kysect.Configuin.MsLearn;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +47,7 @@ public class DependencyBuilder
         serviceCollection.AddSingleton<TemporaryFileMover>();
         serviceCollection.AddSingleton<DotnetFormatReportComparator>();
         serviceCollection.AddSingleton<DotnetFormatPreviewGenerator>();
+        serviceCollection.AddSingleton<EditorConfigTemplateGenerator>();
 
         return serviceCollection;
     }

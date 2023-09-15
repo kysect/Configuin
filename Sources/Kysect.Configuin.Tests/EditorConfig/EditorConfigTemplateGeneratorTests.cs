@@ -2,16 +2,23 @@
 using Kysect.Configuin.EditorConfig.Template;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Resources;
+using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.EditorConfig;
 
 public class EditorConfigTemplateGeneratorTests
 {
+    private readonly EditorConfigTemplateGenerator _editorConfigTemplateGenerator;
+
+    public EditorConfigTemplateGeneratorTests()
+    {
+        _editorConfigTemplateGenerator = new EditorConfigTemplateGenerator(TestLogger.ProviderForTests());
+    }
+
     [Test]
     public void GenerateTemplate_ForIDE0040_ReturnExpectedString()
     {
-        var editorConfigTemplateGenerator = new EditorConfigTemplateGenerator();
         var roslynRules = new RoslynRules(Array.Empty<RoslynQualityRule>(), new[] { WellKnownRoslynRuleDefinitions.IDE0040() });
         string expected = """
                           ## Add accessibility modifiers (IDE0040)
@@ -39,7 +46,7 @@ public class EditorConfigTemplateGeneratorTests
                           
                           """;
 
-        string generateTemplate = editorConfigTemplateGenerator.GenerateTemplate(roslynRules);
+        string generateTemplate = _editorConfigTemplateGenerator.GenerateTemplate(roslynRules);
 
         generateTemplate.Should().Be(expected);
     }
@@ -47,7 +54,6 @@ public class EditorConfigTemplateGeneratorTests
     [Test]
     public void GenerateTemplate_ForCA1064_ReturnExpectedString()
     {
-        var editorConfigTemplateGenerator = new EditorConfigTemplateGenerator();
         var roslynRules = new RoslynRules(new []{ WellKnownRoslynRuleDefinitions.CA1064()}, Array.Empty<RoslynStyleRule>());
         string expected = """
                           ## Exceptions should be public (CA1064)
@@ -57,7 +63,7 @@ public class EditorConfigTemplateGeneratorTests
 
                           """;
 
-        string generateTemplate = editorConfigTemplateGenerator.GenerateTemplate(roslynRules);
+        string generateTemplate = _editorConfigTemplateGenerator.GenerateTemplate(roslynRules);
 
         generateTemplate.Should().Be(expected);
     }
