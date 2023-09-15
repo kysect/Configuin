@@ -17,6 +17,35 @@ public class EditorConfigTemplateGeneratorTests
     }
 
     [Test]
+    public void GenerateTemplate_ForIDE0001_ReturnExpectedString()
+    {
+        RoslynRules roslynRules = RoslynRulesBuilder.New()
+            .AddStyle(WellKnownRoslynRuleDefinitions.IDE0001())
+            .Build();
+
+        string expected = """
+                          ## Simplify name (IDE0001)
+                          ## This rule concerns the use of simplified type names in declarations and executable code, when possible. You can remove unnecessary name qualification to simplify code and improve readability.
+                          ## using System.IO;
+                          ## class C
+                          ## {
+                          ##     // IDE0001: 'System.IO.FileInfo' can be simplified to 'FileInfo'
+                          ##     System.IO.FileInfo file;
+                          ## 
+                          ##     // Fixed code
+                          ##     FileInfo file;
+                          ## }
+                          # dotnet_diagnostic.IDE0001.severity = 
+
+
+                          """;
+
+        string generateTemplate = _editorConfigTemplateGenerator.GenerateTemplate(roslynRules);
+
+        generateTemplate.Should().Be(expected);
+    }
+
+    [Test]
     public void GenerateTemplate_ForIDE0040_ReturnExpectedString()
     {
         RoslynRules roslynRules = RoslynRulesBuilder.New()
