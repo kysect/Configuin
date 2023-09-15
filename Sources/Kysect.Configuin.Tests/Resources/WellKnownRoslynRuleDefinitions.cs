@@ -75,7 +75,7 @@ public static class WellKnownRoslynRuleDefinitions
         return new RoslynStyleRuleGroup(new[] { ide0007, ide0008 }, Array.Empty<RoslynStyleRuleOption>(), overview, Example: null);
     }
 
-    
+
 
     public static RoslynStyleRuleGroup IDE0040()
     {

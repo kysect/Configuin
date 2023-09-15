@@ -29,7 +29,7 @@ public class EditorConfigTemplateGenerator
 
             foreach (RoslynStyleRule roslynStyleRule in roslynStyleRuleGroup.Rules)
                 builder.AddCommentString($"dotnet_diagnostic.{roslynStyleRule.RuleId}.severity = ");
-            
+
             builder.AddEmptyLine();
 
             if (roslynStyleRuleGroup.Options.Any())
