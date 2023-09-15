@@ -18,17 +18,20 @@ public class EditorConfigTemplateGenerator
 
         var builder = new EditorConfigTemplateBuilder();
 
-        foreach (RoslynStyleRule roslynStyleRule in rules.StyleRules)
+        foreach (RoslynStyleRuleGroup roslynStyleRuleGroup in rules.StyleRuleGroups)
         {
-            builder.AddDoubleCommentString($"{roslynStyleRule.Title} ({roslynStyleRule.RuleId})");
-            builder.AddDoubleCommentString(roslynStyleRule.Overview);
-            builder.AddCommentString($"dotnet_diagnostic.{roslynStyleRule.RuleId}.severity = ");
-            builder.AddEmptyLine();
-
-            if (roslynStyleRule.Options.Any())
+            foreach (RoslynStyleRule roslynStyleRule in roslynStyleRuleGroup.Rules)
             {
-                builder.AddDoubleCommentString($"{roslynStyleRule.RuleId} options:");
-                foreach (RoslynStyleRuleOption roslynStyleRuleOption in roslynStyleRule.Options)
+                builder.AddDoubleCommentString($"{roslynStyleRule.Title} ({roslynStyleRule.RuleId})");
+                builder.AddDoubleCommentString(roslynStyleRule.Overview);
+                builder.AddCommentString($"dotnet_diagnostic.{roslynStyleRule.RuleId}.severity = ");
+                builder.AddEmptyLine();
+            }
+
+            if (roslynStyleRuleGroup.Options.Any())
+            {
+                builder.AddDoubleCommentString("Options:");
+                foreach (RoslynStyleRuleOption roslynStyleRuleOption in roslynStyleRuleGroup.Options)
                 {
                     builder.AddDoubleCommentString(roslynStyleRuleOption.Name);
                     foreach (RoslynStyleRuleOptionValue roslynStyleRuleOptionValue in roslynStyleRuleOption.Values)

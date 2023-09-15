@@ -36,10 +36,10 @@ public class MarkdownCodeStyleFormatterTests
                                 
                                 """;
 
-        RoslynStyleRule ide0040 = WellKnownRoslynRuleDefinitions.IDE0001();
+        RoslynStyleRuleGroup ide0040 = WellKnownRoslynRuleDefinitions.IDE0001();
 
         var styleRoslynStyleRuleConfiguration = new CodeStyleRoslynStyleRuleConfiguration(
-            ide0040,
+            ide0040.Rules.Single(),
             RoslynRuleSeverity.Warning,
             Options: Array.Empty<CodeStyleRoslynOptionConfiguration>());
 
@@ -77,11 +77,11 @@ public class MarkdownCodeStyleFormatterTests
                                  
                                  """;
 
-        RoslynStyleRule ide0040 = WellKnownRoslynRuleDefinitions.IDE0040();
+        RoslynStyleRuleGroup ide0040 = WellKnownRoslynRuleDefinitions.IDE0040();
         var optionConfiguration = new CodeStyleRoslynOptionConfiguration(ide0040.Options.Single(), "always");
 
         var styleRoslynStyleRuleConfiguration = new CodeStyleRoslynStyleRuleConfiguration(
-            ide0040,
+            ide0040.Rules.Single(),
             RoslynRuleSeverity.Warning,
             new[] { optionConfiguration });
 

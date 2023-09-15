@@ -19,12 +19,11 @@ public class MsLearnDocumentationParserTests
     {
         string fileText = GetIdeDescription("ide0001.md");
 
-        RoslynStyleRule expected = WellKnownRoslynRuleDefinitions.IDE0001();
+        RoslynStyleRuleGroup expected = WellKnownRoslynRuleDefinitions.IDE0001();
 
         RoslynStyleRuleGroup roslynStyleRules = _parser.ParseStyleRules(fileText);
 
-        roslynStyleRules.Rules.Should().HaveCount(1)
-            .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
+        roslynStyleRules.Should().BeEquivalentTo(expected);
     }
 
     [Test]
@@ -32,12 +31,11 @@ public class MsLearnDocumentationParserTests
     {
         string fileText = GetIdeDescription("ide0040.md");
 
-        RoslynStyleRule expected = WellKnownRoslynRuleDefinitions.IDE0040();
+        RoslynStyleRuleGroup expected = WellKnownRoslynRuleDefinitions.IDE0040();
 
         RoslynStyleRuleGroup roslynStyleRules = _parser.ParseStyleRules(fileText);
 
-        roslynStyleRules.Rules.Should().HaveCount(1)
-            .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
+        roslynStyleRules.Should().BeEquivalentTo(expected);
     }
 
     [Test]

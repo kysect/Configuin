@@ -4,9 +4,9 @@ namespace Kysect.Configuin.Tests.Resources;
 
 public static class WellKnownRoslynRuleDefinitions
 {
-    public static RoslynStyleRule IDE0001()
+    public static RoslynStyleRuleGroup IDE0001()
     {
-        return new RoslynStyleRule(
+        var rule = new RoslynStyleRule(
             RuleId: RoslynRuleId.Parse("IDE0001"),
             Title: "Simplify name",
             Category: "Style",
@@ -21,8 +21,14 @@ public static class WellKnownRoslynRuleDefinitions
                          // Fixed code
                          FileInfo file;
                      }
-                     """,
-            Options: Array.Empty<RoslynStyleRuleOption>());
+                     """);
+
+        return new RoslynStyleRuleGroup(rule);
+    }
+
+    public static RoslynStyleRuleGroup Ide0003_0009()
+    {
+        return new RoslynStyleRuleGroup(new[] { Ide0003(), Ide0009() }, Ide0003_0009Options());
     }
 
     public static RoslynStyleRule Ide0003()
@@ -35,8 +41,7 @@ public static class WellKnownRoslynRuleDefinitions
             These two rules define whether or not you prefer the use of this (C#) and Me. (Visual Basic) qualifiers. To enforce that the qualifiers aren't present, set the severity of IDE0003 to warning or error. To enforce that the qualifiers are present, set the severity of IDE0009 to warning or error.
             For example, if you prefer qualifiers for fields and properties but not for methods or events, then you can enable IDE0009 and set the options dotnet_style_qualification_for_field and dotnet_style_qualification_for_property to true. However, this configuration would not flag methods and events that do have this and Me qualifiers. To also enforce that methods and events don't have qualifiers, enable IDE0003.
             """,
-            null,
-            Ide0003_0009Options());
+            Example: null);
         return ide0003;
     }
 
@@ -50,12 +55,11 @@ public static class WellKnownRoslynRuleDefinitions
             These two rules define whether or not you prefer the use of this (C#) and Me. (Visual Basic) qualifiers. To enforce that the qualifiers aren't present, set the severity of IDE0003 to warning or error. To enforce that the qualifiers are present, set the severity of IDE0009 to warning or error.
             For example, if you prefer qualifiers for fields and properties but not for methods or events, then you can enable IDE0009 and set the options dotnet_style_qualification_for_field and dotnet_style_qualification_for_property to true. However, this configuration would not flag methods and events that do have this and Me qualifiers. To also enforce that methods and events don't have qualifiers, enable IDE0003.
             """,
-            null,
-            Ide0003_0009Options());
+            null);
         return ide0009;
     }
 
-    public static RoslynStyleRule IDE0040()
+    public static RoslynStyleRuleGroup IDE0040()
     {
         string codeSample = """
                          // dotnet_style_require_accessibility_modifiers = always
@@ -86,13 +90,14 @@ public static class WellKnownRoslynRuleDefinitions
             DefaultValue: "for_non_interface_members",
             codeSample);
 
-        return new RoslynStyleRule(
+        var styleRule = new RoslynStyleRule(
             RoslynRuleId.Parse("IDE0040"),
             "Add accessibility modifiers",
             "Style",
             "This style rule concerns requiring accessibility modifiers in declarations.",
-            null,
-            new[] { expectedOption });
+            Example: null);
+
+        return new RoslynStyleRuleGroup(styleRule, new[] { expectedOption });
     }
 
     public static RoslynQualityRule CA1064()
