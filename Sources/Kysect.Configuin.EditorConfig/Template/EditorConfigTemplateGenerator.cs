@@ -1,11 +1,21 @@
 ﻿using Kysect.Configuin.RoslynModels;
+using Microsoft.Extensions.Logging;
 
 namespace Kysect.Configuin.EditorConfig.Template;
 
 public class EditorConfigTemplateGenerator
 {
+    private readonly ILogger _logger;
+
+    public EditorConfigTemplateGenerator(ILogger logger)
+    {
+        _logger = logger;
+    }
+
     public string GenerateTemplate(RoslynRules rules)
     {
+        _logger.LogInformation("Generating .editorconfig template.");
+
         var builder = new EditorConfigTemplateBuilder();
 
         foreach (RoslynStyleRule roslynStyleRule in rules.StyleRules)

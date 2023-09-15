@@ -24,9 +24,11 @@ internal class Program
 
         app.Configure(config =>
         {
+            // TODO: rename to styledoc
             config.AddCommand<GenerateCodeStyleDocCommand>("generate-codestyle-doc");
             config.AddCommand<EditorConfigApplyPreviewCommand>("preview");
             config.AddCommand<AnalyzeEditorConfigCommand>("analyze");
+            config.AddCommand<GenerateEditorConfigTemplateTemplate>("template");
         });
 
         app.Run(args);
@@ -37,6 +39,9 @@ internal class Program
         ServiceProvider serviceProvider = registrations.BuildServiceProvider();
         ConfiguinConfiguration configurationOption = serviceProvider.GetRequiredService<IOptions<ConfiguinConfiguration>>().Value;
 
-        return new[] { "analyze", configurationOption.EditorConfigFile, "-d", configurationOption.MsLearnRepositoryPath };
+        string[] analyzeCommand = new[] { "analyze", configurationOption.EditorConfigFile, "-d", configurationOption.MsLearnRepositoryPath };
+        string[] templateGenerateCommand = new[] { "template", ".editorconfig", "-d", configurationOption.MsLearnRepositoryPath };
+
+        return templateGenerateCommand;
     }
 }
