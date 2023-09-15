@@ -24,6 +24,8 @@ public class EditorConfigTemplateGenerator
             {
                 builder.AddDoubleCommentString($"{roslynStyleRule.Title} ({roslynStyleRule.RuleId})");
                 builder.AddDoubleCommentString(roslynStyleRule.Overview);
+                if (roslynStyleRule.Example is not null)
+                    builder.AddDoubleCommentString(roslynStyleRule.Example);
                 builder.AddCommentString($"dotnet_diagnostic.{roslynStyleRule.RuleId}.severity = ");
                 builder.AddEmptyLine();
             }
