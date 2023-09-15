@@ -98,15 +98,17 @@ public class CodeStyleGenerator : ICodeStyleGenerator
         IReadOnlyCollection<CodeStyleRoslynOptionConfiguration> optionConfigurations,
         RoslynRules roslynRules)
     {
-        RoslynStyleRule? roslynStyleRule = roslynRules.StyleRules.FirstOrDefault(s => s.RuleId.Equals(severityEditorConfigSetting.RuleId));
-        if (roslynStyleRule is not null)
+        RoslynStyleRuleGroup? ruleGroup = roslynRules.StyleRuleGroups.SingleOrDefault(g => g.Rules.Any(r => r.RuleId.Equals(severityEditorConfigSetting.RuleId)));
+
+        if (ruleGroup is not null)
         {
-            var options = roslynStyleRule
+            RoslynStyleRule rule = ruleGroup.Rules.Single(r => r.RuleId.Equals(severityEditorConfigSetting.RuleId));
+            var options = ruleGroup
                 .Options
                 .Select(o => GetOptionConfiguration(optionConfigurations, o.Name))
                 .ToList();
 
-            return new CodeStyleRoslynStyleRuleConfiguration(roslynStyleRule, severityEditorConfigSetting.Severity, options);
+            return new CodeStyleRoslynStyleRuleConfiguration(rule, severityEditorConfigSetting.Severity, options);
         }
 
         RoslynQualityRule? roslynQualityRule = roslynRules.QualityRules.FirstOrDefault(q => q.RuleId.Equals(severityEditorConfigSetting.RuleId));
