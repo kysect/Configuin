@@ -34,7 +34,7 @@ public class EditorConfigAnalyzerTests
 
         editorConfigMissedConfiguration.StyleRuleSeverity
             .Should().HaveCount(1)
-            .And.Contain(WellKnownRoslynRuleDefinitions.IDE0040().RuleId);
+            .And.Contain(WellKnownRoslynRuleDefinitions.IDE0040().Rules.Single().RuleId);
 
         editorConfigMissedConfiguration.StyleRuleOptions
             .Should().HaveCount(1)
@@ -46,7 +46,7 @@ public class EditorConfigAnalyzerTests
     {
         var editorConfigSettings = new EditorConfigSettings(new IEditorConfigSetting[]
         {
-            new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.IDE0040().RuleId, RoslynRuleSeverity.Warning),
+            new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.IDE0040().Rules.Single().RuleId, RoslynRuleSeverity.Warning),
             new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.CA1064().RuleId, RoslynRuleSeverity.Warning),
             new RoslynOptionEditorConfigSetting(WellKnownRoslynRuleDefinitions.IDE0040().Options.Single().Name, "always")
         });
@@ -137,7 +137,7 @@ public class EditorConfigAnalyzerTests
     {
         var editorConfigSettings = new EditorConfigSettings(new IEditorConfigSetting[]
         {
-            new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.IDE0040().RuleId, RoslynRuleSeverity.Warning),
+            new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.IDE0040().Rules.Single().RuleId, RoslynRuleSeverity.Warning),
             new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.CA1064().RuleId, RoslynRuleSeverity.Warning),
         });
 
@@ -148,6 +148,6 @@ public class EditorConfigAnalyzerTests
         IReadOnlyCollection<RoslynRuleId> incorrectOptionSeverity = _editorConfigAnalyzer.GetIncorrectOptionSeverity(editorConfigSettings, roslynRules);
 
         incorrectOptionSeverity.Should().HaveCount(1)
-            .And.Subject.ElementAt(0).Should().BeEquivalentTo(WellKnownRoslynRuleDefinitions.IDE0040().RuleId);
+            .And.Subject.ElementAt(0).Should().BeEquivalentTo(WellKnownRoslynRuleDefinitions.IDE0040().Rules.Single().RuleId);
     }
 }

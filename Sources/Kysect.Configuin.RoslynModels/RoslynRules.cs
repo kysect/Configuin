@@ -18,7 +18,7 @@ public class RoslynRules
 
     public IReadOnlyCollection<RoslynStyleRuleOption> GetOptions()
     {
-        return StyleRules
+        return StyleRuleGroups
             .SelectMany(r => r.Options)
             // TODO: check duplicates
             .DistinctBy(o => o.Name)

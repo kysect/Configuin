@@ -22,12 +22,6 @@ public class RoslynRulesBuilder
         return this;
     }
 
-    public RoslynRulesBuilder AddStyle(RoslynStyleRule styleRule)
-    {
-        _styleRuleGroups.Add(new RoslynStyleRuleGroup(new[] { styleRule }));
-        return this;
-    }
-
     public RoslynRulesBuilder AddStyle(RoslynStyleRuleGroup styleRuleGroup)
     {
         _styleRuleGroups.Add(styleRuleGroup);
