@@ -2,7 +2,7 @@
 using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
 
-namespace Kysect.Configuin.EditorConfig;
+namespace Kysect.Configuin.EditorConfig.Analyzing;
 
 public class EditorConfigAnalyzer
 {

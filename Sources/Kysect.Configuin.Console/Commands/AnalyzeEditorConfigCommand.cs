@@ -1,5 +1,6 @@
 ﻿using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.EditorConfig;
+using Kysect.Configuin.EditorConfig.Analyzing;
 using Kysect.Configuin.MsLearn;
 using Kysect.Configuin.MsLearn.Models;
 using Kysect.Configuin.RoslynModels;
