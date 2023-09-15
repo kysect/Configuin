@@ -108,7 +108,7 @@ public class CodeStyleGenerator : ICodeStyleGenerator
                 .Select(o => GetOptionConfiguration(optionConfigurations, o.Name))
                 .ToList();
 
-            return new CodeStyleRoslynStyleRuleConfiguration(rule, severityEditorConfigSetting.Severity, options);
+            return new CodeStyleRoslynStyleRuleConfiguration(rule, severityEditorConfigSetting.Severity, options, ruleGroup.Overview, ruleGroup.Example);
         }
 
         RoslynQualityRule? roslynQualityRule = roslynRules.QualityRules.FirstOrDefault(q => q.RuleId.Equals(severityEditorConfigSetting.RuleId));
