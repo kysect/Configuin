@@ -21,8 +21,11 @@ public class EditorConfigAnalyzerTests
     public void GetMissedConfigurations_AllOptionAreMissed_ReturnAllOptions()
     {
         var editorConfigSettings = new EditorConfigSettings(Array.Empty<IEditorConfigSetting>());
-        var roslynRules = new RoslynRules(new[] { WellKnownRoslynRuleDefinitions.CA1064() }, new[] { WellKnownRoslynRuleDefinitions.IDE0040() });
-
+        RoslynRules roslynRules = RoslynRulesBuilder.New()
+            .AddQuality(WellKnownRoslynRuleDefinitions.CA1064())
+            .AddStyle(WellKnownRoslynRuleDefinitions.IDE0040())
+            .Build();
+        
         EditorConfigMissedConfiguration editorConfigMissedConfiguration = _editorConfigAnalyzer.GetMissedConfigurations(editorConfigSettings, roslynRules);
 
         editorConfigMissedConfiguration.QualityRuleSeverity
@@ -48,7 +51,10 @@ public class EditorConfigAnalyzerTests
             new RoslynOptionEditorConfigSetting(WellKnownRoslynRuleDefinitions.IDE0040().Options.Single().Name, "always")
         });
 
-        var roslynRules = new RoslynRules(new[] { WellKnownRoslynRuleDefinitions.CA1064() }, new[] { WellKnownRoslynRuleDefinitions.IDE0040() });
+        RoslynRules roslynRules = RoslynRulesBuilder.New()
+            .AddQuality(WellKnownRoslynRuleDefinitions.CA1064())
+            .AddStyle(WellKnownRoslynRuleDefinitions.IDE0040())
+            .Build();
 
         EditorConfigMissedConfiguration editorConfigMissedConfiguration = _editorConfigAnalyzer.GetMissedConfigurations(editorConfigSettings, roslynRules);
 
@@ -65,8 +71,10 @@ public class EditorConfigAnalyzerTests
             new RoslynOptionEditorConfigSetting(WellKnownRoslynRuleDefinitions.IDE0040().Options.Single().Name, "always")
         });
 
-        var roslynRules = new RoslynRules(Array.Empty<RoslynQualityRule>(), new[] { WellKnownRoslynRuleDefinitions.IDE0040() });
-
+        RoslynRules roslynRules = RoslynRulesBuilder.New()
+            .AddStyle(WellKnownRoslynRuleDefinitions.IDE0040())
+            .Build();
+        
         IReadOnlyCollection<EditorConfigInvalidOptionValue> invalidOptionValues = _editorConfigAnalyzer.GetIncorrectOptionValues(editorConfigSettings, roslynRules);
 
         invalidOptionValues.Should().BeEmpty();
@@ -83,7 +91,10 @@ public class EditorConfigAnalyzerTests
             new RoslynOptionEditorConfigSetting(selectedOptions.Name, incorrectOptionValue)
         });
 
-        var roslynRules = new RoslynRules(Array.Empty<RoslynQualityRule>(), new[] { WellKnownRoslynRuleDefinitions.IDE0040() });
+        RoslynRules roslynRules = RoslynRulesBuilder.New()
+            .AddStyle(WellKnownRoslynRuleDefinitions.IDE0040())
+            .Build();
+        
         var expected = new EditorConfigInvalidOptionValue(
             selectedOptions.Name,
             incorrectOptionValue,
@@ -106,7 +117,10 @@ public class EditorConfigAnalyzerTests
             new RoslynOptionEditorConfigSetting(incorrectOptionKey, incorrectOptionValue)
         });
 
-        var roslynRules = new RoslynRules(Array.Empty<RoslynQualityRule>(), new[] { WellKnownRoslynRuleDefinitions.IDE0040() });
+        RoslynRules roslynRules = RoslynRulesBuilder.New()
+            .AddStyle(WellKnownRoslynRuleDefinitions.IDE0040())
+            .Build();
+
         var expected = new EditorConfigInvalidOptionValue(
             incorrectOptionKey,
             incorrectOptionValue,
@@ -127,7 +141,9 @@ public class EditorConfigAnalyzerTests
             new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.CA1064().RuleId, RoslynRuleSeverity.Warning),
         });
 
-        var roslynRules = new RoslynRules(new[] { WellKnownRoslynRuleDefinitions.CA1064() }, Array.Empty<RoslynStyleRule>());
+        RoslynRules roslynRules = RoslynRulesBuilder.New()
+            .AddQuality(WellKnownRoslynRuleDefinitions.CA1064())
+            .Build();
 
         IReadOnlyCollection<RoslynRuleId> incorrectOptionSeverity = _editorConfigAnalyzer.GetIncorrectOptionSeverity(editorConfigSettings, roslynRules);
 

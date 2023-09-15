@@ -21,9 +21,9 @@ public class MsLearnDocumentationParserTests
 
         RoslynStyleRule expected = WellKnownRoslynRuleDefinitions.IDE0001();
 
-        IReadOnlyCollection<RoslynStyleRule> roslynStyleRules = _parser.ParseStyleRules(fileText);
+        RoslynStyleRuleGroup roslynStyleRules = _parser.ParseStyleRules(fileText);
 
-        roslynStyleRules.Should().HaveCount(1)
+        roslynStyleRules.Rules.Should().HaveCount(1)
             .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
     }
 
@@ -34,9 +34,9 @@ public class MsLearnDocumentationParserTests
 
         RoslynStyleRule expected = WellKnownRoslynRuleDefinitions.IDE0040();
 
-        IReadOnlyCollection<RoslynStyleRule> roslynStyleRules = _parser.ParseStyleRules(fileText);
+        RoslynStyleRuleGroup roslynStyleRules = _parser.ParseStyleRules(fileText);
 
-        roslynStyleRules.Should().HaveCount(1)
+        roslynStyleRules.Rules.Should().HaveCount(1)
             .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
     }
 
@@ -47,11 +47,11 @@ public class MsLearnDocumentationParserTests
         RoslynStyleRule ide0003 = WellKnownRoslynRuleDefinitions.Ide0003();
         RoslynStyleRule ide0009 = WellKnownRoslynRuleDefinitions.Ide0009();
 
-        IReadOnlyCollection<RoslynStyleRule> roslynStyleRules = _parser.ParseStyleRules(fileText);
+        RoslynStyleRuleGroup roslynStyleRules = _parser.ParseStyleRules(fileText);
 
-        roslynStyleRules.Should().HaveCount(2);
-        roslynStyleRules.ElementAt(0).Should().BeEquivalentTo(ide0003);
-        roslynStyleRules.ElementAt(1).Should().BeEquivalentTo(ide0009);
+        roslynStyleRules.Rules.Should().HaveCount(2);
+        roslynStyleRules.Rules.ElementAt(0).Should().BeEquivalentTo(ide0003);
+        roslynStyleRules.Rules.ElementAt(1).Should().BeEquivalentTo(ide0009);
     }
 
     [Test]
