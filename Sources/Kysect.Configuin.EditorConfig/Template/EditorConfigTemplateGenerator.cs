@@ -23,6 +23,7 @@ public class EditorConfigTemplateGenerator
             builder.AddDoubleCommentString($"{roslynStyleRule.Title} ({roslynStyleRule.RuleId})");
             builder.AddDoubleCommentString(roslynStyleRule.Overview);
             builder.AddCommentString($"dotnet_diagnostic.{roslynStyleRule.RuleId}.severity = ");
+            builder.AddEmptyLine();
 
             if (roslynStyleRule.Options.Any())
             {
@@ -35,6 +36,7 @@ public class EditorConfigTemplateGenerator
                     if (roslynStyleRuleOption.CsharpCodeSample is not null)
                         builder.AddDoubleCommentString(roslynStyleRuleOption.CsharpCodeSample);
                     builder.AddCommentString($"{roslynStyleRuleOption.Name} = ");
+                    builder.AddEmptyLine();
                 }
             }
         }
@@ -44,6 +46,7 @@ public class EditorConfigTemplateGenerator
             builder.AddDoubleCommentString($"{qualityRule.Title} ({qualityRule.RuleId})");
             builder.AddDoubleCommentString(qualityRule.Description);
             builder.AddCommentString($"dotnet_diagnostic.{qualityRule.RuleId}.severity = ");
+            builder.AddEmptyLine();
         }
 
         return builder.Build();

@@ -18,6 +18,11 @@ public class EditorConfigTemplateBuilder
             _templateBuilder.AppendLine($"## {s}");
     }
 
+    public void AddEmptyLine()
+    {
+        _templateBuilder.AppendLine();
+    }
+
     public string Build()
     {
         return _templateBuilder.ToString();
