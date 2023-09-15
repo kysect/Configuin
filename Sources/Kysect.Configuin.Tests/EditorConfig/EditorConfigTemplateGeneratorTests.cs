@@ -54,7 +54,7 @@ public class EditorConfigTemplateGeneratorTests
     [Test]
     public void GenerateTemplate_ForCA1064_ReturnExpectedString()
     {
-        var roslynRules = new RoslynRules(new []{ WellKnownRoslynRuleDefinitions.CA1064()}, Array.Empty<RoslynStyleRule>());
+        var roslynRules = new RoslynRules(new[] { WellKnownRoslynRuleDefinitions.CA1064() }, Array.Empty<RoslynStyleRule>());
         string expected = """
                           ## Exceptions should be public (CA1064)
                           ## An internal exception is only visible inside its own internal scope. After the exception falls outside the internal scope, only the base exception can be used to catch the exception. If the internal exception is inherited from xref:System.Exception, xref:System.SystemException, or xref:System.ApplicationException, the external code will not have sufficient information to know what to do with the exception.
