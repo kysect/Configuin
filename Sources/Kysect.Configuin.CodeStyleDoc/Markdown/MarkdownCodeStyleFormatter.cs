@@ -42,11 +42,11 @@ public class MarkdownCodeStyleFormatter : ICodeStyleFormatter
         builder.AddEmptyLine();
         builder.AddText($"Severity: {rule.Severity}");
         builder.AddEmptyLine();
-        builder.AddText(rule.Rule.Overview);
-        if (rule.Rule.Example is not null)
+        builder.AddText(rule.Overview);
+        if (rule.Example is not null)
         {
             builder.AddEmptyLine();
-            builder.AddCode(rule.Rule.Example);
+            builder.AddCode(rule.Example);
         }
 
         foreach (CodeStyleRoslynOptionConfiguration optionConfiguration in rule.Options)

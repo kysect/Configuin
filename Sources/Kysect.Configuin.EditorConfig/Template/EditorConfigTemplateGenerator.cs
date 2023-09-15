@@ -21,14 +21,16 @@ public class EditorConfigTemplateGenerator
         foreach (RoslynStyleRuleGroup roslynStyleRuleGroup in rules.StyleRuleGroups)
         {
             foreach (RoslynStyleRule roslynStyleRule in roslynStyleRuleGroup.Rules)
-            {
                 builder.AddDoubleCommentString($"{roslynStyleRule.Title} ({roslynStyleRule.RuleId})");
-                builder.AddDoubleCommentString(roslynStyleRule.Overview);
-                if (roslynStyleRule.Example is not null)
-                    builder.AddDoubleCommentString(roslynStyleRule.Example);
+
+            builder.AddDoubleCommentString(roslynStyleRuleGroup.Overview);
+            if (roslynStyleRuleGroup.Example is not null)
+                builder.AddDoubleCommentString(roslynStyleRuleGroup.Example);
+
+            foreach (RoslynStyleRule roslynStyleRule in roslynStyleRuleGroup.Rules)
                 builder.AddCommentString($"dotnet_diagnostic.{roslynStyleRule.RuleId}.severity = ");
-                builder.AddEmptyLine();
-            }
+            
+            builder.AddEmptyLine();
 
             if (roslynStyleRuleGroup.Options.Any())
             {

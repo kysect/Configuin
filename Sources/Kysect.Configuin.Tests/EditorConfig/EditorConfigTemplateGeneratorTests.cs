@@ -46,6 +46,28 @@ public class EditorConfigTemplateGeneratorTests
     }
 
     [Test]
+    public void GenerateTemplate_ForIDE0007_0008_ReturnExpectedString()
+    {
+        RoslynRules roslynRules = RoslynRulesBuilder.New()
+            .AddStyle(WellKnownRoslynRuleDefinitions.IDE0007_0008())
+            .Build();
+
+        string expected = """
+                          ## Use var instead of explicit type (IDE0007)
+                          ## Use explicit type instead of var (IDE0008)
+                          ## These two style rules define whether the var keyword or an explicit type should be used in a variable declaration. To enforce that var is used, set the severity of IDE0007 to warning or error. To enforce that the explicit type is used, set the severity of IDE0008 to warning or error.
+                          # dotnet_diagnostic.IDE0007.severity = 
+                          # dotnet_diagnostic.IDE0008.severity = 
+
+                          
+                          """;
+
+        string generateTemplate = _editorConfigTemplateGenerator.GenerateTemplate(roslynRules);
+
+        generateTemplate.Should().Be(expected);
+    }
+
+    [Test]
     public void GenerateTemplate_ForIDE0040_ReturnExpectedString()
     {
         RoslynRules roslynRules = RoslynRulesBuilder.New()

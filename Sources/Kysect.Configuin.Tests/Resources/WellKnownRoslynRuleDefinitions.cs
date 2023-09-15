@@ -6,58 +6,76 @@ public static class WellKnownRoslynRuleDefinitions
 {
     public static RoslynStyleRuleGroup IDE0001()
     {
+        string overview = "This rule concerns the use of simplified type names in declarations and executable code, when possible. You can remove unnecessary name qualification to simplify code and improve readability.";
+        string example = """
+                       using System.IO;
+                       class C
+                       {
+                           // IDE0001: 'System.IO.FileInfo' can be simplified to 'FileInfo'
+                           System.IO.FileInfo file;
+                       
+                           // Fixed code
+                           FileInfo file;
+                       }
+                       """;
+
         var rule = new RoslynStyleRule(
             RuleId: RoslynRuleId.Parse("IDE0001"),
             Title: "Simplify name",
-            Category: "Style",
-            Overview: "This rule concerns the use of simplified type names in declarations and executable code, when possible. You can remove unnecessary name qualification to simplify code and improve readability.",
-            Example: """
-                     using System.IO;
-                     class C
-                     {
-                         // IDE0001: 'System.IO.FileInfo' can be simplified to 'FileInfo'
-                         System.IO.FileInfo file;
-                     
-                         // Fixed code
-                         FileInfo file;
-                     }
-                     """);
+            Category: "Style");
 
-        return new RoslynStyleRuleGroup(rule);
+        return new RoslynStyleRuleGroup(
+            rule,
+            Overview: overview,
+            Example: example);
     }
 
     public static RoslynStyleRuleGroup Ide0003_0009()
     {
-        return new RoslynStyleRuleGroup(new[] { Ide0003(), Ide0009() }, Ide0003_0009Options());
+        string overview = """
+                          These two rules define whether or not you prefer the use of this (C#) and Me. (Visual Basic) qualifiers. To enforce that the qualifiers aren't present, set the severity of IDE0003 to warning or error. To enforce that the qualifiers are present, set the severity of IDE0009 to warning or error.
+                          For example, if you prefer qualifiers for fields and properties but not for methods or events, then you can enable IDE0009 and set the options dotnet_style_qualification_for_field and dotnet_style_qualification_for_property to true. However, this configuration would not flag methods and events that do have this and Me qualifiers. To also enforce that methods and events don't have qualifiers, enable IDE0003.
+                          """;
+
+        return new RoslynStyleRuleGroup(new[] { Ide0003(), Ide0009() }, Ide0003_0009Options(), overview, Example: null);
     }
 
     public static RoslynStyleRule Ide0003()
     {
-        var ide0003 = new RoslynStyleRule(
+        return new RoslynStyleRule(
             RoslynRuleId.Parse("IDE0003"),
             "Remove this or Me qualification",
-            "Style",
-            """
-            These two rules define whether or not you prefer the use of this (C#) and Me. (Visual Basic) qualifiers. To enforce that the qualifiers aren't present, set the severity of IDE0003 to warning or error. To enforce that the qualifiers are present, set the severity of IDE0009 to warning or error.
-            For example, if you prefer qualifiers for fields and properties but not for methods or events, then you can enable IDE0009 and set the options dotnet_style_qualification_for_field and dotnet_style_qualification_for_property to true. However, this configuration would not flag methods and events that do have this and Me qualifiers. To also enforce that methods and events don't have qualifiers, enable IDE0003.
-            """,
-            Example: null);
-        return ide0003;
+            "Style");
     }
 
     public static RoslynStyleRule Ide0009()
     {
-        var ide0009 = new RoslynStyleRule(
+        return new RoslynStyleRule(
             RoslynRuleId.Parse("IDE0009"),
             "Add this or Me qualification",
-            "Style",
-            """
-            These two rules define whether or not you prefer the use of this (C#) and Me. (Visual Basic) qualifiers. To enforce that the qualifiers aren't present, set the severity of IDE0003 to warning or error. To enforce that the qualifiers are present, set the severity of IDE0009 to warning or error.
-            For example, if you prefer qualifiers for fields and properties but not for methods or events, then you can enable IDE0009 and set the options dotnet_style_qualification_for_field and dotnet_style_qualification_for_property to true. However, this configuration would not flag methods and events that do have this and Me qualifiers. To also enforce that methods and events don't have qualifiers, enable IDE0003.
-            """,
-            null);
-        return ide0009;
+            "Style");
     }
+
+    public static RoslynStyleRuleGroup IDE0007_0008()
+    {
+        string overview = """
+                          These two style rules define whether the var keyword or an explicit type should be used in a variable declaration. To enforce that var is used, set the severity of IDE0007 to warning or error. To enforce that the explicit type is used, set the severity of IDE0008 to warning or error.
+                          """;
+
+        var ide0007 = new RoslynStyleRule(
+            RoslynRuleId.Parse("IDE0007"),
+            "Use var instead of explicit type",
+            "Style");
+
+        var ide0008 = new RoslynStyleRule(
+            RoslynRuleId.Parse("IDE0008"),
+            "Use explicit type instead of var",
+            "Style");
+
+        return new RoslynStyleRuleGroup(new[] { ide0007, ide0008 }, Array.Empty<RoslynStyleRuleOption>(), overview, Example: null);
+    }
+
+    
 
     public static RoslynStyleRuleGroup IDE0040()
     {
@@ -90,14 +108,13 @@ public static class WellKnownRoslynRuleDefinitions
             DefaultValue: "for_non_interface_members",
             codeSample);
 
+        string overview = "This style rule concerns requiring accessibility modifiers in declarations.";
         var styleRule = new RoslynStyleRule(
             RoslynRuleId.Parse("IDE0040"),
             "Add accessibility modifiers",
-            "Style",
-            "This style rule concerns requiring accessibility modifiers in declarations.",
-            Example: null);
+            "Style");
 
-        return new RoslynStyleRuleGroup(styleRule, new[] { expectedOption });
+        return new RoslynStyleRuleGroup(styleRule, new[] { expectedOption }, overview, Example: null);
     }
 
     public static RoslynQualityRule CA1064()
