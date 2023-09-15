@@ -1,12 +1,25 @@
 ﻿namespace Kysect.Configuin.RoslynModels;
 
-public record RoslynStyleRuleGroup(IReadOnlyCollection<RoslynStyleRule> Rules, IReadOnlyCollection<RoslynStyleRuleOption> Options)
+public record RoslynStyleRuleGroup(
+    IReadOnlyCollection<RoslynStyleRule> Rules,
+    IReadOnlyCollection<RoslynStyleRuleOption> Options,
+    string Overview,
+    string? Example)
 {
-    public RoslynStyleRuleGroup(RoslynStyleRule rule) : this(new[] { rule }, Array.Empty<RoslynStyleRuleOption>())
+    public RoslynStyleRuleGroup(
+        RoslynStyleRule rule,
+        string Overview,
+        string? Example)
+        : this(new[] { rule }, Array.Empty<RoslynStyleRuleOption>(), Overview, Example)
     {
     }
 
-    public RoslynStyleRuleGroup(RoslynStyleRule rule, IReadOnlyCollection<RoslynStyleRuleOption> Options) : this(new[] { rule }, Options)
+    public RoslynStyleRuleGroup(
+        RoslynStyleRule rule,
+        IReadOnlyCollection<RoslynStyleRuleOption> Options,
+        string Overview,
+        string? Example)
+        : this(new[] { rule }, Options, Overview, Example)
     {
     }
 }

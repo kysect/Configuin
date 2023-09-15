@@ -41,7 +41,9 @@ public class MarkdownCodeStyleFormatterTests
         var styleRoslynStyleRuleConfiguration = new CodeStyleRoslynStyleRuleConfiguration(
             ide0040.Rules.Single(),
             RoslynRuleSeverity.Warning,
-            Options: Array.Empty<CodeStyleRoslynOptionConfiguration>());
+            Options: Array.Empty<CodeStyleRoslynOptionConfiguration>(),
+            ide0040.Overview,
+            ide0040.Example);
 
         string formatterRule = _formatter.FormatStyleRule(styleRoslynStyleRuleConfiguration);
 
@@ -83,7 +85,9 @@ public class MarkdownCodeStyleFormatterTests
         var styleRoslynStyleRuleConfiguration = new CodeStyleRoslynStyleRuleConfiguration(
             ide0040.Rules.Single(),
             RoslynRuleSeverity.Warning,
-            new[] { optionConfiguration });
+            new[] { optionConfiguration },
+            ide0040.Overview,
+            ide0040.Example);
 
         string formatterRule = _formatter.FormatStyleRule(styleRoslynStyleRuleConfiguration);
 
