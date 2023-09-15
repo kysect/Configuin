@@ -18,7 +18,7 @@ public class EditorConfigTemplateGeneratorTests
 
     [Test]
     public void GenerateTemplate_ForIDE0001_ReturnExpectedString()
-    {   
+    {
         RoslynRules roslynRules = RoslynRulesBuilder.New()
             .AddStyle(WellKnownRoslynRuleDefinitions.IDE0001())
             .Build();
