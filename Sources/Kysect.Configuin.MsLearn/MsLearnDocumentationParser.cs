@@ -35,20 +35,20 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         _logger.LogInformation("Parsing roslyn rules from MS Learn");
 
         var roslynQualityRules = rawInfo.QualityRuleFileContents.SelectMany(ParseQualityRules).ToList();
-        var roslynStyleRules = rawInfo.StyleRuleFileContents.SelectMany(ParseStyleRules).ToList();
+        var roslynStyleRules = rawInfo.StyleRuleFileContents.Select(ParseStyleRules).ToList();
 
         roslynStyleRules = ParseIde0055FormatOptions(roslynStyleRules, rawInfo);
 
         return new RoslynRules(roslynQualityRules, roslynStyleRules);
     }
 
-    private List<RoslynStyleRule> ParseIde0055FormatOptions(
-        List<RoslynStyleRule> roslynStyleRules,
+    private List<RoslynStyleRuleGroup> ParseIde0055FormatOptions(
+        List<RoslynStyleRuleGroup> roslynStyleRules,
         MsLearnDocumentationRawInfo rawInfo)
     {
         _logger.LogDebug("Parsing IDE0055 options");
 
-        int ruleIde0055Index = roslynStyleRules.FindIndex(r => r.RuleId.Equals(RoslynRuleId.Parse("IDE0055")));
+        int ruleIde0055Index = roslynStyleRules.FindIndex(r => r.Rules.First().RuleId.Equals(RoslynRuleId.Parse("IDE0055")));
         if (ruleIde0055Index == -1)
         {
             _logger.LogWarning("Rule IDE0055 was not found. Cannot add format options.");
@@ -60,19 +60,22 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         _logger.LogDebug("Parse C# format options");
         IReadOnlyCollection<RoslynStyleRuleOption> sharpFormattingOptions = ParseAdditionalFormattingOptions(rawInfo.SharpFormattingOptionsContent);
 
-        roslynStyleRules[ruleIde0055Index] = roslynStyleRules[ruleIde0055Index] with
+        RoslynStyleRule ide0055 = roslynStyleRules[ruleIde0055Index].Rules.Single();
+        ide0055 = ide0055 with
         {
-            Options = roslynStyleRules[ruleIde0055Index]
+            Options = ide0055
                 .Options
                 .Concat(dotnetFormattingOptions)
                 .Concat(sharpFormattingOptions)
                 .ToList()
         };
 
+
+        roslynStyleRules[ruleIde0055Index] = new RoslynStyleRuleGroup(new[] { ide0055 });
         return roslynStyleRules;
     }
 
-    public IReadOnlyCollection<RoslynStyleRule> ParseStyleRules(string info)
+    public RoslynStyleRuleGroup ParseStyleRules(string info)
     {
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(info);
         IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders(_textExtractor);
@@ -98,9 +101,11 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
         IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = ParseOptions(markdownHeadedBlocks);
 
-        return roslynStyleRuleInformationTables
+        var rules = roslynStyleRuleInformationTables
             .Select(table => ConvertToRule(table, overviewText, csharpCodeSample, roslynStyleRuleOptions))
             .ToList();
+
+        return new RoslynStyleRuleGroup(rules);
     }
 
     private RoslynStyleRuleInformationTable ParseInformationTable(Table tableBlock)
