@@ -5,10 +5,10 @@ using Kysect.Configuin.Markdown.Tables;
 using Kysect.Configuin.Markdown.Tables.Models;
 using Kysect.Configuin.MsLearn.Tables;
 using Kysect.Configuin.MsLearn.Tables.Models;
+using Kysect.Configuin.Tests.Tools;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
 using NUnit.Framework;
-using Kysect.Configuin.Tests.Tools;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 

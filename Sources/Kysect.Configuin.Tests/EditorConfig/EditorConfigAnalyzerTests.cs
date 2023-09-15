@@ -25,7 +25,7 @@ public class EditorConfigAnalyzerTests
             .AddQuality(WellKnownRoslynRuleDefinitions.CA1064())
             .AddStyle(WellKnownRoslynRuleDefinitions.IDE0040())
             .Build();
-        
+
         EditorConfigMissedConfiguration editorConfigMissedConfiguration = _editorConfigAnalyzer.GetMissedConfigurations(editorConfigSettings, roslynRules);
 
         editorConfigMissedConfiguration.QualityRuleSeverity
@@ -74,7 +74,7 @@ public class EditorConfigAnalyzerTests
         RoslynRules roslynRules = RoslynRulesBuilder.New()
             .AddStyle(WellKnownRoslynRuleDefinitions.IDE0040())
             .Build();
-        
+
         IReadOnlyCollection<EditorConfigInvalidOptionValue> invalidOptionValues = _editorConfigAnalyzer.GetIncorrectOptionValues(editorConfigSettings, roslynRules);
 
         invalidOptionValues.Should().BeEmpty();
@@ -94,7 +94,7 @@ public class EditorConfigAnalyzerTests
         RoslynRules roslynRules = RoslynRulesBuilder.New()
             .AddStyle(WellKnownRoslynRuleDefinitions.IDE0040())
             .Build();
-        
+
         var expected = new EditorConfigInvalidOptionValue(
             selectedOptions.Name,
             incorrectOptionValue,
