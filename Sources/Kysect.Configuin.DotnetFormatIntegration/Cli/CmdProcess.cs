@@ -29,7 +29,7 @@ public class CmdProcess
         process.WaitForExit();
 
         int exitCode = process.ExitCode;
-        IReadOnlyCollection<string> errors = GetErrors(process);
+        IReadOnlyCollection<string> errors = GetErrors();
         var cmdExecutionResult = new CmdExecutionResult(exitCode, errors);
 
         if (cmdExecutionResult.IsAnyError())
@@ -67,7 +67,7 @@ public class CmdProcess
         throw new NotSupportedException(RuntimeInformation.OSDescription);
     }
 
-    private IReadOnlyCollection<string> GetErrors(Process process)
+    private IReadOnlyCollection<string> GetErrors()
     {
         var errors = new List<string>();
 

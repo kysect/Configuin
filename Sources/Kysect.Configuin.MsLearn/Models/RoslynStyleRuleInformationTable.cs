@@ -13,6 +13,8 @@ public record RoslynStyleRuleInformationTable(
 {
     public static RoslynStyleRuleInformationTable Create(MsLearnPropertyValueDescriptionTable table)
     {
+        ArgumentNullException.ThrowIfNull(table);
+
         MsLearnPropertyValueDescriptionTableRow ruleId = table.GetSingleValue("Rule ID");
         MsLearnPropertyValueDescriptionTableRow title = table.GetSingleValue("Title");
         MsLearnPropertyValueDescriptionTableRow category = table.GetSingleValue("Category");

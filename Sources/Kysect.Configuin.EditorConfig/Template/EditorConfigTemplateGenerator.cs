@@ -14,6 +14,8 @@ public class EditorConfigTemplateGenerator
 
     public string GenerateTemplate(RoslynRules rules)
     {
+        ArgumentNullException.ThrowIfNull(rules);
+
         _logger.LogInformation("Generating .editorconfig template.");
 
         var builder = new EditorConfigTemplateBuilder();

@@ -1,16 +1,17 @@
-﻿namespace Kysect.Configuin.RoslynModels;
+﻿using Kysect.CommonLib.BaseTypes.Extensions;
 
-public readonly struct RoslynRuleIdRange
+namespace Kysect.Configuin.RoslynModels;
+
+public readonly record struct RoslynRuleIdRange(RoslynRuleId Start, RoslynRuleId End)
 {
-    public RoslynRuleId Start { get; }
-    public RoslynRuleId End { get; }
-
     public static RoslynRuleIdRange Parse(string value)
     {
+        value.ThrowIfNull();
+
         RoslynRuleId start;
         RoslynRuleId end;
 
-        if (value.Contains("-"))
+        if (value.Contains('-'))
         {
             string[] parts = value.Split("-", 2);
             start = RoslynRuleId.Parse(parts[0]);
@@ -23,14 +24,6 @@ public readonly struct RoslynRuleIdRange
         }
 
         return new RoslynRuleIdRange(start, end);
-    }
-
-    public RoslynRuleIdRange(RoslynRuleId start, RoslynRuleId end)
-    {
-        // TODO: add validation
-
-        Start = start;
-        End = end;
     }
 
     public IEnumerable<RoslynRuleId> Enumerate()

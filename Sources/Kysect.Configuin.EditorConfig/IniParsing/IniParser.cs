@@ -4,6 +4,8 @@ public class IniParser
 {
     public IReadOnlyCollection<IniFileLine> Parse(string content)
     {
+        ArgumentNullException.ThrowIfNull(content);
+
         string[] lines = content.Split(Environment.NewLine);
 
         var result = new List<IniFileLine>();
