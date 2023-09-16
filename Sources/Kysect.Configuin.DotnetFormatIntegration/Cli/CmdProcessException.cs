@@ -9,4 +9,8 @@ public class CmdProcessException : Exception
     public CmdProcessException() : base("Failed to execute cmd command")
     {
     }
+
+    public CmdProcessException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
 }

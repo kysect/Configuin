@@ -17,6 +17,8 @@ public class MarkdownTableParser
 
     public MarkdownTableContent ParseToSimpleContent(Table table)
     {
+        table.ThrowIfNull();
+
         List<string>? headers = null;
         var parsedRows = new List<IReadOnlyList<string>>();
 

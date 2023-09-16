@@ -7,6 +7,8 @@ public class MsLearnTableParser
 {
     public MsLearnPropertyValueDescriptionTable Parse(MarkdownTableContent simpleTable)
     {
+        ArgumentNullException.ThrowIfNull(simpleTable);
+
         ValidateTableHeader(simpleTable);
 
         var rows = new Dictionary<string, IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>>();
@@ -40,6 +42,9 @@ public class MsLearnTableParser
                     lastKey = rowKey;
                     values = new List<MsLearnPropertyValueDescriptionTableRow> { new(value, description) };
                     break;
+
+                default:
+                    throw new ArgumentException($"Unexpected value for {nameof(continuePreviousKey)}: {continuePreviousKey} and {nameof(lastKey)}: {lastKey}");
             }
         }
 
@@ -54,7 +59,7 @@ public class MsLearnTableParser
         if (simpleTable.Headers is null)
             throw new ArgumentException("Table must have header for parsing as property-value table");
 
-        if (simpleTable.Headers.Count != 2 && simpleTable.Headers.Count != 3)
+        if (simpleTable.Headers.Count is not 2 and not 3)
             throw new ArgumentException($"Unexpected column count in property-value table. Expected 2 or 3, but was {simpleTable.Headers.Count}");
 
         string[] expectedHeaders = { "Property", "Value", "Description" };

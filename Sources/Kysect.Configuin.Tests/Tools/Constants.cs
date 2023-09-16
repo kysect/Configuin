@@ -1,6 +1,6 @@
 ﻿namespace Kysect.Configuin.Tests.Tools;
 
-public class Constants
+public static class Constants
 {
     public static string GetPathToMsDocsRoot()
     {

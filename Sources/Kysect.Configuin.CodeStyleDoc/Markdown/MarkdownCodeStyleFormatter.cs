@@ -15,6 +15,8 @@ public class MarkdownCodeStyleFormatter : ICodeStyleFormatter
 
     public string Format(CodeStyle codeStyle)
     {
+        ArgumentNullException.ThrowIfNull(codeStyle);
+
         _logger.LogInformation("Formatting code style to markdown.");
 
         var strings = codeStyle.Elements
@@ -36,6 +38,8 @@ public class MarkdownCodeStyleFormatter : ICodeStyleFormatter
 
     public string FormatStyleRule(CodeStyleRoslynStyleRuleConfiguration rule)
     {
+        ArgumentNullException.ThrowIfNull(rule);
+
         var builder = new MarkdownStringBuilder();
 
         builder.AddH2($"{rule.Rule.Title} ({rule.Rule.RuleId})");
@@ -65,6 +69,8 @@ public class MarkdownCodeStyleFormatter : ICodeStyleFormatter
 
     public string FormatQualityRule(CodeStyleRoslynQualityRuleConfiguration rule)
     {
+        ArgumentNullException.ThrowIfNull(rule);
+
         var builder = new MarkdownStringBuilder();
 
         builder.AddH2($"{rule.Rule.Title} ({rule.Rule.RuleId})");

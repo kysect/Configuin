@@ -6,6 +6,9 @@ public class EditorConfigSettingsComparator
 {
     public EditorConfigSettingsDiff Compare(EditorConfigSettings left, EditorConfigSettings right)
     {
+        ArgumentNullException.ThrowIfNull(left);
+        ArgumentNullException.ThrowIfNull(right);
+
         IReadOnlyCollection<EditorConfigSettingsRuleSeverityDiff> severityDiffs = GetSeverityDiff(
             left.Settings.OfType<RoslynSeverityEditorConfigSetting>().ToList(),
             right.Settings.OfType<RoslynSeverityEditorConfigSetting>().ToList());

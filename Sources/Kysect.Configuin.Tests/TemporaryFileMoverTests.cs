@@ -38,7 +38,7 @@ public class TemporaryFileMoverTests
         IFileMoveUndoOperation undoAction = _sut.MoveFile(fileForMove, targetPath);
         File.Exists(targetPath).Should().BeTrue();
 
-        undoAction.Dispose();
+        undoAction.Undo();
         File.Exists(targetPath).Should().BeFalse();
     }
 
@@ -56,7 +56,7 @@ public class TemporaryFileMoverTests
         File.Exists(targetFile).Should().BeTrue();
         File.ReadAllText(targetFile).Should().Be(fileForMove);
 
-        undoAction.Dispose();
+        undoAction.Undo();
 
         File.Exists(targetFile).Should().BeTrue();
         File.ReadAllText(targetFile).Should().Be(targetFile);
@@ -73,6 +73,6 @@ public class TemporaryFileMoverTests
 
     private static string GeneratePath(string prefix)
     {
-        return Path.Combine(TestGenerated, $"{prefix}_{Guid.NewGuid().ToString()}");
+        return Path.Combine(TestGenerated, $"{prefix}_{Guid.NewGuid()}");
     }
 }

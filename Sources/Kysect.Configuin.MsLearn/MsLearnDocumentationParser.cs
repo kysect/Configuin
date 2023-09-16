@@ -32,6 +32,8 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     public RoslynRules Parse(MsLearnDocumentationRawInfo rawInfo)
     {
+        ArgumentNullException.ThrowIfNull(rawInfo);
+
         _logger.LogInformation("Parsing roslyn rules from MS Learn");
 
         var roslynQualityRules = rawInfo.QualityRuleFileContents.SelectMany(ParseQualityRules).ToList();
@@ -100,7 +102,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = ParseOptions(markdownHeadedBlocks);
 
         var rules = roslynStyleRuleInformationTables
-            .Select(table => ConvertToRule(table))
+            .Select(ConvertToRule)
             .ToList();
 
         return new RoslynStyleRuleGroup(rules, roslynStyleRuleOptions, overviewText, csharpCodeSample);

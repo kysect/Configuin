@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using ArgumentNullException = System.ArgumentNullException;
 
 namespace Kysect.Configuin.EditorConfig.Template;
 
@@ -8,12 +9,16 @@ public class EditorConfigTemplateBuilder
 
     public void AddCommentString(string value)
     {
+        ArgumentNullException.ThrowIfNull(value);
+
         foreach (string s in FormatString(value))
             _templateBuilder.AppendLine($"# {s}");
     }
 
     public void AddDoubleCommentString(string value)
     {
+        ArgumentNullException.ThrowIfNull(value);
+
         foreach (string s in FormatString(value))
             _templateBuilder.AppendLine($"## {s}");
     }

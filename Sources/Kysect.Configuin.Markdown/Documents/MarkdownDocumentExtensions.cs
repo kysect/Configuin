@@ -1,4 +1,5 @@
-﻿using Kysect.Configuin.Markdown.TextExtractor;
+﻿using Kysect.CommonLib.BaseTypes.Extensions;
+using Kysect.Configuin.Markdown.TextExtractor;
 using Markdig.Parsers;
 using Markdig.Syntax;
 
@@ -13,7 +14,8 @@ public static class MarkdownDocumentExtensions
 
     public static IReadOnlyCollection<MarkdownHeadedBlock> SplitByHeaders(this MarkdownDocument markdownDocument, IMarkdownTextExtractor textExtractor)
     {
-        ArgumentNullException.ThrowIfNull(markdownDocument);
+        markdownDocument.ThrowIfNull();
+        textExtractor.ThrowIfNull();
 
         var result = new List<MarkdownHeadedBlock>();
 

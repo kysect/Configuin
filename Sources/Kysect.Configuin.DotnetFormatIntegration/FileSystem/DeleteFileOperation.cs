@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Kysect.CommonLib.BaseTypes.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Kysect.Configuin.DotnetFormatIntegration.FileSystem;
 
@@ -9,11 +10,11 @@ public class DeleteFileOperation : IFileMoveUndoOperation
 
     public DeleteFileOperation(string path, ILogger logger)
     {
-        _path = path;
-        _logger = logger;
+        _path = path.ThrowIfNull();
+        _logger = logger.ThrowIfNull();
     }
 
-    public void Dispose()
+    public void Undo()
     {
         _logger.LogInformation("Undo file move. Delete {path}", _path);
         File.Delete(_path);

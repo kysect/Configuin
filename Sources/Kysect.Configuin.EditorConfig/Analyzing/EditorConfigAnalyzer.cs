@@ -1,4 +1,5 @@
-﻿using Kysect.CommonLib.Collections.Extensions;
+﻿using Kysect.CommonLib.BaseTypes.Extensions;
+using Kysect.CommonLib.Collections.Extensions;
 using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
 
@@ -8,6 +9,9 @@ public class EditorConfigAnalyzer
 {
     public EditorConfigMissedConfiguration GetMissedConfigurations(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
     {
+        editorConfigSettings.ThrowIfNull();
+        roslynRules.ThrowIfNull();
+
         var selectedSeverity = editorConfigSettings
             .Settings
             .OfType<RoslynSeverityEditorConfigSetting>()
@@ -45,6 +49,9 @@ public class EditorConfigAnalyzer
 
     public IReadOnlyCollection<EditorConfigInvalidOptionValue> GetIncorrectOptionValues(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
     {
+        ArgumentNullException.ThrowIfNull(editorConfigSettings);
+        ArgumentNullException.ThrowIfNull(roslynRules);
+
         var result = new List<EditorConfigInvalidOptionValue>();
 
         var optionAvailableValues = roslynRules.GetOptions().ToDictionary(o => o.Name, o => o.Values);
@@ -63,6 +70,9 @@ public class EditorConfigAnalyzer
 
     public IReadOnlyCollection<RoslynRuleId> GetIncorrectOptionSeverity(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
     {
+        ArgumentNullException.ThrowIfNull(editorConfigSettings);
+        ArgumentNullException.ThrowIfNull(roslynRules);
+
         var ruleIds = new HashSet<RoslynRuleId>();
         ruleIds.AddEach(roslynRules.StyleRules.Select(r => r.RuleId));
         ruleIds.AddEach(roslynRules.QualityRules.Select(r => r.RuleId));
