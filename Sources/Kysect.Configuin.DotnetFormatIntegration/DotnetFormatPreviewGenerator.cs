@@ -28,14 +28,14 @@ public class DotnetFormatPreviewGenerator
     public void GetEditorConfigWarningUpdates(string solutionPath, string newEditorConfig, string sourceEditorConfig)
     {
         IReadOnlyCollection<DotnetFormatFileReport> originalWarnings = _dotnetFormatWarningGenerator.GenerateWarnings(solutionPath);
-        IReadOnlyCollection<DotnetFormatFileReport> newWarnings;
 
-        using (_temporaryFileMover.MoveFile(newEditorConfig, sourceEditorConfig))
-            newWarnings = _dotnetFormatWarningGenerator.GenerateWarnings(solutionPath);
+        IFileMoveUndoOperation undoOperation = _temporaryFileMover.MoveFile(newEditorConfig, sourceEditorConfig);
+        IReadOnlyCollection<DotnetFormatFileReport> newWarnings = _dotnetFormatWarningGenerator.GenerateWarnings(solutionPath);
+        undoOperation.Undo();
 
         CollectionDiff<DotnetFormatFileReport> warningDiff = _dotnetFormatReportComparator.Compare(originalWarnings, newWarnings);
 
-        _logger.LogInformation($"New warnings count: {warningDiff.Added.Count}");
+        _logger.LogInformation("New warnings count: {Count}", warningDiff.Added.Count);
         foreach (DotnetFormatFileReport dotnetFormatFileReport in warningDiff.Added)
         {
             _logger.LogTabInformation(1, $"{dotnetFormatFileReport.FilePath}");

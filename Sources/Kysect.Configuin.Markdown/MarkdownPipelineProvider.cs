@@ -2,7 +2,7 @@
 
 namespace Kysect.Configuin.Markdown;
 
-public class MarkdownPipelineProvider
+public static class MarkdownPipelineProvider
 {
     public static MarkdownPipeline GetDefault()
     {

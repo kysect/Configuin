@@ -12,10 +12,11 @@ public static class TestLogger
             .MinimumLevel.Verbose()
             .WriteTo.Console();
 
-        ILoggerFactory loggerFactory = new LoggerFactory()
-            .DemystifyExceptions()
-            .AddSerilog(loggerConfiguration.CreateLogger());
+        using var factory = new LoggerFactory();
 
-        return loggerFactory.CreateLogger("Tests");
+        return factory
+            .DemystifyExceptions()
+            .AddSerilog(loggerConfiguration.CreateLogger())
+            .CreateLogger("Tests");
     }
 }

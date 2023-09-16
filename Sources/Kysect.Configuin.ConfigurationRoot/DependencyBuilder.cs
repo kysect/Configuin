@@ -18,7 +18,7 @@ using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Kysect.Configuin.ConfigurationRoot;
 
-public class DependencyBuilder
+public static class DependencyBuilder
 {
     public static IServiceCollection InitializeServiceProvider()
     {
@@ -58,10 +58,11 @@ public class DependencyBuilder
             .MinimumLevel.Verbose()
             .WriteTo.Console();
 
-        ILoggerFactory loggerFactory = new LoggerFactory()
-            .DemystifyExceptions()
-            .AddSerilog(loggerConfiguration.CreateLogger());
+        using var factory = new LoggerFactory();
 
-        return loggerFactory.CreateLogger("Tests");
+        return factory
+            .DemystifyExceptions()
+            .AddSerilog(loggerConfiguration.CreateLogger())
+            .CreateLogger("Tests");
     }
 }

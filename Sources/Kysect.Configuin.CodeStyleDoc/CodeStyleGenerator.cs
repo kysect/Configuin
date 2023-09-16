@@ -19,6 +19,9 @@ public class CodeStyleGenerator : ICodeStyleGenerator
 
     public CodeStyle Generate(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
     {
+        ArgumentNullException.ThrowIfNull(editorConfigSettings);
+        ArgumentNullException.ThrowIfNull(roslynRules);
+
         _logger.LogInformation("Start code style generating.");
 
         IReadOnlyCollection<RoslynStyleRuleOption> roslynRuleOptions = roslynRules.GetOptions();

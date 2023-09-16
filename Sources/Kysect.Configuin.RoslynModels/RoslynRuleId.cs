@@ -1,14 +1,14 @@
-﻿using Kysect.Configuin.Common;
+﻿using Kysect.CommonLib.BaseTypes.Extensions;
+using Kysect.Configuin.Common;
 
 namespace Kysect.Configuin.RoslynModels;
 
-public readonly struct RoslynRuleId : IComparable<RoslynRuleId>
+public readonly record struct RoslynRuleId(RoslynRuleType Type, int Id) : IComparable<RoslynRuleId>
 {
-    public RoslynRuleType Type { get; }
-    public int Id { get; }
-
     public static RoslynRuleId Parse(string value)
     {
+        value.ThrowIfNull();
+
         int ParseInt(string intAsString)
         {
             if (int.TryParse(intAsString, out int parsedInt))
@@ -36,30 +36,6 @@ public readonly struct RoslynRuleId : IComparable<RoslynRuleId>
         throw new ArgumentException($"String {value} is not valid Roslyn rule id");
     }
 
-    public RoslynRuleId(RoslynRuleType type, int id)
-    {
-        Type = type;
-        Id = id;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if (obj is RoslynRuleId o)
-            return Equals(o);
-
-        return false;
-    }
-
-    public bool Equals(RoslynRuleId other)
-    {
-        return Type == other.Type && Id == other.Id;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine((int)Type, Id);
-    }
-
     public override string ToString()
     {
         return $"{Type.ToAlias()}{Id:D4}";
@@ -71,5 +47,25 @@ public readonly struct RoslynRuleId : IComparable<RoslynRuleId>
         if (typeComparison != 0)
             return typeComparison;
         return Id.CompareTo(other.Id);
+    }
+
+    public static bool operator <(RoslynRuleId left, RoslynRuleId right)
+    {
+        return left.CompareTo(right) < 0;
+    }
+
+    public static bool operator <=(RoslynRuleId left, RoslynRuleId right)
+    {
+        return left.CompareTo(right) <= 0;
+    }
+
+    public static bool operator >(RoslynRuleId left, RoslynRuleId right)
+    {
+        return left.CompareTo(right) > 0;
+    }
+
+    public static bool operator >=(RoslynRuleId left, RoslynRuleId right)
+    {
+        return left.CompareTo(right) >= 0;
     }
 }

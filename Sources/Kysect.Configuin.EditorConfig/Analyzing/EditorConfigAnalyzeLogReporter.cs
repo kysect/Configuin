@@ -1,4 +1,5 @@
-﻿using Kysect.CommonLib.Collections.Extensions;
+﻿using Kysect.CommonLib.BaseTypes.Extensions;
+using Kysect.CommonLib.Collections.Extensions;
 using Kysect.CommonLib.Logging;
 using Kysect.Configuin.RoslynModels;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,8 @@ public class EditorConfigAnalyzeLogReporter : IEditorConfigAnalyzeReporter
 
     public void ReportMissedConfigurations(EditorConfigMissedConfiguration editorConfigMissedConfiguration)
     {
+        editorConfigMissedConfiguration.ThrowIfNull();
+
         if (editorConfigMissedConfiguration.StyleRuleSeverity.Any())
         {
             _logger.LogInformation("Missed style rules:");
@@ -40,6 +43,8 @@ public class EditorConfigAnalyzeLogReporter : IEditorConfigAnalyzeReporter
 
     public void ReportIncorrectOptionValues(IReadOnlyCollection<EditorConfigInvalidOptionValue> incorrectOptionValues)
     {
+        ArgumentNullException.ThrowIfNull(incorrectOptionValues);
+
         if (incorrectOptionValues.Any())
             _logger.LogInformation("Incorrect option value:");
 
@@ -52,6 +57,8 @@ public class EditorConfigAnalyzeLogReporter : IEditorConfigAnalyzeReporter
 
     public void ReportIncorrectOptionSeverity(IReadOnlyCollection<RoslynRuleId> incorrectOptionSeverity)
     {
+        ArgumentNullException.ThrowIfNull(incorrectOptionSeverity);
+
         if (incorrectOptionSeverity.Any())
             _logger.LogInformation("Some .editorconfig configuration reference to incorrect rule ids.");
 
