@@ -32,7 +32,7 @@ public class MarkdownCodeStyleFormatter : ICodeStyleFormatter
         {
             CodeStyleRoslynStyleRuleConfiguration styleRule => FormatStyleRule(styleRule),
             CodeStyleRoslynQualityRuleConfiguration qualityRule => FormatQualityRule(qualityRule),
-            _ => throw SwitchDefaultException.OnUnexpectedType(nameof(element), element)
+            _ => throw SwitchDefaultExceptions.OnUnexpectedType(nameof(element), element)
         };
     }
 
