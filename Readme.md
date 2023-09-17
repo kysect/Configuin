@@ -4,11 +4,41 @@ Configuin - это утилита для работы с .editorconfig'ом.
 
 ## Возможности
 
-- Генерация документации к editorconfig
+- Генерация шаблона .editorconfig'а
+- Генерация документации к editorconfig'у
 - Предпросмотр изменений от editorconfig'а
 - [in progress] Анализатор .editorconfig'а
-- [in progress] Сравнение двух editorconfig
+- [in progress] Сравнение двух editorconfig'ов
 - [in progress] Форматирование editorconfig'а
+
+### Генерация шаблона .editorconfig'а
+
+Configuin парсит все описанные в документации правила и генерирует .editorconfig, где они все описаны, чтобы упростить процесс заполенения .editorconfig'а. Например, команда
+
+```
+Kysect.Configuin.Console.exe template ".editorconfig" -d "C:\Coding\dotnet-docs"
+```
+
+сгенерирует файл с таким содержанием:
+
+```ini
+## Simplify name (IDE0001)
+## This rule concerns the use of simplified type names in declarations and executable code, when possible. You can remove unnecessary name qualification to simplify code and improve readability.
+## using System.IO;
+## class C
+## {
+##     // IDE0001: 'System.IO.FileInfo' can be simplified to 'FileInfo'
+##     System.IO.FileInfo file;
+## 
+##     // Fixed code
+##     FileInfo file;
+## }
+# dotnet_diagnostic.IDE0001.severity = 
+
+# ...
+```
+
+Полный файл можно посмотреть [тут](Docs/.editorconfig).
 
 ### Генерация документации к .editorconfig
 
