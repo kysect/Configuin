@@ -24,11 +24,9 @@ public class PlainTextExtractor : IMarkdownTextExtractor
     {
         var memoryStream = new MemoryStream();
         using var streamWriter = new StreamWriter(memoryStream);
-        var renderer = new HtmlRenderer(streamWriter)
-        {
-            EnableHtmlForBlock = false,
-            EnableHtmlForInline = false,
-        };
+
+        HtmlRenderer renderer = HtmlRendererProvider.Create(streamWriter);
+
         _markdownPipeline.Setup(renderer);
 
         renderer.Render(block);
