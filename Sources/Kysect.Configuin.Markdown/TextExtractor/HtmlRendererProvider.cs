@@ -13,7 +13,7 @@ public static class HtmlRendererProvider
             EnableHtmlForInline = false,
         };
 
-        renderer.ObjectRenderers.Replace<AutolinkInlineRenderer>(new AutolinkInlineRendererXrefRemoveDecorator());
+        renderer.ObjectRenderers.Replace<AutolinkInlineRenderer>(new AutolinkInlineTextFormatDecorator());
 
         return renderer;
     }
