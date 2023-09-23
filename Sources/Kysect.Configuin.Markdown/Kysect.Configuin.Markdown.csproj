@@ -12,4 +12,8 @@
     <PackageReference Include="Markdig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kysect.Configuin.Common\Kysect.Configuin.Common.csproj" />
+  </ItemGroup>
+
 </Project>
