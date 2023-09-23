@@ -7,7 +7,7 @@ using Markdig.Syntax.Inlines;
 
 namespace Kysect.Configuin.Markdown.TextExtractor;
 
-public class AutolinkInlineRendererXrefRemoveDecorator : HtmlObjectRenderer<AutolinkInline>
+public class AutolinkInlineTextFormatDecorator : HtmlObjectRenderer<AutolinkInline>
 {
     private const string XrefPrefix = "xref:";
 
@@ -19,6 +19,20 @@ public class AutolinkInlineRendererXrefRemoveDecorator : HtmlObjectRenderer<Auto
 
         if (obj.Url.StartsWith(XrefPrefix))
             obj.Url = obj.Url.WithoutPrefix(XrefPrefix);
+
+        var postfixes = new string[]
+        {
+            "%2A?displayProperty=nameWithType",
+            "%2A?displayProperty=fullName",
+            "?displayProperty=fullName",
+            "?displayProperty=nameWithType"
+        };
+
+        foreach (string postfix in postfixes)
+        {
+            if (obj.Url.EndsWith(postfix))
+                obj.Url = obj.Url[..^postfix.Length];
+        }
 
         _renderer.Write(renderer, obj);
     }
