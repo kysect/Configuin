@@ -1,7 +1,6 @@
 [*.{cs,vb}]
 tab_width = 4
 indent_size = 4
-end_of_line = crlf
 
 ## Simplify name (IDE0001)
 ## This rule concerns the use of simplified type names in declarations and executable code, when possible. You can remove unnecessary name qualification to simplify code and improve readability.
