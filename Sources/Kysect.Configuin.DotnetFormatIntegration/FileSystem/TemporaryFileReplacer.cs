@@ -1,5 +1,5 @@
 ﻿using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.CommonLib.FileSystem.Extensions;
+using Kysect.CommonLib.FileSystem;
 using Microsoft.Extensions.Logging;
 
 namespace Kysect.Configuin.DotnetFormatIntegration.FileSystem;
@@ -25,7 +25,7 @@ public class TemporaryFileMover
             var targetFileInfo = new FileInfo(targetPath);
             DirectoryInfo targetFileDirectory = targetFileInfo.Directory.ThrowIfNull();
             string tempFileDirectory = Path.Combine(targetFileDirectory.FullName, ".congifuing");
-            DirectoryExtensions.EnsureFileExists(tempFileDirectory);
+            DirectoryExtensions.EnsureDirectoryExists(new System.IO.Abstractions.FileSystem(), tempFileDirectory);
 
             string tempFilePath = Path.Combine(tempFileDirectory, targetFileInfo.Name);
             _logger.LogInformation("Target path already exists. Save target file to temp path {tempPath}", tempFilePath);

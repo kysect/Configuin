@@ -16,7 +16,7 @@ public static class RoslynRuleTypeExtensions
         {
             RoslynRuleType.StyleRule => "IDE",
             RoslynRuleType.QualityRule => "CA",
-            _ => throw SwitchDefaultExceptions.OnUnexpectedEnum(nameof(ruleType), ruleType)
+            _ => throw SwitchDefaultExceptions.OnUnexpectedType(ruleType)
         };
     }
 }
