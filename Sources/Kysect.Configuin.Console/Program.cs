@@ -14,10 +14,8 @@ internal class Program
 
         IServiceCollection registrations = DependencyBuilder.InitializeServiceProvider();
 
-#if DEBUG
         if (args.Length == 0)
             args = PrepareTestCommand(registrations);
-#endif
 
         var registrar = new TypeRegistrar(registrations);
         var app = new CommandApp(registrar);
