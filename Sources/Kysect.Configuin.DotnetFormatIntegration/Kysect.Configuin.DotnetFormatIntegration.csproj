@@ -10,6 +10,7 @@
     <PackageReference Include="Kysect.CommonLib" />
     <PackageReference Include="Kysect.Editorconfig" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="TestableIO.System.IO.Abstractions.Wrappers" />
   </ItemGroup>
 
 </Project>

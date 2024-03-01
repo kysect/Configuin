@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Kysect.CommonLib.FileSystem.Extensions;
+using Kysect.CommonLib.FileSystem;
 using Kysect.Configuin.DotnetFormatIntegration.FileSystem;
 using Kysect.Configuin.Tests.Tools;
 using NUnit.Framework;
@@ -20,7 +20,7 @@ public class TemporaryFileMoverTests
     [SetUp]
     public void Setup()
     {
-        DirectoryExtensions.EnsureFileExists(TestGenerated);
+        DirectoryExtensions.EnsureDirectoryExists(new System.IO.Abstractions.FileSystem(), TestGenerated);
     }
 
     [TearDown]
