@@ -20,6 +20,8 @@ jobs:
     steps:
     - run: git config --global core.autocrlf input
     - uses: actions/checkout@v3
+      with:
+        submodules: true
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
