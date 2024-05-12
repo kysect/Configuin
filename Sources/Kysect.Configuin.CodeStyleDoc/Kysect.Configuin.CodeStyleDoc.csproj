@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Kysect.Editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Kysect.Configuin.EditorConfig\Kysect.Configuin.EditorConfig.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.RoslynModels\Kysect.Configuin.RoslynModels.csproj" />
   </ItemGroup>

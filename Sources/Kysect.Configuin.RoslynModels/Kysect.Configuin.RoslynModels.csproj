@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="Kysect.CommonLib" />
-    <PackageReference Include="Kysect.Editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
