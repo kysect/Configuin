@@ -1,4 +1,5 @@
-﻿using Kysect.Configuin.EditorConfig.IniParsing;
+﻿using Kysect.Configuin.EditorConfig.DocumentModel;
+using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
 using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
 using Microsoft.Extensions.Logging;
@@ -9,8 +10,8 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
 {
     private readonly ILogger _logger;
 
-    private readonly IniParser _iniParser = new IniParser();
     private readonly HashSet<string> _generalRuleKeys;
+    private readonly EditorConfigDocumentParser _editorConfigDocumentParser;
 
     public EditorConfigSettingsParser(ILogger logger)
     {
@@ -23,22 +24,26 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
             "indent_size",
             "end_of_line"
         };
+        _editorConfigDocumentParser = new EditorConfigDocumentParser();
     }
 
     public EditorConfigSettings Parse(string content)
     {
         _logger.LogInformation("Parse .editorconfig file");
 
-        IReadOnlyCollection<IniFileLine> iniFileLines = _iniParser.Parse(content);
+        ArgumentNullException.ThrowIfNull(content);
 
-        var rules = iniFileLines
+        EditorConfigDocument editorConfigDocument = _editorConfigDocumentParser.Parse(content);
+        List<IEditorConfigSetting> settings = editorConfigDocument
+            .DescendantNodes()
+            .OfType<EditorConfigPropertyNode>()
             .Select(ParseSetting)
             .ToList();
 
-        return new EditorConfigSettings(rules);
+        return new EditorConfigSettings(settings);
     }
 
-    private IEditorConfigSetting ParseSetting(IniFileLine line)
+    private IEditorConfigSetting ParseSetting(EditorConfigPropertyNode line)
     {
         if (_generalRuleKeys.Contains(line.Key))
             return new GeneralEditorConfigSetting(line.Key, line.Value);
@@ -54,7 +59,7 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
         return ParseOptionSetting(line);
     }
 
-    private static RoslynSeverityEditorConfigSetting ParseSeveritySetting(IniFileLine line)
+    private static RoslynSeverityEditorConfigSetting ParseSeveritySetting(EditorConfigPropertyNode line)
     {
         string[] keyParts = line.Key.Split('.');
 
@@ -71,13 +76,13 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
         return new RoslynSeverityEditorConfigSetting(ruleId, severity);
     }
 
-    private static CompositeRoslynOptionEditorConfigSetting ParseCompositeKeySetting(IniFileLine line)
+    private static CompositeRoslynOptionEditorConfigSetting ParseCompositeKeySetting(EditorConfigPropertyNode line)
     {
         string[] keyParts = line.Key.Split('.');
         return new CompositeRoslynOptionEditorConfigSetting(keyParts, line.Value, Severity: null);
     }
 
-    private static RoslynOptionEditorConfigSetting ParseOptionSetting(IniFileLine line)
+    private static RoslynOptionEditorConfigSetting ParseOptionSetting(EditorConfigPropertyNode line)
     {
         return new RoslynOptionEditorConfigSetting(line.Key, line.Value);
     }
