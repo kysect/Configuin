@@ -1,7 +1,5 @@
-﻿using FluentAssertions;
-using Kysect.Configuin.DotnetFormatIntegration.Cli;
+﻿using Kysect.Configuin.DotnetFormatIntegration.Cli;
 using Kysect.Configuin.Tests.Tools;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests;
 
@@ -14,7 +12,7 @@ public class CmdProcessTests
         _cmdProcess = new CmdProcess(TestLogger.ProviderForTests());
     }
 
-    [Test]
+    [Fact]
     public void Execute_ForInvalidCommand_ThrowError()
     {
         CmdExecutionResult cmdExecutionResult = _cmdProcess.ExecuteCommand("qwerasdf1234");

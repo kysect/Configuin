@@ -1,12 +1,10 @@
-﻿using FluentAssertions;
-using Kysect.CommonLib.BaseTypes.Extensions;
+﻿using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.Markdown.Documents;
 using Kysect.Configuin.Markdown.Tables;
 using Kysect.Configuin.Markdown.Tables.Models;
 using Kysect.Configuin.Tests.Tools;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
@@ -14,7 +12,7 @@ public class MarkdownTableParserTests
 {
     private readonly MarkdownTableParser _parser = new MarkdownTableParser(TestImplementations.GetTextExtractor());
 
-    [Test]
+    [Fact]
     public void ParseToSimpleContent_ForSimpleTable_ReturnExpectedResult()
     {
         string input = """

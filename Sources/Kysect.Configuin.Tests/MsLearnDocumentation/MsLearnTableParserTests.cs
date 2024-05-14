@@ -1,4 +1,3 @@
-using FluentAssertions;
 using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.Markdown.Documents;
 using Kysect.Configuin.Markdown.Tables;
@@ -8,7 +7,6 @@ using Kysect.Configuin.MsLearn.Tables.Models;
 using Kysect.Configuin.Tests.Tools;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
@@ -17,7 +15,7 @@ public class MsLearnTableParserTests
     private readonly MsLearnTableParser _msLearnTableParser = new MsLearnTableParser();
     private readonly MarkdownTableParser _markdownTableParser = new MarkdownTableParser(TestImplementations.GetTextExtractor());
 
-    [Test]
+    [Fact]
     public void Parse_KeyValueTable_ReturnExpectedResult()
     {
         string input = """
@@ -43,7 +41,7 @@ public class MsLearnTableParserTests
         msLearnTableContent.Should().BeEquivalentTo(expected);
     }
 
-    [Test]
+    [Fact]
     public void Parse_KeyMultiValueTableContent_ReturnExpectedResult()
     {
         string input = """
@@ -79,7 +77,7 @@ public class MsLearnTableParserTests
         msLearnTableContent.Should().BeEquivalentTo(expected);
     }
 
-    [Test]
+    [Fact]
     public void Parse_PropertyValueWithDescriptionTable_ReturnExpectedResult()
     {
         string input = """

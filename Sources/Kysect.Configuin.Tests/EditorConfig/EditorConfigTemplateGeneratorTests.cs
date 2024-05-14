@@ -1,9 +1,7 @@
-﻿using FluentAssertions;
-using Kysect.Configuin.EditorConfig.Template;
+﻿using Kysect.Configuin.EditorConfig.Template;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Resources;
 using Kysect.Configuin.Tests.Tools;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.EditorConfig;
 
@@ -16,7 +14,7 @@ public class EditorConfigTemplateGeneratorTests
         _editorConfigTemplateGenerator = new EditorConfigTemplateGenerator(TestLogger.ProviderForTests());
     }
 
-    [Test]
+    [Fact]
     public void GenerateTemplate_ForIDE0001_ReturnExpectedString()
     {
         RoslynRules roslynRules = RoslynRulesBuilder.New()
@@ -45,7 +43,7 @@ public class EditorConfigTemplateGeneratorTests
         generateTemplate.Should().Be(expected);
     }
 
-    [Test]
+    [Fact]
     public void GenerateTemplate_ForIDE0007_0008_ReturnExpectedString()
     {
         RoslynRules roslynRules = RoslynRulesBuilder.New()
@@ -67,7 +65,7 @@ public class EditorConfigTemplateGeneratorTests
         generateTemplate.Should().Be(expected);
     }
 
-    [Test]
+    [Fact]
     public void GenerateTemplate_ForIDE0040_ReturnExpectedString()
     {
         RoslynRules roslynRules = RoslynRulesBuilder.New()
@@ -107,7 +105,7 @@ public class EditorConfigTemplateGeneratorTests
         generateTemplate.Should().Be(expected);
     }
 
-    [Test]
+    [Fact]
     public void GenerateTemplate_ForCA1064_ReturnExpectedString()
     {
         RoslynRules roslynRules = RoslynRulesBuilder.New()

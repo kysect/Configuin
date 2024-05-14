@@ -1,13 +1,11 @@
-﻿using FluentAssertions;
-using Kysect.Configuin.MsLearn;
+﻿using Kysect.Configuin.MsLearn;
 using Kysect.Configuin.Tests.Tools;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
 public class MsLearnRepositoryPathProviderTests
 {
-    [Test]
+    [Fact]
     public void GetPath_ReturnExistsFileItems()
     {
         string pathToRoot = Constants.GetPathToMsDocsRoot();

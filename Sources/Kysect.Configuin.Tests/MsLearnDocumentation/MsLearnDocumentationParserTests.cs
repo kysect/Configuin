@@ -1,10 +1,8 @@
-﻿using FluentAssertions;
-using Kysect.Configuin.MsLearn;
+﻿using Kysect.Configuin.MsLearn;
 using Kysect.Configuin.MsLearn.Models;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Resources;
 using Kysect.Configuin.Tests.Tools;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
@@ -14,7 +12,7 @@ public class MsLearnDocumentationParserTests
 
     private readonly MsLearnDocumentationParser _parser = new MsLearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
 
-    [Test]
+    [Fact]
     public void ParseStyleRule_IDE0001_ReturnExpectedResult()
     {
         string fileText = GetIdeDescription("ide0001.md");
@@ -26,7 +24,7 @@ public class MsLearnDocumentationParserTests
         roslynStyleRules.Should().BeEquivalentTo(expected);
     }
 
-    [Test]
+    [Fact]
     public void ParseStyleRule_IDE0040_ReturnExpectedResult()
     {
         string fileText = GetIdeDescription("ide0040.md");
@@ -38,7 +36,7 @@ public class MsLearnDocumentationParserTests
         roslynStyleRules.Should().BeEquivalentTo(expected);
     }
 
-    [Test]
+    [Fact]
     public void ParseStyleRule_IDE0003_0009_ReturnExpectedResult()
     {
         string fileText = GetIdeDescription("ide0003-ide0009.md");
@@ -52,7 +50,7 @@ public class MsLearnDocumentationParserTests
         roslynStyleRules.Rules.ElementAt(1).Should().BeEquivalentTo(ide0009);
     }
 
-    [Test]
+    [Fact]
     public void ParseQualityRule_CA1064_ReturnExpectedResult()
     {
         string fileText = GetPathToCa("ca1064.md");
@@ -65,7 +63,7 @@ public class MsLearnDocumentationParserTests
             .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
     }
 
-    [Test]
+    [Fact]
     public void ParseQualityRule_CA1865_CA1867_ReturnExpectedResult()
     {
         string fileText = GetPathToCa("ca1865-ca1867.md");
@@ -78,7 +76,7 @@ public class MsLearnDocumentationParserTests
         qualityRules.ElementAt(0).Should().BeEquivalentTo(expected);
     }
 
-    [Test]
+    [Fact]
     public void Parse_DotnetFormattingOptions_ReturnExpectedResult()
     {
         string pathToDotnetFormattingFile = MsLearnRepositoryPathProvider.GetPathToDotnetFormattingFile();
@@ -91,7 +89,7 @@ public class MsLearnDocumentationParserTests
         roslynStyleRuleOptions.ElementAt(1).Should().BeEquivalentTo(WellKnownRoslynRuleOptionsDefinitions.dotnet_separate_import_directive_groups());
     }
 
-    [Test]
+    [Fact]
     public void Parse_CsharpFormattingOptions_ReturnExpectedResult()
     {
         string pathToFile = MsLearnRepositoryPathProvider.GetPathToSharpFormattingFile();
@@ -103,8 +101,7 @@ public class MsLearnDocumentationParserTests
         roslynStyleRuleOptions.ElementAt(0).Should().BeEquivalentTo(WellKnownRoslynRuleOptionsDefinitions.csharp_new_line_before_open_brace());
     }
 
-    [Test]
-    [Ignore("Issue #33")]
+    [Fact(Skip = "Issue #33")]
     public void Parse_CodeStyleRefactoringOptions_ReturnExpectedResult()
     {
         string pathToFile = string.Empty;
@@ -116,7 +113,7 @@ public class MsLearnDocumentationParserTests
         codeStyleRefactoringOptions.ElementAt(0).Should().BeEquivalentTo(WellKnownRoslynRuleOptionsDefinitions.dotnet_style_operator_placement_when_wrapping);
     }
 
-    [Test]
+    [Fact]
     public void Parse_MsDocsRepository_FinishWithoutError()
     {
         MsLearnDocumentationInfoLocalReader repositoryPathReader = TestImplementations.CreateDocumentationInfoLocalProvider();
@@ -125,7 +122,6 @@ public class MsLearnDocumentationParserTests
         RoslynRules roslynRules = _parser.Parse(msLearnDocumentationRawInfo);
 
         // TODO: add asserts
-        Assert.Pass();
     }
 
     private static string GetIdeDescription(string fileName)

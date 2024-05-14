@@ -1,6 +1,5 @@
 ﻿using Kysect.Configuin.DotnetFormatIntegration.Cli;
 using Kysect.Configuin.Tests.Tools;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.DotnetFormat;
 
@@ -13,15 +12,13 @@ public class DotnetFormatCliTests
         _dotnetFormatCli = new DotnetFormatCli(TestLogger.ProviderForTests());
     }
 
-    [Test]
-    [Ignore("This test require infrastructure")]
+    [Fact(Skip = "This test require infrastructure")]
     public void Validate_FinishedWithoutErrors()
     {
         _dotnetFormatCli.Validate();
     }
 
-    [Test]
-    [Ignore("This test require infrastructure")]
+    [Fact(Skip = "This test require infrastructure")]
     public void GenerateWarnings_CreateReportFile()
     {
         //const string pathToSln = "./../../../../";
