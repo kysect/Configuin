@@ -1,22 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
   <ItemGroup>
-	<PackageReference Include="codeessentials.Extensions.Logging.Demystifier" />
-	<PackageReference Include="Kysect.CommonLib" />
-	<PackageReference Include="Kysect.CommonLib.DependencyInjection" />
-	<PackageReference Include="Microsoft.Extensions.Configuration" />
-	<PackageReference Include="Microsoft.Extensions.Configuration.Json" />
-	<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-	<PackageReference Include="Serilog" />
-	<PackageReference Include="Serilog.Extensions.Logging" />
-	<PackageReference Include="Serilog.Settings.Configuration" />
-	<PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="codeessentials.Extensions.Logging.Demystifier" />
+    <PackageReference Include="Kysect.CommonLib" />
+    <PackageReference Include="Kysect.CommonLib.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.Extensions.Logging" />
+    <PackageReference Include="Serilog.Settings.Configuration" />
+    <PackageReference Include="Serilog.Sinks.Console" />
   </ItemGroup>
 
   <ItemGroup>
