@@ -1,8 +1,6 @@
-﻿using FluentAssertions;
-using Kysect.CommonLib.Collections.Diff;
+﻿using Kysect.CommonLib.Collections.Diff;
 using Kysect.Configuin.DotnetFormatIntegration.Cli;
 using Kysect.Configuin.Tests.Tools;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests;
 
@@ -15,7 +13,7 @@ public class DotnetFormatReportComparatorTests
         _dotnetFormatReportComparator = new DotnetFormatReportComparator(TestLogger.ProviderForTests());
     }
 
-    [Test]
+    [Fact]
     public void Compare_ChangedFile_ReturnExpectedDiff()
     {
         string left = File.ReadAllText(Path.Combine("Resources", "DotnetFormatOutput-one-report.json"));

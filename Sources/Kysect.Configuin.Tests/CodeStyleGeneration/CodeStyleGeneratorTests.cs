@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Kysect.CommonLib.BaseTypes.Extensions;
+﻿using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.CodeStyleDoc;
 using Kysect.Configuin.CodeStyleDoc.Models;
 using Kysect.Configuin.EditorConfig;
@@ -7,7 +6,6 @@ using Kysect.Configuin.MsLearn;
 using Kysect.Configuin.MsLearn.Models;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Tools;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.CodeStyleGeneration;
 
@@ -23,7 +21,7 @@ public class CodeStyleGeneratorTests
         _sut = new CodeStyleGenerator(TestLogger.ProviderForTests());
     }
 
-    [Test]
+    [Fact]
     public void Generate_ForAllMsLearnDocumentation_FinishWithoutErrors()
     {
         string pathToIniFile = Path.Combine("Resources", "Editor-config-sample.ini");

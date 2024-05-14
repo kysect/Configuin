@@ -1,15 +1,13 @@
-﻿using FluentAssertions;
-using Kysect.Configuin.RoslynModels;
-using NUnit.Framework;
+﻿using Kysect.Configuin.RoslynModels;
 
 namespace Kysect.Configuin.Tests;
 
 public class RoslynRuleIdTests
 {
-    [Test]
-    [TestCase("CA1000", RoslynRuleType.QualityRule, 1000)]
-    [TestCase("ca1001", RoslynRuleType.QualityRule, 1001)]
-    [TestCase("IDE1002", RoslynRuleType.StyleRule, 1002)]
+    [Theory]
+    [InlineData("CA1000", RoslynRuleType.QualityRule, 1000)]
+    [InlineData("ca1001", RoslynRuleType.QualityRule, 1001)]
+    [InlineData("IDE1002", RoslynRuleType.StyleRule, 1002)]
     public void Parse(string input, RoslynRuleType type, int id)
     {
         var expected = new RoslynRuleId(type, id);
@@ -19,7 +17,7 @@ public class RoslynRuleIdTests
         roslynRuleId.Should().Be(expected);
     }
 
-    [Test]
+    [Fact]
     public void Parse_WithIncorrectPrefix_ThrowException()
     {
         Assert.Throws<ArgumentException>(() =>
@@ -28,7 +26,7 @@ public class RoslynRuleIdTests
         });
     }
 
-    [Test]
+    [Fact]
     public void Parse_Range_ReturnAllValueInRange()
     {
         string input = "CA1865-CA1867";

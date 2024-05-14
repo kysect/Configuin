@@ -1,9 +1,7 @@
-﻿using FluentAssertions;
-using Kysect.Configuin.EditorConfig;
+﻿using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Tools;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.EditorConfig;
 
@@ -11,7 +9,7 @@ public class EditorConfigSettingsParserTests
 {
     private readonly EditorConfigSettingsParser _parser = new EditorConfigSettingsParser(TestLogger.ProviderForTests());
 
-    [Test]
+    [Fact]
     public void Parse_TabWidth_ReturnGeneralEditorRule()
     {
         string content = "tab_width = 4";
@@ -24,7 +22,7 @@ public class EditorConfigSettingsParserTests
             .And.Contain(expected);
     }
 
-    [Test]
+    [Fact]
     public void Parse_DotnetDiagnosticSeverity_ReturnRoslyntSeverityRule()
     {
         string content = "dotnet_diagnostic.IDE0001.severity = warning";
@@ -37,7 +35,7 @@ public class EditorConfigSettingsParserTests
             .And.Contain(expected);
     }
 
-    [Test]
+    [Fact]
     public void Parse_KeyWithDots_ReturnCompositeOptionRule()
     {
         string content = "dotnet_naming_style.camel_case_style.capitalization = camel_case";
@@ -52,7 +50,7 @@ public class EditorConfigSettingsParserTests
             .And.ContainEquivalentOf(expected);
     }
 
-    [Test]
+    [Fact]
     public void Parse_StyleOption_ReturnOptionRule()
     {
         string content = "csharp_style_var_when_type_is_apparent = true";
@@ -67,7 +65,7 @@ public class EditorConfigSettingsParserTests
             .And.Contain(expected);
     }
 
-    [Test]
+    [Fact]
     public void Parse_StyleOptionWithSeverity_ReturnOptionRuleWithSeverity()
     {
         string content = "csharp_style_var_when_type_is_apparent = true";
@@ -82,7 +80,7 @@ public class EditorConfigSettingsParserTests
             .And.Contain(expected);
     }
 
-    [Test]
+    [Fact]
     public void Parse_EditorConfigFile_ReturnWithoutErrors()
     {
         string fileText = File.ReadAllText(Path.Combine("Resources", "Editor-config-sample.ini"));

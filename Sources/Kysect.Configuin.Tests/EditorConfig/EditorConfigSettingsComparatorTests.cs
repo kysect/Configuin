@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Kysect.Configuin.EditorConfig;
+﻿using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.EditorConfig.Diff;
 using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;

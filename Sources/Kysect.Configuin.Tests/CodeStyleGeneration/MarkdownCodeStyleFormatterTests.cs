@@ -1,10 +1,8 @@
-﻿using FluentAssertions;
-using Kysect.Configuin.CodeStyleDoc.Markdown;
+﻿using Kysect.Configuin.CodeStyleDoc.Markdown;
 using Kysect.Configuin.CodeStyleDoc.Models;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Resources;
 using Kysect.Configuin.Tests.Tools;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.CodeStyleGeneration;
 
@@ -12,7 +10,7 @@ public class MarkdownCodeStyleFormatterTests
 {
     private readonly MarkdownCodeStyleFormatter _formatter = new MarkdownCodeStyleFormatter(TestLogger.ProviderForTests());
 
-    [Test]
+    [Fact]
     public void FormatStyleRule_ForIDE0001_ReturnExpected()
     {
         const string expected = """
@@ -50,7 +48,7 @@ public class MarkdownCodeStyleFormatterTests
         formatterRule.Should().Be(expected);
     }
 
-    [Test]
+    [Fact]
     public void FormatStyleRule_ForIDE0040_ReturnExpected()
     {
         const string expected = """
@@ -94,7 +92,7 @@ public class MarkdownCodeStyleFormatterTests
         formatterRule.Should().Be(expected);
     }
 
-    [Test]
+    [Fact]
     public void FormatQualityRule_ForCA1064_ReturnExpected()
     {
         // TODO: add description

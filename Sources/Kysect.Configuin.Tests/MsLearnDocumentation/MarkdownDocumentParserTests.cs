@@ -1,9 +1,7 @@
-﻿using FluentAssertions;
-using Kysect.Configuin.Markdown.Documents;
+﻿using Kysect.Configuin.Markdown.Documents;
 using Kysect.Configuin.Markdown.TextExtractor;
 using Kysect.Configuin.Tests.Tools;
 using Markdig.Syntax;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.MsLearnDocumentation;
 
@@ -11,7 +9,7 @@ public class MarkdownDocumentParserTests
 {
     private readonly IMarkdownTextExtractor _plainTextExtractor = TestImplementations.GetTextExtractor();
 
-    [Test]
+    [Fact]
     public void SplitByHeaders_DocumentWithThreeHeaders_ReturnThreeParts()
     {
         string input = """

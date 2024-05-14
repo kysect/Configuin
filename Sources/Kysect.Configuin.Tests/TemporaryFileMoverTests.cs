@@ -1,12 +1,10 @@
-﻿using FluentAssertions;
-using Kysect.CommonLib.FileSystem;
+﻿using Kysect.CommonLib.FileSystem;
 using Kysect.Configuin.DotnetFormatIntegration.FileSystem;
 using Kysect.Configuin.Tests.Tools;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests;
 
-public class TemporaryFileMoverTests
+public class TemporaryFileMoverTests : IDisposable
 {
     private const string TestGenerated = "TemporaryFileMoverTests";
 
@@ -15,21 +13,17 @@ public class TemporaryFileMoverTests
     public TemporaryFileMoverTests()
     {
         _sut = new TemporaryFileMover(TestLogger.ProviderForTests());
-    }
-
-    [SetUp]
-    public void Setup()
-    {
         DirectoryExtensions.EnsureDirectoryExists(new System.IO.Abstractions.FileSystem(), TestGenerated);
+
     }
 
-    [TearDown]
-    public void TearDown()
+    public void Dispose()
     {
         Directory.Delete(TestGenerated, recursive: true);
+
     }
 
-    [Test]
+    [Fact]
     public void MoveFile_WhenTargetNotExists_UndoDeleteFile()
     {
         string fileForMove = CreateFile("file_for_move");
@@ -42,7 +36,7 @@ public class TemporaryFileMoverTests
         File.Exists(targetPath).Should().BeFalse();
     }
 
-    [Test]
+    [Fact]
     public void MoveFile_WhenTargetExists_UndoReturnOriginalFile()
     {
         string fileForMove = CreateFile("file_for_move");

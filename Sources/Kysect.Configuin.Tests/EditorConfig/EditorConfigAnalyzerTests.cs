@@ -1,10 +1,8 @@
-﻿using FluentAssertions;
-using Kysect.Configuin.EditorConfig;
+﻿using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.EditorConfig.Analyzing;
 using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Resources;
-using NUnit.Framework;
 
 namespace Kysect.Configuin.Tests.EditorConfig;
 
@@ -17,7 +15,7 @@ public class EditorConfigAnalyzerTests
         _editorConfigAnalyzer = new EditorConfigAnalyzer();
     }
 
-    [Test]
+    [Fact]
     public void GetMissedConfigurations_AllOptionAreMissed_ReturnAllOptions()
     {
         var editorConfigSettings = new EditorConfigSettings(Array.Empty<IEditorConfigSetting>());
@@ -41,7 +39,7 @@ public class EditorConfigAnalyzerTests
             .And.Contain(WellKnownRoslynRuleDefinitions.IDE0040().Options.Single().Name);
     }
 
-    [Test]
+    [Fact]
     public void GetMissedConfigurations_AllOptionExists_ReturnAllOptions()
     {
         var editorConfigSettings = new EditorConfigSettings(new IEditorConfigSetting[]
@@ -63,7 +61,7 @@ public class EditorConfigAnalyzerTests
         editorConfigMissedConfiguration.StyleRuleOptions.Should().BeEmpty();
     }
 
-    [Test]
+    [Fact]
     public void GetIncorrectOptionValues_AllOptionsValid_NoElementReturn()
     {
         var editorConfigSettings = new EditorConfigSettings(new IEditorConfigSetting[]
@@ -80,7 +78,7 @@ public class EditorConfigAnalyzerTests
         invalidOptionValues.Should().BeEmpty();
     }
 
-    [Test]
+    [Fact]
     public void GetIncorrectOptionValues_ForInvalidOptionValue_ReturnInvalidOption()
     {
         string incorrectOptionValue = "null";
@@ -106,7 +104,7 @@ public class EditorConfigAnalyzerTests
             .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
     }
 
-    [Test]
+    [Fact]
     public void GetIncorrectOptionValues_ForInvalidOptionKey_ReturnInvalidOption()
     {
         string incorrectOptionKey = "null";
@@ -132,7 +130,7 @@ public class EditorConfigAnalyzerTests
             .And.Subject.ElementAt(0).Should().BeEquivalentTo(expected);
     }
 
-    [Test]
+    [Fact]
     public void GetIncorrectOptionSeverity_ForInvalidSeverityConfiguration_ReturnInvalidRuleIds()
     {
         var editorConfigSettings = new EditorConfigSettings(new IEditorConfigSetting[]
