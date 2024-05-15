@@ -28,9 +28,7 @@ public class EditorConfigDocumentParser
             bool isSection = trimmedLine.StartsWith(EditorConfigDocumentSectionNode.NodeIndicator);
             if (isSection)
             {
-                int indicatorLength = EditorConfigDocumentSectionNode.NodeIndicator.Length;
-                string sectionTitle = line.Substring(indicatorLength, line.Length - (indicatorLength * 2)).Trim();
-                context.AddSection(sectionTitle);
+                context.AddSection(trimmedLine);
                 continue;
             }
 
@@ -49,9 +47,7 @@ public class EditorConfigDocumentParser
                 if (parts.Length != 2)
                     throw new ArgumentException($"Line {line} contains unexpected count of '='");
 
-                string key = parts[0].Trim();
-                string value = parts[1].Trim();
-                EditorConfigPropertyNode propertyNode = new EditorConfigPropertyNode(key, value);
+                var propertyNode = new EditorConfigPropertyNode(EditorConfigStringNode.Create(parts[0]), EditorConfigStringNode.Create(parts[1]));
                 context.AddProperty(propertyNode);
                 continue;
             }

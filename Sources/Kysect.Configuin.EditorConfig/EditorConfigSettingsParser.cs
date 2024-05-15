@@ -45,14 +45,14 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
 
     private IEditorConfigSetting ParseSetting(EditorConfigPropertyNode line)
     {
-        if (_generalRuleKeys.Contains(line.Key))
-            return new GeneralEditorConfigSetting(line.Key, line.Value);
+        if (_generalRuleKeys.Contains(line.Key.Value))
+            return new GeneralEditorConfigSetting(line.Key.Value, line.Value.Value);
 
-        bool isSeveritySetting = line.Key.StartsWith("dotnet_diagnostic.");
+        bool isSeveritySetting = line.Key.Value.StartsWith("dotnet_diagnostic.");
         if (isSeveritySetting)
             return ParseSeveritySetting(line);
 
-        bool isCompositeKeyRule = line.Key.Contains('.');
+        bool isCompositeKeyRule = line.Key.Value.Contains('.');
         if (isCompositeKeyRule)
             return ParseCompositeKeySetting(line);
 
@@ -61,16 +61,16 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
 
     private static RoslynSeverityEditorConfigSetting ParseSeveritySetting(EditorConfigPropertyNode line)
     {
-        string[] keyParts = line.Key.Split('.');
+        string[] keyParts = line.Key.Value.Split('.');
 
         if (keyParts.Length != 3)
-            throw new ArgumentException($"Incorrect rule key: {line.Key}");
+            throw new ArgumentException($"Incorrect rule key: {line.Key.Value}");
 
         if (!string.Equals(keyParts[2], "severity", StringComparison.InvariantCultureIgnoreCase))
             throw new ArgumentException($"Expect postfix .severity for diagnostic rule but was {keyParts[2]}");
 
-        if (!Enum.TryParse(line.Value, true, out RoslynRuleSeverity severity))
-            throw new ArgumentException($"Cannot parse severity from {line.Value}");
+        if (!Enum.TryParse(line.Value.Value, true, out RoslynRuleSeverity severity))
+            throw new ArgumentException($"Cannot parse severity from {line.Value.Value}");
 
         var ruleId = RoslynRuleId.Parse(keyParts[1]);
         return new RoslynSeverityEditorConfigSetting(ruleId, severity);
@@ -78,12 +78,12 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
 
     private static CompositeRoslynOptionEditorConfigSetting ParseCompositeKeySetting(EditorConfigPropertyNode line)
     {
-        string[] keyParts = line.Key.Split('.');
-        return new CompositeRoslynOptionEditorConfigSetting(keyParts, line.Value, Severity: null);
+        string[] keyParts = line.Key.Value.Split('.');
+        return new CompositeRoslynOptionEditorConfigSetting(keyParts, line.Value.Value, Severity: null);
     }
 
     private static RoslynOptionEditorConfigSetting ParseOptionSetting(EditorConfigPropertyNode line)
     {
-        return new RoslynOptionEditorConfigSetting(line.Key, line.Value);
+        return new RoslynOptionEditorConfigSetting(line.Key.Value, line.Value.Value);
     }
 }

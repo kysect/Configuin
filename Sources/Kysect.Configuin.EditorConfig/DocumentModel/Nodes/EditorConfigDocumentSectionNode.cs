@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Text;
 
 namespace Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
 
@@ -18,5 +19,19 @@ public record EditorConfigDocumentSectionNode(string Value, ImmutableList<IEdito
     public EditorConfigDocumentSectionNode AddChild(IEditorConfigNode child)
     {
         return this with { Children = Children.Add(child) };
+    }
+
+    public string ToFullString()
+    {
+        var stringBuilder = new StringBuilder();
+        LeadingTrivia.ForEach(s => stringBuilder.AppendLine(s));
+
+        string line = $"{Value}";
+        if (TrailingTrivia is not null)
+            line += $"{line} {TrailingTrivia}";
+        stringBuilder.Append(line);
+
+        Children.ForEach(c => stringBuilder.Append($"{Environment.NewLine}{c.ToFullString()}"));
+        return stringBuilder.ToString();
     }
 }

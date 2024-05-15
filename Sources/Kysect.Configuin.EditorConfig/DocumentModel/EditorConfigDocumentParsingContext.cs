@@ -86,7 +86,7 @@ public class EditorConfigDocumentParsingContext
     {
         DumpSection();
         DumpCategory();
-        return _currentDocument;
+        return _currentDocument with { TrailingTrivia = _currentTrivia.ToImmutableList() };
     }
 
     public void AddTrivia(string line)
