@@ -1,13 +1,15 @@
 ﻿using Kysect.Configuin.EditorConfig;
+using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Tools;
 
 namespace Kysect.Configuin.Tests.EditorConfig;
 
-public class EditorConfigSettingsParserTests
+public class DotnetConfigSettingsParserTests
 {
-    private readonly EditorConfigSettingsParser _parser = new EditorConfigSettingsParser(TestLogger.ProviderForTests());
+    private readonly DotnetConfigSettingsParser _parser = new DotnetConfigSettingsParser(TestLogger.ProviderForTests());
+    private readonly EditorConfigDocumentParser _documentParser = new EditorConfigDocumentParser();
 
     [Fact]
     public void Parse_TabWidth_ReturnGeneralEditorRule()
@@ -15,9 +17,9 @@ public class EditorConfigSettingsParserTests
         string content = "tab_width = 4";
         var expected = new GeneralEditorConfigSetting(Key: "tab_width", Value: "4");
 
-        EditorConfigSettings editorConfigSettings = _parser.Parse(content);
+        DotnetConfigSettings dotnetConfigSettings = _parser.Parse(_documentParser.Parse(content));
 
-        editorConfigSettings.Settings
+        dotnetConfigSettings.Settings
             .Should().HaveCount(1)
             .And.Contain(expected);
     }
@@ -28,9 +30,9 @@ public class EditorConfigSettingsParserTests
         string content = "dotnet_diagnostic.IDE0001.severity = warning";
         var expected = new RoslynSeverityEditorConfigSetting(RoslynRuleId.Parse("IDE0001"), RoslynRuleSeverity.Warning);
 
-        EditorConfigSettings editorConfigSettings = _parser.Parse(content);
+        DotnetConfigSettings dotnetConfigSettings = _parser.Parse(_documentParser.Parse(content));
 
-        editorConfigSettings.Settings
+        dotnetConfigSettings.Settings
             .Should().HaveCount(1)
             .And.Contain(expected);
     }
@@ -43,9 +45,9 @@ public class EditorConfigSettingsParserTests
             KeyParts: new[] { "dotnet_naming_style", "camel_case_style", "capitalization" },
             Value: "camel_case", Severity: null);
 
-        EditorConfigSettings editorConfigSettings = _parser.Parse(content);
+        DotnetConfigSettings dotnetConfigSettings = _parser.Parse(_documentParser.Parse(content));
 
-        editorConfigSettings.Settings
+        dotnetConfigSettings.Settings
             .Should().HaveCount(1)
             .And.ContainEquivalentOf(expected);
     }
@@ -58,9 +60,9 @@ public class EditorConfigSettingsParserTests
             Key: "csharp_style_var_when_type_is_apparent",
             Value: "true");
 
-        EditorConfigSettings editorConfigSettings = _parser.Parse(content);
+        DotnetConfigSettings dotnetConfigSettings = _parser.Parse(_documentParser.Parse(content));
 
-        editorConfigSettings.Settings
+        dotnetConfigSettings.Settings
             .Should().HaveCount(1)
             .And.Contain(expected);
     }
@@ -73,9 +75,9 @@ public class EditorConfigSettingsParserTests
             Key: "csharp_style_var_when_type_is_apparent",
             Value: "true");
 
-        EditorConfigSettings editorConfigSettings = _parser.Parse(content);
+        DotnetConfigSettings dotnetConfigSettings = _parser.Parse(_documentParser.Parse(content));
 
-        editorConfigSettings.Settings
+        dotnetConfigSettings.Settings
             .Should().HaveCount(1)
             .And.Contain(expected);
     }
@@ -85,10 +87,10 @@ public class EditorConfigSettingsParserTests
     {
         string fileText = File.ReadAllText(Path.Combine("Resources", "Editor-config-sample.ini"));
 
-        EditorConfigSettings editorConfigSettings = _parser.Parse(fileText);
+        DotnetConfigSettings dotnetConfigSettings = _parser.Parse(_documentParser.Parse(fileText));
 
         // TODO: add more asserts
-        editorConfigSettings.Settings
+        dotnetConfigSettings.Settings
             .Should().HaveCount(393);
     }
 }

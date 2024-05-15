@@ -18,6 +18,7 @@ using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Kysect.Configuin.ConfigurationRoot;
 
+// TODO: add tests for configuration
 public static class DependencyBuilder
 {
     public static IServiceCollection InitializeServiceProvider()
@@ -31,8 +32,7 @@ public static class DependencyBuilder
         serviceCollection.AddOptionsWithValidation<EditorConfigApplyConfiguration>(nameof(EditorConfigApplyConfiguration));
         serviceCollection.AddSingleton(CreateLogger);
 
-        serviceCollection.AddSingleton<IEditorConfigContentProvider, EditorConfigFileContentProvider>();
-        serviceCollection.AddSingleton<IEditorConfigSettingsParser, EditorConfigSettingsParser>();
+        serviceCollection.AddSingleton<IDotnetConfigSettingsParser, DotnetConfigSettingsParser>();
         serviceCollection.AddSingleton<IMsLearnDocumentationInfoReader, MsLearnDocumentationInfoLocalReader>();
 
         serviceCollection.AddSingleton<IMsLearnDocumentationParser>(sp =>

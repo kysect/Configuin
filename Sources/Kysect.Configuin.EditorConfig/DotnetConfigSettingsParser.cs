@@ -1,4 +1,5 @@
-﻿using Kysect.Configuin.EditorConfig.DocumentModel;
+﻿using Kysect.CommonLib.BaseTypes.Extensions;
+using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
 using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
@@ -6,14 +7,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Kysect.Configuin.EditorConfig;
 
-public class EditorConfigSettingsParser : IEditorConfigSettingsParser
+public class DotnetConfigSettingsParser : IDotnetConfigSettingsParser
 {
     private readonly ILogger _logger;
 
     private readonly HashSet<string> _generalRuleKeys;
-    private readonly EditorConfigDocumentParser _editorConfigDocumentParser;
 
-    public EditorConfigSettingsParser(ILogger logger)
+    public DotnetConfigSettingsParser(ILogger logger)
     {
         _logger = logger;
 
@@ -24,27 +24,25 @@ public class EditorConfigSettingsParser : IEditorConfigSettingsParser
             "indent_size",
             "end_of_line"
         };
-        _editorConfigDocumentParser = new EditorConfigDocumentParser();
     }
 
-    public EditorConfigSettings Parse(string content)
+    public DotnetConfigSettings Parse(EditorConfigDocument editorConfigDocument)
     {
         _logger.LogInformation("Parse .editorconfig file");
 
-        ArgumentNullException.ThrowIfNull(content);
-
-        EditorConfigDocument editorConfigDocument = _editorConfigDocumentParser.Parse(content);
         List<IEditorConfigSetting> settings = editorConfigDocument
             .DescendantNodes()
             .OfType<EditorConfigPropertyNode>()
             .Select(ParseSetting)
             .ToList();
 
-        return new EditorConfigSettings(settings);
+        return new DotnetConfigSettings(settings);
     }
 
-    private IEditorConfigSetting ParseSetting(EditorConfigPropertyNode line)
+    public IEditorConfigSetting ParseSetting(EditorConfigPropertyNode line)
     {
+        line.ThrowIfNull();
+
         if (_generalRuleKeys.Contains(line.Key.Value))
             return new GeneralEditorConfigSetting(line.Key.Value, line.Value.Value);
 
