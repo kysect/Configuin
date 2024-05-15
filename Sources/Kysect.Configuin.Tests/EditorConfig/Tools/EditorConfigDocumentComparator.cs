@@ -13,6 +13,7 @@ public class EditorConfigDocumentComparator
         expected.ThrowIfNull();
 
         CompareChildren(actual.Children, expected.Children);
+        actual.TrailingTrivia.Should().BeEquivalentTo(expected.TrailingTrivia);
     }
 
     private void CompareChildren(ImmutableList<IEditorConfigNode> actual, ImmutableList<IEditorConfigNode> expected)

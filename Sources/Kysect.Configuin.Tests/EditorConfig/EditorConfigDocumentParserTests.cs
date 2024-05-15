@@ -14,7 +14,16 @@ public class EditorConfigDocumentParserTests()
     public void Parse_EmptyFile_ReturnEmptyDocumentNode()
     {
         const string content = "";
-        EditorConfigDocument expected = new EditorConfigDocument(ImmutableList<IEditorConfigNode>.Empty);
+        EditorConfigDocument expected = new EditorConfigDocument(ImmutableList<IEditorConfigNode>.Empty, [""]);
+
+        ParseAndCompare(content, expected);
+    }
+
+    [Fact]
+    public void Parse_TriviaOnly_ReturnEmptyDocumentNode()
+    {
+        const string content = "# comment";
+        EditorConfigDocument expected = new EditorConfigDocument(ImmutableList<IEditorConfigNode>.Empty, ["# comment"]);
 
         ParseAndCompare(content, expected);
     }
@@ -36,7 +45,7 @@ public class EditorConfigDocumentParserTests()
         const string content = """
                                ### Custom section ###
                                """;
-        EditorConfigDocument expected = new EditorConfigDocument([new EditorConfigDocumentSectionNode("Custom section")]);
+        EditorConfigDocument expected = new EditorConfigDocument([new EditorConfigDocumentSectionNode("### Custom section ###")]);
 
         EditorConfigDocument actual = _parser.Parse(content);
 
@@ -47,7 +56,7 @@ public class EditorConfigDocumentParserTests()
     public void Parse_Property_ReturnDocumentWithPropertyNode()
     {
         const string content = """
-                               key = value
+                               key=value
                                """;
         EditorConfigDocument expected = new EditorConfigDocument([new EditorConfigPropertyNode("key", "value")]);
 
@@ -59,9 +68,9 @@ public class EditorConfigDocumentParserTests()
     {
         const string content = """
                                [*.cs]
-                               tab_width = 4
-                               indent_size = 4
-                               end_of_line = crlf
+                               tab_width=4
+                               indent_size=4
+                               end_of_line=crlf
                                """;
 
         EditorConfigDocument expected = new EditorConfigDocument([
@@ -79,14 +88,14 @@ public class EditorConfigDocumentParserTests()
         const string content = """
                                [*.cs]
                                ### Custom section ###
-                               tab_width = 4
-                               indent_size = 4
-                               end_of_line = crlf
+                               tab_width=4
+                               indent_size=4
+                               end_of_line=crlf
                                """;
 
         EditorConfigDocument expected = new EditorConfigDocument([
             new EditorConfigCategoryNode("*.cs")
-                .AddChild(new EditorConfigDocumentSectionNode("Custom section")
+                .AddChild(new EditorConfigDocumentSectionNode("### Custom section ###")
                     .AddChild(new EditorConfigPropertyNode("tab_width", "4"))
                     .AddChild(new EditorConfigPropertyNode("indent_size", "4"))
                     .AddChild(new EditorConfigPropertyNode("end_of_line", "crlf")))
@@ -102,7 +111,7 @@ public class EditorConfigDocumentParserTests()
                                [*.cs]
                                
                                
-                               tab_width = 4
+                               tab_width=4
                                """;
 
         EditorConfigDocument expected = new EditorConfigDocument([
@@ -111,6 +120,32 @@ public class EditorConfigDocumentParserTests()
         ]);
 
         ParseAndCompare(content, expected);
+    }
+
+    [Fact]
+    public void Parse_SampleDocumentAndSerialize_ReturnSameValue()
+    {
+        string expected = File.ReadAllText(Path.Combine("Resources", "Editor-config-sample.ini"));
+        EditorConfigDocument document = _parser.Parse(expected);
+        string actual = document.ToFullString();
+
+        actual.Should().Be(expected);
+    }
+
+    [Fact]
+    public void Parse_DocumentWithAllElements_ReturnSameValue()
+    {
+        string expected = """
+                          # comment
+                          [*.cs]
+                          ### Category ###
+                          key = value
+                          """;
+
+        EditorConfigDocument document = _parser.Parse(expected);
+        string actual = document.ToFullString();
+
+        actual.Should().Be(expected);
     }
 
     private void ParseAndCompare(string content, EditorConfigDocument expected)
