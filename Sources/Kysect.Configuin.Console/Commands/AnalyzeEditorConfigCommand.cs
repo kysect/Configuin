@@ -1,6 +1,8 @@
 ﻿using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.EditorConfig.Analyzing;
+using Kysect.Configuin.EditorConfig.DocumentModel;
+using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
 using Kysect.Configuin.MsLearn;
 using Kysect.Configuin.MsLearn.Models;
 using Kysect.Configuin.RoslynModels;
@@ -11,7 +13,13 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Kysect.Configuin.Console.Commands;
 
-internal sealed class AnalyzeEditorConfigCommand : Command<AnalyzeEditorConfigCommand.Settings>
+internal sealed class AnalyzeEditorConfigCommand(
+    IDotnetConfigSettingsParser dotnetConfigSettingsParser,
+    IMsLearnDocumentationInfoReader msLearnDocumentationInfoReader,
+    IMsLearnDocumentationParser msLearnDocumentationParser,
+    ILogger logger,
+    EditorConfigDocumentParser editorConfigDocumentParser)
+    : Command<AnalyzeEditorConfigCommand.Settings>
 {
     public sealed class Settings : CommandSettings
     {
@@ -24,37 +32,23 @@ internal sealed class AnalyzeEditorConfigCommand : Command<AnalyzeEditorConfigCo
         public string? MsLearnRepositoryPath { get; init; }
     }
 
-    private readonly IEditorConfigContentProvider _editorConfigContentProvider;
-    private readonly IEditorConfigSettingsParser _editorConfigSettingsParser;
-    private readonly IMsLearnDocumentationInfoReader _msLearnDocumentationInfoReader;
-    private readonly IMsLearnDocumentationParser _msLearnDocumentationParser;
-    private readonly ILogger _logger;
-
-    public AnalyzeEditorConfigCommand(IEditorConfigContentProvider editorConfigContentProvider, IEditorConfigSettingsParser editorConfigSettingsParser, IMsLearnDocumentationInfoReader msLearnDocumentationInfoReader, IMsLearnDocumentationParser msLearnDocumentationParser, ILogger logger)
-    {
-        _editorConfigContentProvider = editorConfigContentProvider;
-        _editorConfigSettingsParser = editorConfigSettingsParser;
-        _msLearnDocumentationInfoReader = msLearnDocumentationInfoReader;
-        _msLearnDocumentationParser = msLearnDocumentationParser;
-        _logger = logger;
-    }
-
     public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
     {
         settings.EditorConfigPath.ThrowIfNull();
         settings.MsLearnRepositoryPath.ThrowIfNull();
 
-        var editorConfigAnalyzer = new EditorConfigAnalyzer();
-        IEditorConfigAnalyzeReporter reporter = new EditorConfigAnalyzeLogReporter(_logger);
+        EditorConfigAnalyzer editorConfigAnalyzer = new EditorConfigAnalyzer();
+        IEditorConfigAnalyzeReporter reporter = new EditorConfigAnalyzeLogReporter(logger);
 
-        string editorConfigContent = _editorConfigContentProvider.Provide(settings.EditorConfigPath);
-        EditorConfigSettings editorConfigSettings = _editorConfigSettingsParser.Parse(editorConfigContent);
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = _msLearnDocumentationInfoReader.Provide(settings.MsLearnRepositoryPath);
-        RoslynRules roslynRules = _msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
+        string editorConfigContent = File.ReadAllText(settings.EditorConfigPath);
+        EditorConfigDocument editorConfigDocument = editorConfigDocumentParser.Parse(editorConfigContent);
+        DotnetConfigSettings dotnetConfigSettings = dotnetConfigSettingsParser.Parse(editorConfigDocument);
+        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = msLearnDocumentationInfoReader.Provide(settings.MsLearnRepositoryPath);
+        RoslynRules roslynRules = msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
 
-        EditorConfigMissedConfiguration editorConfigMissedConfiguration = editorConfigAnalyzer.GetMissedConfigurations(editorConfigSettings, roslynRules);
-        IReadOnlyCollection<EditorConfigInvalidOptionValue> incorrectOptionValues = editorConfigAnalyzer.GetIncorrectOptionValues(editorConfigSettings, roslynRules);
-        IReadOnlyCollection<RoslynRuleId> incorrectOptionSeverity = editorConfigAnalyzer.GetIncorrectOptionSeverity(editorConfigSettings, roslynRules);
+        EditorConfigMissedConfiguration editorConfigMissedConfiguration = editorConfigAnalyzer.GetMissedConfigurations(dotnetConfigSettings, roslynRules);
+        IReadOnlyCollection<EditorConfigInvalidOptionValue> incorrectOptionValues = editorConfigAnalyzer.GetIncorrectOptionValues(dotnetConfigSettings, roslynRules);
+        IReadOnlyCollection<RoslynRuleId> incorrectOptionSeverity = editorConfigAnalyzer.GetIncorrectOptionSeverity(dotnetConfigSettings, roslynRules);
 
         reporter.ReportMissedConfigurations(editorConfigMissedConfiguration);
         reporter.ReportIncorrectOptionValues(incorrectOptionValues);

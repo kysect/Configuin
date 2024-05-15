@@ -2,11 +2,11 @@
 
 namespace Kysect.Configuin.EditorConfig;
 
-public class EditorConfigSettings
+public class DotnetConfigSettings
 {
     public IReadOnlyCollection<IEditorConfigSetting> Settings { get; }
 
-    public EditorConfigSettings(IReadOnlyCollection<IEditorConfigSetting> settings)
+    public DotnetConfigSettings(IReadOnlyCollection<IEditorConfigSetting> settings)
     {
         Settings = settings;
     }

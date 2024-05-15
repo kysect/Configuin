@@ -7,18 +7,18 @@ namespace Kysect.Configuin.EditorConfig.Analyzing;
 
 public class EditorConfigAnalyzer
 {
-    public EditorConfigMissedConfiguration GetMissedConfigurations(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
+    public EditorConfigMissedConfiguration GetMissedConfigurations(DotnetConfigSettings dotnetConfigSettings, RoslynRules roslynRules)
     {
-        editorConfigSettings.ThrowIfNull();
+        dotnetConfigSettings.ThrowIfNull();
         roslynRules.ThrowIfNull();
 
-        var selectedSeverity = editorConfigSettings
+        var selectedSeverity = dotnetConfigSettings
             .Settings
             .OfType<RoslynSeverityEditorConfigSetting>()
             .Select(c => c.RuleId)
             .ToHashSet();
 
-        var selectedOptions = editorConfigSettings
+        var selectedOptions = dotnetConfigSettings
             .Settings
             .OfType<RoslynOptionEditorConfigSetting>()
             .Select(c => c.Key)
@@ -47,16 +47,16 @@ public class EditorConfigAnalyzer
         return new EditorConfigMissedConfiguration(missedStyleRules, missedQualityRules, missedOptions);
     }
 
-    public IReadOnlyCollection<EditorConfigInvalidOptionValue> GetIncorrectOptionValues(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
+    public IReadOnlyCollection<EditorConfigInvalidOptionValue> GetIncorrectOptionValues(DotnetConfigSettings dotnetConfigSettings, RoslynRules roslynRules)
     {
-        ArgumentNullException.ThrowIfNull(editorConfigSettings);
+        ArgumentNullException.ThrowIfNull(dotnetConfigSettings);
         ArgumentNullException.ThrowIfNull(roslynRules);
 
         var result = new List<EditorConfigInvalidOptionValue>();
 
         var optionAvailableValues = roslynRules.GetOptions().ToDictionary(o => o.Name, o => o.Values);
 
-        foreach ((string key, string value) in editorConfigSettings.Settings.OfType<RoslynOptionEditorConfigSetting>())
+        foreach ((string key, string value) in dotnetConfigSettings.Settings.OfType<RoslynOptionEditorConfigSetting>())
         {
             if (!optionAvailableValues.TryGetValue(key, out IReadOnlyCollection<RoslynStyleRuleOptionValue>? values))
                 values = Array.Empty<RoslynStyleRuleOptionValue>();
@@ -68,9 +68,9 @@ public class EditorConfigAnalyzer
         return result;
     }
 
-    public IReadOnlyCollection<RoslynRuleId> GetIncorrectOptionSeverity(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
+    public IReadOnlyCollection<RoslynRuleId> GetIncorrectOptionSeverity(DotnetConfigSettings dotnetConfigSettings, RoslynRules roslynRules)
     {
-        ArgumentNullException.ThrowIfNull(editorConfigSettings);
+        ArgumentNullException.ThrowIfNull(dotnetConfigSettings);
         ArgumentNullException.ThrowIfNull(roslynRules);
 
         var ruleIds = new HashSet<RoslynRuleId>();
@@ -78,7 +78,7 @@ public class EditorConfigAnalyzer
         ruleIds.AddEach(roslynRules.QualityRules.Select(r => r.RuleId));
 
         var result = new List<RoslynRuleId>();
-        foreach ((RoslynRuleId roslynRuleId, RoslynRuleSeverity _) in editorConfigSettings.Settings.OfType<RoslynSeverityEditorConfigSetting>())
+        foreach ((RoslynRuleId roslynRuleId, RoslynRuleSeverity _) in dotnetConfigSettings.Settings.OfType<RoslynSeverityEditorConfigSetting>())
         {
             if (!ruleIds.Contains(roslynRuleId))
                 result.Add(roslynRuleId);

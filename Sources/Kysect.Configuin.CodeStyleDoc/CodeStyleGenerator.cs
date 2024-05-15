@@ -17,15 +17,15 @@ public class CodeStyleGenerator : ICodeStyleGenerator
         _logger = logger;
     }
 
-    public CodeStyle Generate(EditorConfigSettings editorConfigSettings, RoslynRules roslynRules)
+    public CodeStyle Generate(DotnetConfigSettings dotnetConfigSettings, RoslynRules roslynRules)
     {
-        ArgumentNullException.ThrowIfNull(editorConfigSettings);
+        ArgumentNullException.ThrowIfNull(dotnetConfigSettings);
         ArgumentNullException.ThrowIfNull(roslynRules);
 
         _logger.LogInformation("Start code style generating.");
 
         IReadOnlyCollection<RoslynStyleRuleOption> roslynRuleOptions = roslynRules.GetOptions();
-        IReadOnlyCollection<IEditorConfigSetting> notProcessedSettings = editorConfigSettings.Settings;
+        IReadOnlyCollection<IEditorConfigSetting> notProcessedSettings = dotnetConfigSettings.Settings;
 
         _logger.LogInformation("Try parse {count} settings", notProcessedSettings.Count);
         notProcessedSettings = notProcessedSettings.Where(IsSupported).ToList();

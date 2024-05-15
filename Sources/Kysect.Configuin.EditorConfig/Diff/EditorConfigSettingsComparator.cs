@@ -4,7 +4,7 @@ namespace Kysect.Configuin.EditorConfig.Diff;
 
 public class EditorConfigSettingsComparator
 {
-    public EditorConfigSettingsDiff Compare(EditorConfigSettings left, EditorConfigSettings right)
+    public EditorConfigSettingsDiff Compare(DotnetConfigSettings left, DotnetConfigSettings right)
     {
         ArgumentNullException.ThrowIfNull(left);
         ArgumentNullException.ThrowIfNull(right);

@@ -18,7 +18,7 @@ public class EditorConfigAnalyzerTests
     [Fact]
     public void GetMissedConfigurations_AllOptionAreMissed_ReturnAllOptions()
     {
-        var editorConfigSettings = new EditorConfigSettings(Array.Empty<IEditorConfigSetting>());
+        var editorConfigSettings = new DotnetConfigSettings(Array.Empty<IEditorConfigSetting>());
         RoslynRules roslynRules = RoslynRulesBuilder.New()
             .AddQuality(WellKnownRoslynRuleDefinitions.CA1064())
             .AddStyle(WellKnownRoslynRuleDefinitions.IDE0040())
@@ -42,7 +42,7 @@ public class EditorConfigAnalyzerTests
     [Fact]
     public void GetMissedConfigurations_AllOptionExists_ReturnAllOptions()
     {
-        var editorConfigSettings = new EditorConfigSettings(new IEditorConfigSetting[]
+        var editorConfigSettings = new DotnetConfigSettings(new IEditorConfigSetting[]
         {
             new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.IDE0040().Rules.Single().RuleId, RoslynRuleSeverity.Warning),
             new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.CA1064().RuleId, RoslynRuleSeverity.Warning),
@@ -64,7 +64,7 @@ public class EditorConfigAnalyzerTests
     [Fact]
     public void GetIncorrectOptionValues_AllOptionsValid_NoElementReturn()
     {
-        var editorConfigSettings = new EditorConfigSettings(new IEditorConfigSetting[]
+        var editorConfigSettings = new DotnetConfigSettings(new IEditorConfigSetting[]
         {
             new RoslynOptionEditorConfigSetting(WellKnownRoslynRuleDefinitions.IDE0040().Options.Single().Name, "always")
         });
@@ -84,7 +84,7 @@ public class EditorConfigAnalyzerTests
         string incorrectOptionValue = "null";
         RoslynStyleRuleOption selectedOptions = WellKnownRoslynRuleDefinitions.IDE0040().Options.Single();
 
-        var editorConfigSettings = new EditorConfigSettings(new IEditorConfigSetting[]
+        var editorConfigSettings = new DotnetConfigSettings(new IEditorConfigSetting[]
         {
             new RoslynOptionEditorConfigSetting(selectedOptions.Name, incorrectOptionValue)
         });
@@ -110,7 +110,7 @@ public class EditorConfigAnalyzerTests
         string incorrectOptionKey = "null";
         string incorrectOptionValue = "null";
 
-        var editorConfigSettings = new EditorConfigSettings(new IEditorConfigSetting[]
+        var editorConfigSettings = new DotnetConfigSettings(new IEditorConfigSetting[]
         {
             new RoslynOptionEditorConfigSetting(incorrectOptionKey, incorrectOptionValue)
         });
@@ -133,7 +133,7 @@ public class EditorConfigAnalyzerTests
     [Fact]
     public void GetIncorrectOptionSeverity_ForInvalidSeverityConfiguration_ReturnInvalidRuleIds()
     {
-        var editorConfigSettings = new EditorConfigSettings(new IEditorConfigSetting[]
+        var editorConfigSettings = new DotnetConfigSettings(new IEditorConfigSetting[]
         {
             new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.IDE0040().Rules.Single().RuleId, RoslynRuleSeverity.Warning),
             new RoslynSeverityEditorConfigSetting(WellKnownRoslynRuleDefinitions.CA1064().RuleId, RoslynRuleSeverity.Warning),
