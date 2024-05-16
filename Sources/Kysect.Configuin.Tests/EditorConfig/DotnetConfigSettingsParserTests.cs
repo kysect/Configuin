@@ -91,6 +91,6 @@ public class DotnetConfigSettingsParserTests
 
         // TODO: add more asserts
         dotnetConfigSettings.Settings
-            .Should().HaveCount(393);
+            .Should().HaveCount(392);
     }
 }
