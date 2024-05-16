@@ -5,6 +5,10 @@ namespace Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
 
 public record EditorConfigDocument(ImmutableList<IEditorConfigNode> Children, ImmutableList<string> TrailingTrivia) : IEditorConfigContainerNode
 {
+    public EditorConfigDocument() : this([])
+    {
+    }
+
     public EditorConfigDocument(ImmutableList<IEditorConfigNode> children) : this(children, ImmutableList<string>.Empty)
     {
     }
@@ -12,6 +16,11 @@ public record EditorConfigDocument(ImmutableList<IEditorConfigNode> Children, Im
     IEditorConfigContainerNode IEditorConfigContainerNode.AddChild(IEditorConfigNode child)
     {
         return AddChild(child);
+    }
+
+    public IEditorConfigContainerNode WithChildren(ImmutableList<IEditorConfigNode> children)
+    {
+        return this with { Children = children };
     }
 
     public EditorConfigDocument AddChild(IEditorConfigNode child)

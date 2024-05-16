@@ -14,6 +14,11 @@ public record EditorConfigCategoryNode(string Value, ImmutableList<IEditorConfig
         return AddChild(child);
     }
 
+    public IEditorConfigContainerNode WithChildren(ImmutableList<IEditorConfigNode> children)
+    {
+        return this with { Children = children };
+    }
+
     public EditorConfigCategoryNode AddChild(IEditorConfigNode child)
     {
         return this with { Children = Children.Add(child) };

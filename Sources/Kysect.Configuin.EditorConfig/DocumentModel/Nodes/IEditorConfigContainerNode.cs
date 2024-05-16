@@ -6,4 +6,5 @@ public interface IEditorConfigContainerNode : IEditorConfigNode
 {
     ImmutableList<IEditorConfigNode> Children { get; }
     IEditorConfigContainerNode AddChild(IEditorConfigNode child);
+    IEditorConfigContainerNode WithChildren(ImmutableList<IEditorConfigNode> children);
 }

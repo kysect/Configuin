@@ -16,6 +16,11 @@ public record EditorConfigDocumentSectionNode(string Value, ImmutableList<IEdito
         return this with { Children = Children.Add(child) };
     }
 
+    public IEditorConfigContainerNode WithChildren(ImmutableList<IEditorConfigNode> children)
+    {
+        return this with { Children = children };
+    }
+
     public EditorConfigDocumentSectionNode AddChild(IEditorConfigNode child)
     {
         return this with { Children = Children.Add(child) };
