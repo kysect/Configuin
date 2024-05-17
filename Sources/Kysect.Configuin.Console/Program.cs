@@ -20,8 +20,7 @@ internal class Program
 
         app.Configure(config =>
         {
-            // TODO: rename to styledoc
-            config.AddCommand<GenerateCodeStyleDocCommand>("generate-codestyle-doc");
+            config.AddCommand<GenerateCodeStyleDocCommand>("generate-styledoc");
             config.AddCommand<EditorConfigApplyPreviewCommand>("preview");
             config.AddCommand<AnalyzeEditorConfigCommand>("analyze");
             config.AddCommand<GenerateEditorConfigTemplateTemplate>("template");
