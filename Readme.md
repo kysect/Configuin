@@ -1,25 +1,25 @@
 # Configuin
 
-Configuin - это утилита для работы с .editorconfig'ом.
+Configuin is a tool for working with .NET .editorconfig.
 
-## Возможности
+## Available commands
 
-- Генерация шаблона .editorconfig'а
-- Генерация документации к editorconfig'у
-- Предпросмотр изменений от editorconfig'а
-- [in progress] Анализатор .editorconfig'а
-- [in progress] Сравнение двух editorconfig'ов
-- [in progress] Форматирование editorconfig'а
+- Generate .NET .editorconfig template
+- Generate documentation for .NET .editorconfig
+- Preview changes after applying `dotnet format` with new .editorconfig
+- Format .NET .editorconfig file
+- [in progress] .editorconfig analyzer
+- [in progress] Compare two .editorconfig
 
-### Генерация шаблона .editorconfig'а
+### Generate .NET .editorconfig template
 
-Configuin парсит все описанные в документации правила и генерирует .editorconfig, где они все описаны, чтобы упростить процесс заполенения .editorconfig'а. Например, команда
+Configuin parses all rules described in the documentation and generates a .editorconfig where they are all described to simplify the process of filling out the .editorconfig. For example, the command
 
 ```
 Kysect.Configuin.Console.exe template ".editorconfig" -d "C:\Coding\dotnet-docs"
 ```
 
-сгенерирует файл с таким содержанием:
+will generate a file with the following content:
 
 ```ini
 ## Simplify name (IDE0001)
@@ -38,23 +38,24 @@ Kysect.Configuin.Console.exe template ".editorconfig" -d "C:\Coding\dotnet-docs"
 # ...
 ```
 
-Полный файл можно посмотреть [тут](Docs/.editorconfig).
+The full file can be viewed [here](Docs/.editorconfig).
 
-### Генерация документации к .editorconfig
+### Generate documentation for .NET .editorconfig
 
-Configuin парсит описание Roslyn, которые есть на сайте MS Learn, парсит .editorconfig файл предоставленный пользователем и генерирует документ с подробным описанием строк. Пример вызова:
+Configuin parses the Roslyn description, which is available on the MS Learn website, parses the .editorconfig file provided by the user, and generates a document with a detailed description of the lines. Example of use:
 
+```bash
+Kysect.Configuin.Console.exe generate-styledoc "C:\Project\.editorconfig" -o "output.md" -d "C:\Coding\dotnet-docs"
 ```
-Kysect.Configuin.Console.exe generate-codestyle-doc "C:\Project\.editorconfig" -o "output.md" -d "C:\Coding\dotnet-docs"
-```
 
-Например, .editorconfig файл может содержать:
+For example, the .editorconfig file may contain:
+
 ```ini
 dotnet_diagnostic.IDE0040.severity = warning
 dotnet_style_require_accessibility_modifiers = always:warning
 ```
 
-При генерации кодстайла, для этих строк будет находиться описание и генерироваться такой output:
+When generating the code style, a description will be found for these lines and such an output will be generated:
 
 ```md
 ## Add accessibility modifiers (IDE0040)
@@ -81,43 +82,30 @@ class MyClass
 \```
 ```
 
-### Предпросмотр изменений от editorconfig'а
+### Preview changes after applying `dotnet format` with new .editorconfig
 
-```
+```bash
 Kysect.Configuin.Console.exe preview -s "C:\Project\" -t "C:\Project\.editorconfig" -e "C:\.editorconfig"
 ```
 
-Configuin генерирует список изменений, который будут получены, если к проекту применить .editorconfig.
+Configuin generates a list of changes that will be received if the .editorconfig is applied to the project.
 
-Алгоритм:
-- Запускается `dotnet format` для проекта и сохраняется список сообщений
-- Подменяется .editorconfig на то, который указал пользователь
-- Запускается `dotnet format` и сохраняется второй результат
-- Генерируется diff между результатами
-- Откатывается изменение .editorconfig'а 
+Algorithm:
+- `dotnet format` is launched for the project and the list of messages is saved
+- .editorconfig is replaced with the one specified by the user
+- `dotnet format` is launched and the second result is saved
+- A diff is generated between the results
+- .editorconfig change is rolled back
 
-Пример использования:
+Example of use:
 
-1. Берётся проект с .editorconfig'ом
-2. Копируется .editorconfig и модифицируется, например, включается CA1032
-3. Запускается Configuin, указывается путь к солюшену и изменённому .editorconfig
-4. Генерируется результат:
+1. Take a project with .editorconfig
+2. Copy .editorconfig and modify it, for example, include CA1032
+3. Run Configuin, specify the path to the solution and the modified .editorconfig
+
+Generated result:
 
 ```log
-[18:24:58 INF] Generate dotnet format warnings for C:\Coding\Kysect.CommonLib\Sources\Kysect.CommonLib.sln will save to output-8b107f73-6763-4c1f-b643-4e8eabac9d91.json
-[18:24:58 INF] Generate warnings for C:\Coding\Kysect.CommonLib\Sources\Kysect.CommonLib.sln and write result to output-8b107f73-6763-4c1f-b643-4e8eabac9d91.json
-[18:24:58 VRB] Execute cmd command cmd.exe /C dotnet format "C:\Coding\Kysect.CommonLib\Sources\Kysect.CommonLib.sln" --verify-no-changes --report "output-8b107f73-6763-4c1f-b643-4e8eabac9d91.json"
-[18:25:08 INF] Remove temp file output-8b107f73-6763-4c1f-b643-4e8eabac9d91.json
-[18:25:08 INF] Move C:\Users\fredi\Desktop\.editorconfig to C:\Coding\Kysect.CommonLib\Sources\.editorconfig
-[18:25:08 INF] Target path already exists. Save target file to temp path C:\Coding\Kysect.CommonLib\Sources\.congifuing\.editorconfig
-[18:25:08 INF] Move C:\Coding\Kysect.CommonLib\Sources\.editorconfig to C:\Coding\Kysect.CommonLib\Sources\.congifuing\.editorconfig
-[18:25:08 INF] Copy C:\Users\fredi\Desktop\.editorconfig to C:\Coding\Kysect.CommonLib\Sources\.editorconfig
-[18:25:08 INF] Generate dotnet format warnings for C:\Coding\Kysect.CommonLib\Sources\Kysect.CommonLib.sln will save to output-4d210962-92ec-44c8-b367-35840f6403d9.json
-[18:25:08 INF] Generate warnings for C:\Coding\Kysect.CommonLib\Sources\Kysect.CommonLib.sln and write result to output-4d210962-92ec-44c8-b367-35840f6403d9.json
-[18:25:08 VRB] Execute cmd command cmd.exe /C dotnet format "C:\Coding\Kysect.CommonLib\Sources\Kysect.CommonLib.sln" --verify-no-changes --report "output-4d210962-92ec-44c8-b367-35840f6403d9.json"
-[18:25:16 ERR] Cmd execution finished with exit code 2.
-[18:25:16 INF] Remove temp file output-4d210962-92ec-44c8-b367-35840f6403d9.json
-[18:25:16 INF] Undo file move. Move backup file from C:\Coding\Kysect.CommonLib\Sources\.congifuing\.editorconfig to C:\Coding\Kysect.CommonLib\Sources\.editorconfig
 [18:25:16 INF] Comparing dotnet format report
 [18:25:16 INF] Same: 0, added: 2, removed: 0
 [18:25:16 INF] New warnings count: 2
@@ -127,19 +115,40 @@ Configuin генерирует список изменений, который �
 [18:25:16 INF]          error CA1032: Add the following constructor to ReflectionException: public ReflectionException(string message)
 ```
 
-### [in progress] Анализатор .editorconfig'а
+### Format .NET .editorconfig file
 
+```bash
+Kysect.Configuin.Console.exe format ".editorconfig" -d "C:\Coding\dotnet-docs"
 ```
-Kysect.Configuin.Console.exe analyze "C:\Project\.editorconfig" -d "C:\Coding\dotnet-docs"
+
+Configuin formats the .editorconfig file according to the rules described in the documentation. Generated result will be same as [template](Docs/.editorconfig):
+
+```ini
+# Autogenerated values
+[*.cs]
+### IDE ###
+dotnet_diagnostic.IDE0001.severity = warning
+dotnet_diagnostic.IDE0002.severity = warning
+
+
+# IDE0003 and IDE0009
+dotnet_diagnostic.IDE0003.severity = warning
+dotnet_diagnostic.IDE0009.severity = warning
+dotnet_style_qualification_for_field = false:warning
+dotnet_style_qualification_for_property = false:warning
+dotnet_style_qualification_for_method = false:warning
+dotnet_style_qualification_for_event = false:warning
+
+...
+
+### CA ###
+dotnet_diagnostic.CA1000.severity = none
+dotnet_diagnostic.CA1001.severity = warning
+dotnet_diagnostic.CA1002.severity = warning
 ```
 
-Configuin анализирует editorconfig файл и:
-- Находит несуществующие правила
-- Находит не корректные значения
-- Генерирует список существующих правил, которые не указаны в .editorconfig
-
-### [in progress] Сравнение двух editorconfig
-
-Configuin сравнивает два .editorconfig файла и генерирует diff между ними.
-
-### [in progress] Форматирование editorconfig'а
+Some features:
+- Same rules are grouped
+- Options saved near the rule
+- Not parsed rules don't change
+- Comments are saved and moved with the rule
