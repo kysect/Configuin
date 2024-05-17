@@ -19,11 +19,13 @@ public class EditorConfigDocumentParsingContext
         _currentTrivia = new List<string>();
     }
 
-    public void AddCategory(string categoryName)
+    public void AddCategory(EditorConfigCategoryNode categoryNode)
     {
+        categoryNode.ThrowIfNull();
+
         DumpSection();
         DumpCategory();
-        _currentCategory = new EditorConfigCategoryNode(categoryName) { LeadingTrivia = _currentTrivia.ToImmutableList() };
+        _currentCategory = categoryNode with { LeadingTrivia = _currentTrivia.ToImmutableList() };
         _currentTrivia = new List<string>();
     }
 

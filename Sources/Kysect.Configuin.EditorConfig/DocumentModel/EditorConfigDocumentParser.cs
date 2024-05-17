@@ -26,8 +26,18 @@ public class EditorConfigDocumentParser
             bool isCategory = trimmedLine.StartsWith("[");
             if (isCategory)
             {
-                var categoryName = line.Substring(1, line.Length - 2);
-                context.AddCategory(categoryName);
+                (string? lineWithoutComment, string? comment) = ExtractComment(trimmedLine);
+                lineWithoutComment = lineWithoutComment.Trim();
+                if (!lineWithoutComment.EndsWith("]"))
+                    throw new ArgumentException($"Line is not valid category definition: {lineWithoutComment}");
+
+                string categoryName = lineWithoutComment.Substring(1, lineWithoutComment.Length - 2);
+
+                EditorConfigCategoryNode categoryNode = comment is not null
+                    ? new EditorConfigCategoryNode(categoryName) { TrailingTrivia = comment }
+                    : new EditorConfigCategoryNode(categoryName);
+
+                context.AddCategory(categoryNode);
                 continue;
             }
 
@@ -49,11 +59,17 @@ public class EditorConfigDocumentParser
             bool isProperty = trimmedLine.Contains('=');
             if (isProperty)
             {
-                string[] parts = line.Split('=');
+                (string? lineWithoutComment, string? comment) = ExtractComment(trimmedLine);
+                lineWithoutComment = lineWithoutComment.Trim();
+
+                string[] parts = lineWithoutComment.Split('=');
                 if (parts.Length != 2)
                     throw new ArgumentException($"Line {line} contains unexpected count of '='");
 
                 var propertyNode = new EditorConfigPropertyNode(EditorConfigStringNode.Create(parts[0]), EditorConfigStringNode.Create(parts[1]));
+                if (comment is not null)
+                    propertyNode = propertyNode with { TrailingTrivia = comment };
+
                 context.AddProperty(propertyNode);
                 continue;
             }
@@ -62,5 +78,14 @@ public class EditorConfigDocumentParser
         }
 
         return context.Build();
+    }
+
+    private (string lineWithoutComment, string? comment) ExtractComment(string originalString)
+    {
+        if (!originalString.Contains('#'))
+            return (originalString, null);
+
+        string[] parts = originalString.Split('#');
+        return (parts[0], parts[1]);
     }
 }

@@ -40,6 +40,17 @@ public class EditorConfigDocumentParserTests()
     }
 
     [Fact]
+    public void Parse_CategoryWithComment_ReturnDocumentWithCategoryNode()
+    {
+        const string content = """
+                               [*.cs] # comment
+                               """;
+        EditorConfigDocument expected = new EditorConfigDocument([new EditorConfigCategoryNode("*.cs") { TrailingTrivia = " comment" }]);
+
+        ParseAndCompare(content, expected);
+    }
+
+    [Fact]
     public void Parse_Group_ReturnDocumentWithGroupNode()
     {
         const string content = """
@@ -59,6 +70,17 @@ public class EditorConfigDocumentParserTests()
                                key=value
                                """;
         EditorConfigDocument expected = new EditorConfigDocument([new EditorConfigPropertyNode("key", "value")]);
+
+        ParseAndCompare(content, expected);
+    }
+
+    [Fact]
+    public void Parse_PropertyWithComment_ReturnDocumentWithPropertyNode()
+    {
+        const string content = """
+                               key=value # comment
+                               """;
+        EditorConfigDocument expected = new EditorConfigDocument([new EditorConfigPropertyNode("key", "value") { TrailingTrivia = " comment" }]);
 
         ParseAndCompare(content, expected);
     }
