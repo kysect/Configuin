@@ -1,14 +1,16 @@
-﻿using Kysect.Configuin.RoslynModels;
+﻿using Kysect.Configuin.Common;
+using Kysect.Configuin.RoslynModels;
 
 namespace Kysect.Configuin.Tests;
 
 public class RoslynRuleIdTests
 {
     [Theory]
-    [InlineData("CA1000", RoslynRuleType.QualityRule, 1000)]
-    [InlineData("ca1001", RoslynRuleType.QualityRule, 1001)]
-    [InlineData("IDE1002", RoslynRuleType.StyleRule, 1002)]
-    public void Parse(string input, RoslynRuleType type, int id)
+    [InlineData("CA1000", RoslynRuleTypes.QualityRule, 1000)]
+    [InlineData("ca1001", RoslynRuleTypes.QualityRule, 1001)]
+    [InlineData("IDE1002", RoslynRuleTypes.StyleRule, 1002)]
+    [InlineData("CS0219", "CS", 0219)]
+    public void Parse(string input, string type, int id)
     {
         var expected = new RoslynRuleId(type, id);
 
@@ -20,9 +22,9 @@ public class RoslynRuleIdTests
     [Fact]
     public void Parse_WithIncorrectPrefix_ThrowException()
     {
-        Assert.Throws<ArgumentException>(() =>
+        Assert.Throws<ConfiguinException>(() =>
         {
-            var roslynRuleId = RoslynRuleId.Parse("QWE1234");
+            var roslynRuleId = RoslynRuleId.Parse("QWE234");
         });
     }
 
@@ -36,8 +38,8 @@ public class RoslynRuleIdTests
 
         roslynRuleIds
             .Should().HaveCount(3)
-            .And.Contain(new RoslynRuleId(RoslynRuleType.QualityRule, 1865))
-            .And.Contain(new RoslynRuleId(RoslynRuleType.QualityRule, 1866))
-            .And.Contain(new RoslynRuleId(RoslynRuleType.QualityRule, 1867));
+            .And.Contain(new RoslynRuleId("CA", 1865))
+            .And.Contain(new RoslynRuleId("CA", 1866))
+            .And.Contain(new RoslynRuleId("CA", 1867));
     }
 }
