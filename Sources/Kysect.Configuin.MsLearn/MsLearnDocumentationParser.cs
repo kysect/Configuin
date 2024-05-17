@@ -1,3 +1,4 @@
+using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.Common;
 using Kysect.Configuin.Markdown.Documents;
 using Kysect.Configuin.Markdown.Tables;
@@ -81,6 +82,10 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     public RoslynStyleRuleGroup ParseStyleRules(string info)
     {
+        info.ThrowIfNull();
+
+        info = _documentationPreprocessor.Process(info);
+
         MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(info);
         IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders(_textExtractor);
 

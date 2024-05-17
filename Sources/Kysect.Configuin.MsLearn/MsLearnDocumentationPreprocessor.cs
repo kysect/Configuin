@@ -7,6 +7,8 @@ public class MsLearnDocumentationPreprocessor
 {
     public MsLearnDocumentationRawInfo Process(MsLearnDocumentationRawInfo info)
     {
+        info.ThrowIfNull();
+
         return new MsLearnDocumentationRawInfo(
             info.QualityRuleFileContents.Select(Process).ToList(),
             info.StyleRuleFileContents.Select(Process).ToList(),
@@ -27,6 +29,8 @@ public class MsLearnDocumentationPreprocessor
 
         lines = RemoveZones(lines);
 
+        lines = lines.Where(l => !l.StartsWith("[!INCLUDE")).ToList();
+
         return string.Join(Environment.NewLine, lines);
     }
 
@@ -41,14 +45,18 @@ public class MsLearnDocumentationPreprocessor
             if (startIndex == -1 || endIndex == -1 || startIndex >= endIndex)
                 throw new ArgumentException("Cannot find zones for removing");
 
-            if (lines[startIndex].StartsWith(":::zone pivot=\"lang-csharp-vb\""))
+            bool actualZone = lines[startIndex].StartsWith(":::zone pivot=\"lang-csharp-vb\"")
+                              || lines[startIndex].StartsWith(":::zone pivot=\"dotnet-8-0\"");
+            if (actualZone)
             {
                 lines.RemoveAt(endIndex);
                 lines.RemoveAt(startIndex);
                 continue;
             }
 
-            if (lines[startIndex].StartsWith(":::zone pivot=\"lang-fsharp\""))
+            bool notActualZone = lines[startIndex].StartsWith(":::zone pivot=\"lang-fsharp\"")
+                                 || lines[startIndex].StartsWith(":::zone pivot=\"dotnet-7-0,dotnet-6-0\"");
+            if (notActualZone)
             {
                 lines.RemoveRange(startIndex, endIndex - startIndex + 1);
                 continue;
