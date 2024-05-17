@@ -108,7 +108,8 @@ public class CodeStyleGenerator : ICodeStyleGenerator
             RoslynStyleRule rule = ruleGroup.Rules.Single(r => r.RuleId.Equals(severityEditorConfigSetting.RuleId));
             var options = ruleGroup
                 .Options
-                .Select(o => GetOptionConfiguration(optionConfigurations, o.Name))
+                .Select(o => FindOptionConfiguration(optionConfigurations, o.Name))
+                .WhereNotNull()
                 .ToList();
 
             return new CodeStyleRoslynStyleRuleConfiguration(rule, severityEditorConfigSetting.Severity, options, ruleGroup.Overview, ruleGroup.Example);
@@ -123,14 +124,10 @@ public class CodeStyleGenerator : ICodeStyleGenerator
         throw new ConfiguinException($"Rule with id {severityEditorConfigSetting.RuleId} was not found");
     }
 
-    private CodeStyleRoslynOptionConfiguration GetOptionConfiguration(
+    private CodeStyleRoslynOptionConfiguration? FindOptionConfiguration(
         IReadOnlyCollection<CodeStyleRoslynOptionConfiguration> optionConfigurations,
         string name)
     {
-        CodeStyleRoslynOptionConfiguration? option = optionConfigurations.FirstOrDefault(o => o.Option.Name == name);
-        if (option is null)
-            throw new ConfiguinException($"Option with name {name} was not found");
-
-        return option;
+        return optionConfigurations.FirstOrDefault(o => o.Option.Name == name);
     }
 }

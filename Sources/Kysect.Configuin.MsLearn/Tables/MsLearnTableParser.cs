@@ -65,6 +65,9 @@ public class MsLearnTableParser
         string[] expectedHeaders = { "Property", "Value", "Description" };
         for (int i = 0; i < simpleTable.Headers.Count; i++)
         {
+            if (string.IsNullOrEmpty(simpleTable.Headers[i]))
+                continue;
+
             if (simpleTable.Headers[i] != expectedHeaders[i])
                 throw new ArgumentException($"Table header on index {i} must be equal to {expectedHeaders[i]} but was {simpleTable.Headers[i]}");
         }
