@@ -65,6 +65,19 @@ public class EditorConfigFormatter
 
                 selectedStyleRuleNodes.Add(editorConfigPropertyNode);
             }
+
+            if (roslynStyleRuleGroup.Rules.Any(r => r.RuleId.Equals(RoslynNameRuleInfo.RuleId)))
+            {
+                foreach (EditorConfigPropertyNode editorConfigPropertyNode in propertyNodes)
+                {
+                    IEditorConfigSetting editorConfigSetting = _settingsParser.ParseSetting(editorConfigPropertyNode);
+                    if (editorConfigSetting is not CompositeRoslynOptionEditorConfigSetting option)
+                        continue;
+
+                    if (RoslynNameRuleInfo.IsNameRuleOption(option.ToDisplayString()))
+                        selectedStyleRuleNodes.Add(editorConfigPropertyNode);
+                }
+            }
         }
 
         List<EditorConfigPropertyNode> selectedQualityRuleNodes = new List<EditorConfigPropertyNode>();

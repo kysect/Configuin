@@ -45,7 +45,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         var roslynStyleRules = rawInfo.StyleRuleFileContents.Select(ParseStyleRules).ToList();
 
         roslynStyleRules = ParseIde0055FormatOptions(roslynStyleRules, rawInfo);
-
+        roslynStyleRules = AddNamingRule(roslynStyleRules);
         return new RoslynRules(roslynQualityRules, roslynStyleRules);
     }
 
@@ -79,6 +79,16 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
         return roslynStyleRules;
     }
+
+    private List<RoslynStyleRuleGroup> AddNamingRule(List<RoslynStyleRuleGroup> roslynStyleRules)
+    {
+        var namingRule = new RoslynStyleRule(RoslynNameRuleInfo.RuleId, "Code-style naming rules", "Style");
+        var roslynStyleRuleGroup = new RoslynStyleRuleGroup(namingRule, string.Empty, null);
+
+        roslynStyleRules.Add(roslynStyleRuleGroup);
+        return roslynStyleRules;
+    }
+
 
     public RoslynStyleRuleGroup ParseStyleRules(string info)
     {
