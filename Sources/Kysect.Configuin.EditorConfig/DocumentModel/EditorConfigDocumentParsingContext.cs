@@ -10,6 +10,7 @@ public class EditorConfigDocumentParsingContext
     private EditorConfigCategoryNode? _currentCategory;
     private EditorConfigDocumentSectionNode? _currentSection;
     private List<string> _currentTrivia;
+
     public EditorConfigDocumentParsingContext()
     {
         _currentDocument = new EditorConfigDocument(ImmutableList<IEditorConfigNode>.Empty);

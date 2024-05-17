@@ -29,6 +29,6 @@ public readonly record struct RoslynRuleIdRange(RoslynRuleId Start, RoslynRuleId
     public IEnumerable<RoslynRuleId> Enumerate()
     {
         for (int i = Start.Id; i <= End.Id; i++)
-            yield return new RoslynRuleId(Start.Type, i);
+            yield return Start with { Id = i };
     }
 }
