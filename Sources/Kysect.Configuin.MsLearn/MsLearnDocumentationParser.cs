@@ -20,6 +20,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     private readonly MarkdownTableParser _markdownTableParser;
     private readonly MsLearnTableParser _msLearnTableParser;
     private readonly IMarkdownTextExtractor _textExtractor;
+    private readonly MsLearnDocumentationPreprocessor _documentationPreprocessor;
 
     public MsLearnDocumentationParser(IMarkdownTextExtractor textExtractor, ILogger logger)
     {
@@ -28,11 +29,14 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
         _markdownTableParser = new MarkdownTableParser(textExtractor);
         _msLearnTableParser = new MsLearnTableParser();
+        _documentationPreprocessor = new MsLearnDocumentationPreprocessor();
     }
 
     public RoslynRules Parse(MsLearnDocumentationRawInfo rawInfo)
     {
         ArgumentNullException.ThrowIfNull(rawInfo);
+
+        rawInfo = _documentationPreprocessor.Process(rawInfo);
 
         _logger.LogInformation("Parsing roslyn rules from MS Learn");
 
