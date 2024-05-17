@@ -1,8 +1,6 @@
 ﻿using Kysect.Configuin.ConfigurationRoot;
-using Kysect.Configuin.ConfigurationRoot.Configuration;
 using Kysect.Configuin.Console.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Spectre.Console.Cli;
 
 namespace Kysect.Configuin.Console;
@@ -15,7 +13,7 @@ internal class Program
         IServiceCollection registrations = DependencyBuilder.InitializeServiceProvider();
 
         if (args.Length == 0)
-            args = PrepareTestCommand(registrations);
+            args = PrepareTestCommand();
 
         var registrar = new TypeRegistrar(registrations);
         var app = new CommandApp(registrar);
@@ -27,19 +25,20 @@ internal class Program
             config.AddCommand<EditorConfigApplyPreviewCommand>("preview");
             config.AddCommand<AnalyzeEditorConfigCommand>("analyze");
             config.AddCommand<GenerateEditorConfigTemplateTemplate>("template");
+            config.AddCommand<FormatEditorconfigCommand>("format");
         });
 
         app.Run(args);
     }
 
-    private static string[] PrepareTestCommand(IServiceCollection registrations)
+    private static string[] PrepareTestCommand()
     {
-        ServiceProvider serviceProvider = registrations.BuildServiceProvider();
-        ConfiguinConfiguration configurationOption = serviceProvider.GetRequiredService<IOptions<ConfiguinConfiguration>>().Value;
+        var msLearnRepositoryPath = Path.Combine("..", "..", "..", "..", "..", "ms-learn");
 
-        string[] analyzeCommand = new[] { "analyze", configurationOption.EditorConfigFile, "-d", configurationOption.MsLearnRepositoryPath };
-        string[] templateGenerateCommand = new[] { "template", ".editorconfig", "-d", configurationOption.MsLearnRepositoryPath };
+        string[] analyzeCommand = new[] { "analyze", ".editorconfig", "-d", msLearnRepositoryPath };
+        string[] templateGenerateCommand = new[] { "template", ".editorconfig", "-d", msLearnRepositoryPath };
+        string[] formatCommand = new[] { "format", ".editorconfig", "-d", msLearnRepositoryPath };
 
-        return templateGenerateCommand;
+        return formatCommand;
     }
 }

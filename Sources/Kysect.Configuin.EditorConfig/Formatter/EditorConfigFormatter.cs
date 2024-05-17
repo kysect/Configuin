@@ -9,9 +9,9 @@ namespace Kysect.Configuin.EditorConfig.Formatter;
 
 public class EditorConfigFormatter
 {
-    private readonly DotnetConfigSettingsParser _settingsParser;
+    private readonly IDotnetConfigSettingsParser _settingsParser;
 
-    public EditorConfigFormatter(DotnetConfigSettingsParser settingsParser)
+    public EditorConfigFormatter(IDotnetConfigSettingsParser settingsParser)
     {
         _settingsParser = settingsParser;
     }

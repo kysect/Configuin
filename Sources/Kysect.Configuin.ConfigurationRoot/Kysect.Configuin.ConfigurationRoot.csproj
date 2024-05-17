@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <PackageReference Include="codeessentials.Extensions.Logging.Demystifier" />
     <PackageReference Include="Kysect.CommonLib" />
@@ -26,6 +26,7 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\.editorconfig" CopyToOutputDirectory="Always" Condition="$(Configuration) == Debug" />
   </ItemGroup>
 
 </Project>

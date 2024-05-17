@@ -9,10 +9,16 @@ public class EditorConfigDocumentParser
     {
         content.ThrowIfNull();
 
+        // KB: sometimes Environment.NewLine is not the same as in the file
         string[] lines = content.Split(Environment.NewLine);
+        return Parse(lines);
+    }
+
+    public EditorConfigDocument Parse(string[] lines)
+    {
+        lines.ThrowIfNull();
 
         var context = new EditorConfigDocumentParsingContext();
-        //List<string> currentTrivia = new List<string>();
 
         foreach (string line in lines)
         {
