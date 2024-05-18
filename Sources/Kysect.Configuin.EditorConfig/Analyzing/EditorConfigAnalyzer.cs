@@ -25,7 +25,7 @@ public class EditorConfigAnalyzer
             .ToHashSet();
 
         var missedStyleRules = roslynRules
-            .StyleRules
+            .GetStyleRules()
             .Where(rule => !selectedSeverity.Contains(rule.RuleId))
             .Select(r => r.RuleId)
             .Order()
@@ -74,7 +74,7 @@ public class EditorConfigAnalyzer
         ArgumentNullException.ThrowIfNull(roslynRules);
 
         var ruleIds = new HashSet<RoslynRuleId>();
-        ruleIds.AddEach(roslynRules.StyleRules.Select(r => r.RuleId));
+        ruleIds.AddEach(roslynRules.GetStyleRules().Select(r => r.RuleId));
         ruleIds.AddEach(roslynRules.QualityRules.Select(r => r.RuleId));
 
         var result = new List<RoslynRuleId>();

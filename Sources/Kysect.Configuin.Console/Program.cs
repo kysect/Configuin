@@ -25,6 +25,7 @@ internal class Program
             config.AddCommand<AnalyzeEditorConfigCommand>("analyze");
             config.AddCommand<GenerateEditorConfigTemplateTemplate>("template");
             config.AddCommand<FormatEditorconfigCommand>("format");
+            config.AddCommand<GenerateRoslynRuleDocumentationFile>("generate-roslyn-documentation");
         });
 
         app.Run(args);
@@ -37,7 +38,8 @@ internal class Program
         string[] analyzeCommand = new[] { "analyze", ".editorconfig", "-d", msLearnRepositoryPath };
         string[] templateGenerateCommand = new[] { "template", ".editorconfig", "-d", msLearnRepositoryPath };
         string[] formatCommand = new[] { "format", ".editorconfig", "-d", msLearnRepositoryPath };
+        string[] generateRoslynDocumentationCommand = new[] { "generate-roslyn-documentation", msLearnRepositoryPath, "roslyn-rules.json" };
 
-        return formatCommand;
+        return generateRoslynDocumentationCommand;
     }
 }

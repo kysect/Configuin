@@ -25,7 +25,8 @@ public static class WellKnownRoslynRuleDefinitions
             Category: "Style");
 
         return new RoslynStyleRuleGroup(
-            rule,
+            [rule],
+            [],
             Overview: overview,
             Example: example);
     }
@@ -114,7 +115,7 @@ public static class WellKnownRoslynRuleDefinitions
             "Add accessibility modifiers",
             "Style");
 
-        return new RoslynStyleRuleGroup(styleRule, new[] { expectedOption }, overview, Example: null);
+        return new RoslynStyleRuleGroup([styleRule], [expectedOption], overview, Example: null);
     }
 
     public static RoslynQualityRule CA1064()
