@@ -25,6 +25,11 @@ internal sealed class FormatEditorconfigCommand(
         [Description("Path to cloned MS Learn repository.")]
         [CommandOption("-d|--documentation")]
         public string? MsLearnRepositoryPath { get; init; }
+
+        [Description("Group CA rules by category")]
+        [CommandOption("--group-ca")]
+        [DefaultValue(true)]
+        public bool GroupQualityRulesByCategory { get; init; }
     }
 
     public override int Execute(CommandContext context, Settings settings)
@@ -38,7 +43,7 @@ internal sealed class FormatEditorconfigCommand(
         MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = repositoryPathReader.Provide(settings.MsLearnRepositoryPath);
         RoslynRules roslynRules = msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
         EditorConfigDocument editorConfigDocument = editorConfigDocumentParser.Parse(editorConfigContentLines);
-        EditorConfigDocument formattedDocument = editorConfigFormatter.FormatAccordingToRuleDefinitions(editorConfigDocument, roslynRules);
+        EditorConfigDocument formattedDocument = editorConfigFormatter.FormatAccordingToRuleDefinitions(editorConfigDocument, roslynRules, settings.GroupQualityRulesByCategory);
         File.WriteAllText(settings.EditorConfigPath, formattedDocument.ToFullString());
 
         return 0;
