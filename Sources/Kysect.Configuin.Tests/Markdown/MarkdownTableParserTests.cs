@@ -6,7 +6,7 @@ using Kysect.Configuin.Tests.Tools;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
 
-namespace Kysect.Configuin.Tests.MsLearnDocumentation;
+namespace Kysect.Configuin.Tests.Markdown;
 
 public class MarkdownTableParserTests
 {

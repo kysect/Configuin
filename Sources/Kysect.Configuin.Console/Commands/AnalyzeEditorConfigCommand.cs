@@ -3,8 +3,7 @@ using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.EditorConfig.Analyzing;
 using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
-using Kysect.Configuin.MsLearn;
-using Kysect.Configuin.MsLearn.Models;
+using Kysect.Configuin.Learn.Abstraction;
 using Kysect.Configuin.RoslynModels;
 using Microsoft.Extensions.Logging;
 using Spectre.Console.Cli;
@@ -15,11 +14,10 @@ namespace Kysect.Configuin.Console.Commands;
 
 internal sealed class AnalyzeEditorConfigCommand(
     IDotnetConfigSettingsParser dotnetConfigSettingsParser,
-    IMsLearnDocumentationInfoReader msLearnDocumentationInfoReader,
-    IMsLearnDocumentationParser msLearnDocumentationParser,
-    ILogger logger,
-    EditorConfigDocumentParser editorConfigDocumentParser)
-    : Command<AnalyzeEditorConfigCommand.Settings>
+    IRoslynRuleDocumentationParser roslynRuleDocumentationParser,
+    EditorConfigDocumentParser editorConfigDocumentParser,
+    ILogger logger
+    ) : Command<AnalyzeEditorConfigCommand.Settings>
 {
     public sealed class Settings : CommandSettings
     {
@@ -43,8 +41,7 @@ internal sealed class AnalyzeEditorConfigCommand(
         string editorConfigContent = File.ReadAllText(settings.EditorConfigPath);
         EditorConfigDocument editorConfigDocument = editorConfigDocumentParser.Parse(editorConfigContent);
         DotnetConfigSettings dotnetConfigSettings = dotnetConfigSettingsParser.Parse(editorConfigDocument);
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = msLearnDocumentationInfoReader.Provide(settings.MsLearnRepositoryPath);
-        RoslynRules roslynRules = msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
+        RoslynRules roslynRules = roslynRuleDocumentationParser.Parse(settings.MsLearnRepositoryPath);
 
         EditorConfigMissedConfiguration editorConfigMissedConfiguration = editorConfigAnalyzer.GetMissedConfigurations(dotnetConfigSettings, roslynRules);
         IReadOnlyCollection<EditorConfigInvalidOptionValue> incorrectOptionValues = editorConfigAnalyzer.GetIncorrectOptionValues(dotnetConfigSettings, roslynRules);

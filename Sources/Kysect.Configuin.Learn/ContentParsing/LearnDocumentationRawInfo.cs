@@ -1,6 +1,6 @@
-﻿namespace Kysect.Configuin.MsLearn.Models;
+﻿namespace Kysect.Configuin.Learn.ContentParsing;
 
-public class MsLearnDocumentationRawInfo
+public class LearnDocumentationRawInfo
 {
     public IReadOnlyCollection<string> QualityRuleFileContents { get; }
     public IReadOnlyCollection<string> StyleRuleFileContents { get; }
@@ -8,7 +8,7 @@ public class MsLearnDocumentationRawInfo
     public string DotnetFormattingOptionsContent { get; }
     public string QualityRuleOptions { get; }
 
-    public MsLearnDocumentationRawInfo(
+    public LearnDocumentationRawInfo(
         IReadOnlyCollection<string> qualityRuleFileContents,
         IReadOnlyCollection<string> styleRuleFileContents,
         string sharpFormattingOptionsContent,

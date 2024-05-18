@@ -1,16 +1,16 @@
-﻿using Kysect.Configuin.MsLearn;
+﻿using Kysect.Configuin.Learn;
 using Kysect.Configuin.Tests.Tools;
 
-namespace Kysect.Configuin.Tests.MsLearnDocumentation;
+namespace Kysect.Configuin.Tests.Learn;
 
-public class MsLearnRepositoryPathProviderTests
+public class LearnRepositoryPathProviderTests
 {
     [Fact]
     public void GetPath_ReturnExistsFileItems()
     {
         string pathToRoot = Constants.GetPathToMsDocsRoot();
 
-        var pathProvider = new MsLearnRepositoryPathProvider(pathToRoot);
+        var pathProvider = new LearnRepositoryPathProvider(pathToRoot);
 
         string pathToStyleRules = pathProvider.GetPathToStyleRules();
         string pathToQualityRules = pathProvider.GetPathToQualityRules();

@@ -1,40 +1,48 @@
-using Kysect.CommonLib.BaseTypes.Extensions;
+﻿using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.Common;
+using Kysect.Configuin.Learn.Abstraction;
+using Kysect.Configuin.Learn.ContentParsing;
 using Kysect.Configuin.Markdown.Documents;
-using Kysect.Configuin.Markdown.Tables;
 using Kysect.Configuin.Markdown.Tables.Models;
+using Kysect.Configuin.Markdown.Tables;
 using Kysect.Configuin.Markdown.TextExtractor;
-using Kysect.Configuin.MsLearn.Models;
-using Kysect.Configuin.MsLearn.Tables;
-using Kysect.Configuin.MsLearn.Tables.Models;
 using Kysect.Configuin.RoslynModels;
 using Markdig.Extensions.Tables;
-using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
+using Markdig.Syntax;
 using Microsoft.Extensions.Logging;
 
-namespace Kysect.Configuin.MsLearn;
+namespace Kysect.Configuin.Learn;
 
-public class MsLearnDocumentationParser : IMsLearnDocumentationParser
+public class LearnDocumentationParser : IRoslynRuleDocumentationParser
 {
     private readonly ILogger _logger;
-
     private readonly MarkdownTableParser _markdownTableParser;
-    private readonly MsLearnTableParser _msLearnTableParser;
+    private readonly LearnTableParser _learnTableParser;
     private readonly IMarkdownTextExtractor _textExtractor;
-    private readonly MsLearnDocumentationPreprocessor _documentationPreprocessor;
+    private readonly LearnDocumentationPreprocessor _documentationPreprocessor;
 
-    public MsLearnDocumentationParser(IMarkdownTextExtractor textExtractor, ILogger logger)
+    private readonly LearnDocumentationReader _repositoryPathReader;
+
+    public LearnDocumentationParser(IMarkdownTextExtractor textExtractor, ILogger logger)
     {
+        _repositoryPathReader = new LearnDocumentationReader();
         _textExtractor = textExtractor;
         _logger = logger;
 
         _markdownTableParser = new MarkdownTableParser(textExtractor);
-        _msLearnTableParser = new MsLearnTableParser();
-        _documentationPreprocessor = new MsLearnDocumentationPreprocessor();
+        _learnTableParser = new LearnTableParser();
+        _documentationPreprocessor = new LearnDocumentationPreprocessor();
     }
 
-    public RoslynRules Parse(MsLearnDocumentationRawInfo rawInfo)
+    public RoslynRules Parse(string learnRepositoryPath)
+    {
+        LearnDocumentationRawInfo learnDocumentationRawInfo = _repositoryPathReader.Provide(learnRepositoryPath);
+        RoslynRules roslynRules = Parse(learnDocumentationRawInfo);
+        return roslynRules;
+    }
+
+    public RoslynRules Parse(LearnDocumentationRawInfo rawInfo)
     {
         ArgumentNullException.ThrowIfNull(rawInfo);
 
@@ -55,7 +63,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
     private List<RoslynStyleRuleGroup> ParseIde0055FormatOptions(
         List<RoslynStyleRuleGroup> roslynStyleRules,
-        MsLearnDocumentationRawInfo rawInfo)
+        LearnDocumentationRawInfo rawInfo)
     {
         _logger.LogDebug("Parsing IDE0055 options");
 
@@ -93,7 +101,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         return roslynStyleRules;
     }
 
-    private List<RoslynQualityRule> AddQualityRuleOptions(MsLearnDocumentationRawInfo rawInfo, List<RoslynQualityRule> qualityRules)
+    private List<RoslynQualityRule> AddQualityRuleOptions(LearnDocumentationRawInfo rawInfo, List<RoslynQualityRule> qualityRules)
     {
         string qualityRuleOptionFileContent = rawInfo.QualityRuleOptions;
 
@@ -106,7 +114,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             .OfType<ListBlock>()
             .Single();
 
-        List<string> options = new List<string>();
+        var options = new List<string>();
 
         foreach (Block optionListLine in optionList)
         {
@@ -194,8 +202,8 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = ParseOptions(markdownHeadedBlocks);
 
         var rules = roslynStyleRuleInformationTables
-            .Select(ConvertToRule)
-            .ToList();
+        .Select(ConvertToRule)
+        .ToList();
 
         return new RoslynStyleRuleGroup(rules, roslynStyleRuleOptions, overviewText, csharpCodeSample);
     }
@@ -203,7 +211,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
     private RoslynStyleRuleInformationTable ParseInformationTable(Table tableBlock)
     {
         MarkdownTableContent markdownTableContent = _markdownTableParser.ParseToSimpleContent(tableBlock);
-        MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
+        LearnPropertyValueDescriptionTable table = _learnTableParser.Parse(markdownTableContent);
         return RoslynStyleRuleInformationTable.Create(table);
     }
 
@@ -230,16 +238,16 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
         Table tableBlock = contentBlocks.Single();
         MarkdownTableContent markdownTableContent = _markdownTableParser.ParseToSimpleContent(tableBlock);
-        MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
+        LearnPropertyValueDescriptionTable table = _learnTableParser.Parse(markdownTableContent);
 
-        MsLearnPropertyValueDescriptionTableRow ruleId = table.GetSingleValue("Rule ID");
-        MsLearnPropertyValueDescriptionTableRow title = table.GetSingleValue("Title");
-        MsLearnPropertyValueDescriptionTableRow category = table.GetSingleValue("Category");
+        LearnPropertyValueDescriptionTableRow ruleId = table.GetSingleValue("Rule ID");
+        LearnPropertyValueDescriptionTableRow title = table.GetSingleValue("Title");
+        LearnPropertyValueDescriptionTableRow category = table.GetSingleValue("Category");
         // TODO: add this fields to model
-        MsLearnPropertyValueDescriptionTableRow breakingChanges = table.GetSingleValue("Fix is breaking or non-breaking");
+        LearnPropertyValueDescriptionTableRow breakingChanges = table.GetSingleValue("Fix is breaking or non-breaking");
         // TODO: remove hardcoded dotnet version
         // TODO: docs contains both .NET7 and .NET8 =_=
-        //MsLearnPropertyValueDescriptionTableRow isDefault = table.GetSingleValue("Enabled by default in .NET 8");
+        //LearnPropertyValueDescriptionTableRow isDefault = table.GetSingleValue("Enabled by default in .NET 8");
 
         IReadOnlyCollection<RoslynRuleId> ruleIds = RoslynRuleIdRange.Parse(ruleId.Value).Enumerate().ToList();
 
@@ -311,7 +319,7 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
         return headerText.StartsWith("dotnet_")
                || headerText.StartsWith("csharp_")
-               // IDE0073
+        // IDE0073
                || headerText == "file_header_template";
     }
 
@@ -322,13 +330,13 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
             throw new ConfiguinException($"Unexpected table count in option block {optionBlock.HeaderText}");
 
         MarkdownTableContent markdownTableContent = _markdownTableParser.ParseToSimpleContent(tables.Single());
-        MsLearnPropertyValueDescriptionTable table = _msLearnTableParser.Parse(markdownTableContent);
+        LearnPropertyValueDescriptionTable table = _learnTableParser.Parse(markdownTableContent);
 
         string? csharpCodeSample = TryExtractCsharpCodeBlock(optionBlock);
 
-        MsLearnPropertyValueDescriptionTableRow optionName = table.GetSingleValue("Option name");
-        IReadOnlyList<MsLearnPropertyValueDescriptionTableRow> optionValues = table.FindValues("Option values");
-        MsLearnPropertyValueDescriptionTableRow? defaultValue = table.FindValues("Default option value").SingleOrDefault();
+        LearnPropertyValueDescriptionTableRow optionName = table.GetSingleValue("Option name");
+        IReadOnlyList<LearnPropertyValueDescriptionTableRow> optionValues = table.FindValues("Option values");
+        LearnPropertyValueDescriptionTableRow? defaultValue = table.FindValues("Default option value").SingleOrDefault();
 
         return new RoslynStyleRuleOption(
             optionName.Value,

@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Kysect.Configuin.Common\Kysect.Configuin.Common.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.Learn.Abstraction\Kysect.Configuin.Learn.Abstraction.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.Markdown\Kysect.Configuin.Markdown.csproj" />
+  </ItemGroup>
+</Project>

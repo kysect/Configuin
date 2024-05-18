@@ -2,8 +2,7 @@
 using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
 using Kysect.Configuin.EditorConfig.Formatter;
-using Kysect.Configuin.MsLearn;
-using Kysect.Configuin.MsLearn.Models;
+using Kysect.Configuin.Learn;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Tools;
 
@@ -13,13 +12,13 @@ public class EditorConfigFormatterTests
 {
     private readonly EditorConfigFormatter _formatter;
     private readonly EditorConfigDocumentParser _parser;
-    private readonly MsLearnDocumentationInfoLocalReader _repositoryPathReader = TestImplementations.CreateDocumentationInfoLocalProvider();
-    private readonly MsLearnDocumentationParser _msLearnDocumentationParser = new MsLearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
+    private readonly LearnDocumentationParser _learnDocumentationParser;
 
     public EditorConfigFormatterTests()
     {
         _formatter = new EditorConfigFormatter(new DotnetConfigSettingsParser(TestLogger.ProviderForTests()));
         _parser = new EditorConfigDocumentParser();
+        _learnDocumentationParser = new LearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
     }
 
     [Fact]
@@ -97,8 +96,7 @@ public class EditorConfigFormatterTests
                        dotnet_naming_rule.public_protected_static_readonly_fields_must_be_pascal_case_rule.style      = pascal_case_style
                        """;
 
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = _repositoryPathReader.Provide(Constants.GetPathToMsDocsRoot());
-        RoslynRules roslynRules = _msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
+        RoslynRules roslynRules = _learnDocumentationParser.Parse(Constants.GetPathToMsDocsRoot());
 
         EditorConfigDocument editorConfigDocument = _parser.Parse(input);
         EditorConfigDocument formattedDocument = _formatter.FormatAccordingToRuleDefinitions(editorConfigDocument, roslynRules, false);
@@ -128,8 +126,7 @@ public class EditorConfigFormatterTests
                        dotnet_diagnostic.CA1835.severity = none
                        """;
 
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = _repositoryPathReader.Provide(Constants.GetPathToMsDocsRoot());
-        RoslynRules roslynRules = _msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
+        RoslynRules roslynRules = _learnDocumentationParser.Parse(Constants.GetPathToMsDocsRoot());
 
         EditorConfigDocument editorConfigDocument = _parser.Parse(input);
         EditorConfigDocument formattedDocument = _formatter.FormatAccordingToRuleDefinitions(editorConfigDocument, roslynRules, true);
@@ -145,9 +142,8 @@ public class EditorConfigFormatterTests
         string expected = File.ReadAllText(Path.Combine("Resources", "Editor-config-sample-formatted.ini"))
             .Replace("\r\n", "\n")
             .Replace("\n", Environment.NewLine);
-        ;
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = _repositoryPathReader.Provide(Constants.GetPathToMsDocsRoot());
-        RoslynRules roslynRules = _msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
+
+        RoslynRules roslynRules = _learnDocumentationParser.Parse(Constants.GetPathToMsDocsRoot());
 
         EditorConfigDocument editorConfigDocument = _parser.Parse(input);
         EditorConfigDocument formattedDocument = _formatter.FormatAccordingToRuleDefinitions(editorConfigDocument, roslynRules, false);

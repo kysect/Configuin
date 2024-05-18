@@ -1,18 +1,17 @@
 using Kysect.CommonLib.BaseTypes.Extensions;
+using Kysect.Configuin.Learn.ContentParsing;
 using Kysect.Configuin.Markdown.Documents;
 using Kysect.Configuin.Markdown.Tables;
 using Kysect.Configuin.Markdown.Tables.Models;
-using Kysect.Configuin.MsLearn.Tables;
-using Kysect.Configuin.MsLearn.Tables.Models;
 using Kysect.Configuin.Tests.Tools;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
 
-namespace Kysect.Configuin.Tests.MsLearnDocumentation;
+namespace Kysect.Configuin.Tests.Learn;
 
-public class MsLearnTableParserTests
+public class LearnTableParserTests
 {
-    private readonly MsLearnTableParser _msLearnTableParser = new MsLearnTableParser();
+    private readonly LearnTableParser _learnTableParser = new LearnTableParser();
     private readonly MarkdownTableParser _markdownTableParser = new MarkdownTableParser(TestImplementations.GetTextExtractor());
 
     [Fact]
@@ -26,19 +25,19 @@ public class MsLearnTableParserTests
                     | **Fix is breaking or non-breaking** | Breaking                     |
                     """;
 
-        var expected = new MsLearnPropertyValueDescriptionTable(
-            new Dictionary<string, IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>>()
+        var expected = new LearnPropertyValueDescriptionTable(
+            new Dictionary<string, IReadOnlyList<LearnPropertyValueDescriptionTableRow>>()
             {
-                {"Rule ID", new []{new MsLearnPropertyValueDescriptionTableRow("CA1000") }},
-                {"Category", new []{new MsLearnPropertyValueDescriptionTableRow("Design") }},
-                {"Fix is breaking or non-breaking", new []{new MsLearnPropertyValueDescriptionTableRow("Breaking") }},
+                {"Rule ID", new []{new LearnPropertyValueDescriptionTableRow("CA1000") }},
+                {"Category", new []{new LearnPropertyValueDescriptionTableRow("Design") }},
+                {"Fix is breaking or non-breaking", new []{new LearnPropertyValueDescriptionTableRow("Breaking") }},
             });
 
 
         MarkdownTableContent table = ConvertToMarkdownTable(input);
-        MsLearnPropertyValueDescriptionTable msLearnTableContent = _msLearnTableParser.Parse(table);
+        LearnPropertyValueDescriptionTable learnTableContent = _learnTableParser.Parse(table);
 
-        msLearnTableContent.Should().BeEquivalentTo(expected);
+        learnTableContent.Should().BeEquivalentTo(expected);
     }
 
     [Fact]
@@ -56,25 +55,25 @@ public class MsLearnTableParserTests
                     | **Applicable languages** | C# and Visual Basic                                               |
                     """;
 
-        var expected = new MsLearnPropertyValueDescriptionTable(
-            new Dictionary<string, IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>>()
+        var expected = new LearnPropertyValueDescriptionTable(
+            new Dictionary<string, IReadOnlyList<LearnPropertyValueDescriptionTableRow>>()
             {
-                {"Rule ID", new []{new MsLearnPropertyValueDescriptionTableRow("IDE0058") }},
-                {"Title", new []{new MsLearnPropertyValueDescriptionTableRow("Remove unnecessary expression value") }},
-                {"Category", new []{new MsLearnPropertyValueDescriptionTableRow("Style") }},
-                {"Subcategory", new []{new MsLearnPropertyValueDescriptionTableRow("Unnecessary code rules") }},
+                {"Rule ID", new []{new LearnPropertyValueDescriptionTableRow("IDE0058") }},
+                {"Title", new []{new LearnPropertyValueDescriptionTableRow("Remove unnecessary expression value") }},
+                {"Category", new []{new LearnPropertyValueDescriptionTableRow("Style") }},
+                {"Subcategory", new []{new LearnPropertyValueDescriptionTableRow("Unnecessary code rules") }},
                 {"Options", new []
                 {
-                    new MsLearnPropertyValueDescriptionTableRow("csharp_style_unused_value_expression_statement_preference"),
-                    new MsLearnPropertyValueDescriptionTableRow("visual_basic_style_unused_value_expression_statement_preference"),
+                    new LearnPropertyValueDescriptionTableRow("csharp_style_unused_value_expression_statement_preference"),
+                    new LearnPropertyValueDescriptionTableRow("visual_basic_style_unused_value_expression_statement_preference"),
                 }},
-                {"Applicable languages", new []{new MsLearnPropertyValueDescriptionTableRow("C# and Visual Basic") }}
+                {"Applicable languages", new []{new LearnPropertyValueDescriptionTableRow("C# and Visual Basic") }}
             });
 
         MarkdownTableContent table = ConvertToMarkdownTable(input);
-        MsLearnPropertyValueDescriptionTable msLearnTableContent = _msLearnTableParser.Parse(table);
+        LearnPropertyValueDescriptionTable learnTableContent = _learnTableParser.Parse(table);
 
-        msLearnTableContent.Should().BeEquivalentTo(expected);
+        learnTableContent.Should().BeEquivalentTo(expected);
     }
 
     [Fact]
@@ -89,23 +88,23 @@ public class MsLearnTableParserTests
                     | **Default option value** | `true`                                                           |                                  |
                     """;
 
-        var expected = new MsLearnPropertyValueDescriptionTable(
-            new Dictionary<string, IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>>()
+        var expected = new LearnPropertyValueDescriptionTable(
+            new Dictionary<string, IReadOnlyList<LearnPropertyValueDescriptionTableRow>>()
             {
-                {"Option name", new []{new MsLearnPropertyValueDescriptionTableRow("dotnet_style_prefer_is_null_check_over_reference_equality_method")}},
+                {"Option name", new []{new LearnPropertyValueDescriptionTableRow("dotnet_style_prefer_is_null_check_over_reference_equality_method")}},
                 {"Option values", new []
                 {
-                    new MsLearnPropertyValueDescriptionTableRow("true", "Prefer is null check"),
-                    new MsLearnPropertyValueDescriptionTableRow("false", "Prefer reference equality method")
+                    new LearnPropertyValueDescriptionTableRow("true", "Prefer is null check"),
+                    new LearnPropertyValueDescriptionTableRow("false", "Prefer reference equality method")
                 }},
-                {"Default option value", new []{new MsLearnPropertyValueDescriptionTableRow("true") }},
+                {"Default option value", new []{new LearnPropertyValueDescriptionTableRow("true") }},
             });
 
         MarkdownTableContent table = ConvertToMarkdownTable(input);
 
-        MsLearnPropertyValueDescriptionTable msLearnTableContent = _msLearnTableParser.Parse(table);
+        LearnPropertyValueDescriptionTable learnTableContent = _learnTableParser.Parse(table);
 
-        msLearnTableContent.Should().BeEquivalentTo(expected);
+        learnTableContent.Should().BeEquivalentTo(expected);
     }
 
     private MarkdownTableContent ConvertToMarkdownTable(string content)

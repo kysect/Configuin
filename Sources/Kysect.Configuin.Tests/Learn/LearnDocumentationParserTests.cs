@@ -1,16 +1,22 @@
-﻿using Kysect.Configuin.MsLearn;
-using Kysect.Configuin.MsLearn.Models;
+﻿using Kysect.Configuin.Learn;
+using Kysect.Configuin.Learn.Abstraction;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Resources;
 using Kysect.Configuin.Tests.Tools;
 
-namespace Kysect.Configuin.Tests.MsLearnDocumentation;
+namespace Kysect.Configuin.Tests.Learn;
 
-public class MsLearnDocumentationParserTests
+public class LearnDocumentationParserTests
 {
-    private static readonly MsLearnRepositoryPathProvider MsLearnRepositoryPathProvider = TestImplementations.CreateRepositoryPathProvider();
+    private static readonly LearnRepositoryPathProvider LearnRepositoryPathProvider = TestImplementations.CreateRepositoryPathProvider();
 
-    private readonly MsLearnDocumentationParser _parser = new MsLearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
+    private readonly LearnDocumentationParser _parser = new LearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
+    private readonly IRoslynRuleDocumentationParser _roslynRuleDocumentationParser;
+
+    public LearnDocumentationParserTests()
+    {
+        _roslynRuleDocumentationParser = new LearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
+    }
 
     [Fact]
     public void ParseStyleRule_IDE0001_ReturnExpectedResult()
@@ -79,7 +85,7 @@ public class MsLearnDocumentationParserTests
     [Fact]
     public void Parse_DotnetFormattingOptions_ReturnExpectedResult()
     {
-        string pathToDotnetFormattingFile = MsLearnRepositoryPathProvider.GetPathToDotnetFormattingFile();
+        string pathToDotnetFormattingFile = LearnRepositoryPathProvider.GetPathToDotnetFormattingFile();
         string fileContent = File.ReadAllText(pathToDotnetFormattingFile);
 
         IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = _parser.ParseAdditionalFormattingOptions(fileContent);
@@ -92,7 +98,7 @@ public class MsLearnDocumentationParserTests
     [Fact]
     public void Parse_CsharpFormattingOptions_ReturnExpectedResult()
     {
-        string pathToFile = MsLearnRepositoryPathProvider.GetPathToSharpFormattingFile();
+        string pathToFile = LearnRepositoryPathProvider.GetPathToSharpFormattingFile();
         string fileContent = File.ReadAllText(pathToFile);
 
         IReadOnlyCollection<RoslynStyleRuleOption> roslynStyleRuleOptions = _parser.ParseAdditionalFormattingOptions(fileContent);
@@ -116,10 +122,7 @@ public class MsLearnDocumentationParserTests
     [Fact]
     public void Parse_MsDocsRepository_FinishWithoutError()
     {
-        MsLearnDocumentationInfoLocalReader repositoryPathReader = TestImplementations.CreateDocumentationInfoLocalProvider();
-
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = repositoryPathReader.Provide(Constants.GetPathToMsDocsRoot());
-        RoslynRules roslynRules = _parser.Parse(msLearnDocumentationRawInfo);
+        RoslynRules roslynRules = _roslynRuleDocumentationParser.Parse(Constants.GetPathToMsDocsRoot());
 
         roslynRules.QualityRules.Single(r => r.RuleId.ToString() == "CA2007").Options.Should().HaveCount(2);
         // TODO: add asserts
@@ -127,13 +130,13 @@ public class MsLearnDocumentationParserTests
 
     private static string GetIdeDescription(string fileName)
     {
-        string path = Path.Combine(MsLearnRepositoryPathProvider.GetPathToStyleRules(), fileName);
+        string path = Path.Combine(LearnRepositoryPathProvider.GetPathToStyleRules(), fileName);
         return File.ReadAllText(path);
     }
 
     private static string GetPathToCa(string fileName)
     {
-        string path = Path.Combine(MsLearnRepositoryPathProvider.GetPathToQualityRules(), fileName);
+        string path = Path.Combine(LearnRepositoryPathProvider.GetPathToQualityRules(), fileName);
         return File.ReadAllText(path);
     }
 }

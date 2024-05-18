@@ -1,12 +1,12 @@
-﻿using Kysect.Configuin.MsLearn.Models;
+﻿using Kysect.Configuin.Learn.ContentParsing;
 
-namespace Kysect.Configuin.MsLearn;
+namespace Kysect.Configuin.Learn;
 
-public class MsLearnDocumentationInfoLocalReader : IMsLearnDocumentationInfoReader
+public class LearnDocumentationReader
 {
-    public MsLearnDocumentationRawInfo Provide(string pathToRepository)
+    public LearnDocumentationRawInfo Provide(string pathToRepository)
     {
-        var msLearnRepositoryPathProvider = new MsLearnRepositoryPathProvider(pathToRepository);
+        var msLearnRepositoryPathProvider = new LearnRepositoryPathProvider(pathToRepository);
 
         string qualityRulesDirectory = msLearnRepositoryPathProvider.GetPathToQualityRules();
         string styleRulesDirectory = msLearnRepositoryPathProvider.GetPathToStyleRules();
@@ -28,7 +28,7 @@ public class MsLearnDocumentationInfoLocalReader : IMsLearnDocumentationInfoRead
         string dotnetFormattingOptionsContent = File.ReadAllText(dotnetFormattingOptions);
         string qualityRuleOptionsContent = File.ReadAllText(qualityRuleOptions);
 
-        return new MsLearnDocumentationRawInfo(
+        return new LearnDocumentationRawInfo(
             qualityRuleInfos,
             styleRuleInfos,
             sharpFormattingOptionsContent,
