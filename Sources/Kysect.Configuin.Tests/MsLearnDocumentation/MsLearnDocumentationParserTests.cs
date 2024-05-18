@@ -121,6 +121,7 @@ public class MsLearnDocumentationParserTests
         MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = repositoryPathReader.Provide(Constants.GetPathToMsDocsRoot());
         RoslynRules roslynRules = _parser.Parse(msLearnDocumentationRawInfo);
 
+        roslynRules.QualityRules.Single(r => r.RuleId.ToString() == "CA2007").Options.Should().HaveCount(2);
         // TODO: add asserts
     }
 

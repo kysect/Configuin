@@ -10,6 +10,7 @@ using Kysect.Configuin.MsLearn.Tables.Models;
 using Kysect.Configuin.RoslynModels;
 using Markdig.Extensions.Tables;
 using Markdig.Syntax;
+using Markdig.Syntax.Inlines;
 using Microsoft.Extensions.Logging;
 
 namespace Kysect.Configuin.MsLearn;
@@ -46,6 +47,9 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
 
         roslynStyleRules = ParseIde0055FormatOptions(roslynStyleRules, rawInfo);
         roslynStyleRules = AddNamingRule(roslynStyleRules);
+
+        roslynQualityRules = AddQualityRuleOptions(rawInfo, roslynQualityRules);
+
         return new RoslynRules(roslynQualityRules, roslynStyleRules);
     }
 
@@ -89,6 +93,75 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
         return roslynStyleRules;
     }
 
+    private List<RoslynQualityRule> AddQualityRuleOptions(MsLearnDocumentationRawInfo rawInfo, List<RoslynQualityRule> qualityRules)
+    {
+        string qualityRuleOptionFileContent = rawInfo.QualityRuleOptions;
+
+        MarkdownDocument markdownDocument = MarkdownDocumentExtensions.CreateFromString(qualityRuleOptionFileContent);
+        IReadOnlyCollection<MarkdownHeadedBlock> markdownHeadedBlocks = markdownDocument.SplitByHeaders(_textExtractor);
+
+        MarkdownHeadedBlock optionListBlock = markdownHeadedBlocks.Single(b => b.HeaderText == "Options");
+        ListBlock optionList = optionListBlock
+            .Content
+            .OfType<ListBlock>()
+            .Single();
+
+        List<string> options = new List<string>();
+
+        foreach (Block optionListLine in optionList)
+        {
+
+            if (optionListLine is not ListItemBlock listItemBlock)
+                throw new ConfiguinException("Unexpected block in options list");
+
+            if (listItemBlock.Single() is not ParagraphBlock paragraphBlock)
+                throw new ConfiguinException("Unexpected block in options list");
+
+            paragraphBlock.Inline.ThrowIfNull();
+            LinkInline linkInline = paragraphBlock.Inline.OfType<LinkInline>().Single();
+            linkInline.Url.ThrowIfNull();
+            // TODO: some kind of hack
+            string optionName = linkInline.Url.Replace("#", "");
+            options.Add(optionName);
+        }
+
+        foreach (string option in options)
+        {
+            MarkdownHeadedBlock optionBlock = markdownHeadedBlocks.Single(b => b.HeaderText == option);
+            RoslynQualityRuleOption? roslynQualityRuleOption = TryParseQualityRuleOption(optionBlock);
+
+            if (roslynQualityRuleOption is null)
+                continue;
+
+            // TODO: remove this modification, need to parse all options before creating instances
+            int ruleIndex = qualityRules.FindIndex(r => r.RuleId == roslynQualityRuleOption.RuleId);
+            qualityRules[ruleIndex] = qualityRules[ruleIndex] with { Options = qualityRules[ruleIndex].Options.Append(roslynQualityRuleOption.OptionName).ToList() };
+        }
+
+        return qualityRules;
+    }
+
+    private RoslynQualityRuleOption? TryParseQualityRuleOption(MarkdownHeadedBlock block)
+    {
+        Table table = block
+            .Content
+            .OfType<Table>()
+            .First();
+
+        if (table.Count != 2)
+            throw new ConfiguinException("Quality rule option table does not contains 2 rows");
+
+        TableRow valueRow = table.Last().To<TableRow>();
+        if (valueRow.Count != 4)
+            throw new ConfiguinException("Quality rule option table does not contains 4 columns");
+
+        var usedIdRules = _textExtractor.ExtractText(valueRow[3]).Split();
+        // TODO: support case when multiple rules are used
+        if (usedIdRules.Length != 1)
+            return null;
+
+        return new RoslynQualityRuleOption(RoslynRuleId.Parse(usedIdRules[0]), block.HeaderText);
+    }
 
     public RoslynStyleRuleGroup ParseStyleRules(string info)
     {
@@ -177,7 +250,9 @@ public class MsLearnDocumentationParser : IMsLearnDocumentationParser
                 id,
                 title.Value,
                 category.Value,
-                description))
+                description,
+                // TODO: add options
+                []))
             .ToList();
     }
 
