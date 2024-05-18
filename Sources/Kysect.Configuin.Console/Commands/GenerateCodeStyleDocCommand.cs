@@ -38,14 +38,15 @@ internal sealed class GenerateCodeStyleDocCommand(
     public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
     {
         settings.EditorConfigPath.ThrowIfNull();
-        settings.MsLearnRepositoryPath.ThrowIfNull();
         settings.OutputPath.ThrowIfNull();
 
         string editorConfigContent = File.ReadAllText(settings.EditorConfigPath);
         EditorConfigDocument editorConfigDocument = documentParser.Parse(editorConfigContent);
         DotnetConfigSettings dotnetConfigSettings = dotnetConfigSettingsParser.Parse(editorConfigDocument);
 
-        RoslynRules roslynRules = roslynRuleDocumentationParser.Parse(settings.MsLearnRepositoryPath);
+        RoslynRules roslynRules = settings.MsLearnRepositoryPath is null
+            ? RoslynRuleDocumentationCache.ReadFromCache()
+            : roslynRuleDocumentationParser.Parse(settings.MsLearnRepositoryPath);
 
         CodeStyle codeStyle = codeStyleGenerator.Generate(dotnetConfigSettings, roslynRules);
         codeStyleWriter.Write(settings.OutputPath, codeStyle);

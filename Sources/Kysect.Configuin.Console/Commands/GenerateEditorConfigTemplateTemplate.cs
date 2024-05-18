@@ -29,9 +29,11 @@ public class GenerateEditorConfigTemplateTemplate(
     public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
     {
         settings.EditorConfigPath.ThrowIfNull();
-        settings.MsLearnRepositoryPath.ThrowIfNull();
 
-        RoslynRules roslynRules = roslynRuleDocumentationParser.Parse(settings.MsLearnRepositoryPath);
+        RoslynRules roslynRules = settings.MsLearnRepositoryPath is null
+            ? RoslynRuleDocumentationCache.ReadFromCache()
+            : roslynRuleDocumentationParser.Parse(settings.MsLearnRepositoryPath);
+
         string editorconfigContent = editorConfigTemplateGenerator.GenerateTemplate(roslynRules);
         // TODO: move to interface?
         logger.LogInformation("Writing .editorconfig template to {path}", settings.EditorConfigPath);

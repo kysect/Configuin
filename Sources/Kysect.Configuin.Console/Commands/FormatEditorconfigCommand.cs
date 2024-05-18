@@ -34,10 +34,11 @@ internal sealed class FormatEditorconfigCommand(
     public override int Execute(CommandContext context, Settings settings)
     {
         settings.EditorConfigPath.ThrowIfNull();
-        settings.MsLearnRepositoryPath.ThrowIfNull();
 
         string[] editorConfigContentLines = File.ReadAllLines(settings.EditorConfigPath);
-        RoslynRules roslynRules = roslynRuleDocumentationParser.Parse(settings.MsLearnRepositoryPath);
+        RoslynRules roslynRules = settings.MsLearnRepositoryPath is null
+            ? RoslynRuleDocumentationCache.ReadFromCache()
+            : roslynRuleDocumentationParser.Parse(settings.MsLearnRepositoryPath);
 
         EditorConfigDocument editorConfigDocument = editorConfigDocumentParser.Parse(editorConfigContentLines);
         EditorConfigDocument formattedDocument = editorConfigFormatter.FormatAccordingToRuleDefinitions(editorConfigDocument, roslynRules, settings.GroupQualityRulesByCategory);

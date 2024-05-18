@@ -1,19 +1,12 @@
 ﻿namespace Kysect.Configuin.RoslynModels;
 
-public class RoslynRules
+public record RoslynRules(
+    IReadOnlyCollection<RoslynQualityRule> QualityRules,
+    IReadOnlyCollection<RoslynStyleRuleGroup> StyleRuleGroups)
 {
-    public IReadOnlyCollection<RoslynQualityRule> QualityRules { get; }
-    public IReadOnlyCollection<RoslynStyleRule> StyleRules { get; }
-    public IReadOnlyCollection<RoslynStyleRuleGroup> StyleRuleGroups { get; }
-
-    public RoslynRules(
-        IReadOnlyCollection<RoslynQualityRule> qualityRules,
-        IReadOnlyCollection<RoslynStyleRuleGroup> styleRuleGroups)
+    public IReadOnlyCollection<RoslynStyleRule> GetStyleRules()
     {
-        QualityRules = qualityRules;
-        StyleRuleGroups = styleRuleGroups;
-
-        StyleRules = styleRuleGroups.SelectMany(r => r.Rules).ToList();
+        return StyleRuleGroups.SelectMany(r => r.Rules).ToList();
     }
 
     public IReadOnlyCollection<RoslynStyleRuleOption> GetOptions()

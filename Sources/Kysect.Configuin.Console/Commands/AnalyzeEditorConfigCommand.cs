@@ -33,15 +33,17 @@ internal sealed class AnalyzeEditorConfigCommand(
     public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
     {
         settings.EditorConfigPath.ThrowIfNull();
-        settings.MsLearnRepositoryPath.ThrowIfNull();
 
         EditorConfigAnalyzer editorConfigAnalyzer = new EditorConfigAnalyzer();
         IEditorConfigAnalyzeReporter reporter = new EditorConfigAnalyzeLogReporter(logger);
 
+        RoslynRules roslynRules = settings.MsLearnRepositoryPath is null
+            ? RoslynRuleDocumentationCache.ReadFromCache()
+            : roslynRuleDocumentationParser.Parse(settings.MsLearnRepositoryPath);
+
         string editorConfigContent = File.ReadAllText(settings.EditorConfigPath);
         EditorConfigDocument editorConfigDocument = editorConfigDocumentParser.Parse(editorConfigContent);
         DotnetConfigSettings dotnetConfigSettings = dotnetConfigSettingsParser.Parse(editorConfigDocument);
-        RoslynRules roslynRules = roslynRuleDocumentationParser.Parse(settings.MsLearnRepositoryPath);
 
         EditorConfigMissedConfiguration editorConfigMissedConfiguration = editorConfigAnalyzer.GetMissedConfigurations(dotnetConfigSettings, roslynRules);
         IReadOnlyCollection<EditorConfigInvalidOptionValue> incorrectOptionValues = editorConfigAnalyzer.GetIncorrectOptionValues(dotnetConfigSettings, roslynRules);

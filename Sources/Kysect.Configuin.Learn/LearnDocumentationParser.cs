@@ -56,7 +56,7 @@ public class LearnDocumentationParser : IRoslynRuleDocumentationParser
     private List<RoslynStyleRuleGroup> AddNamingRule(List<RoslynStyleRuleGroup> roslynStyleRules)
     {
         var namingRule = new RoslynStyleRule(RoslynNameRuleInfo.RuleId, "Code-style naming rules", "Style");
-        var roslynStyleRuleGroup = new RoslynStyleRuleGroup(namingRule, string.Empty, null);
+        var roslynStyleRuleGroup = new RoslynStyleRuleGroup([namingRule], [], string.Empty, null);
 
         roslynStyleRules.Add(roslynStyleRuleGroup);
         return roslynStyleRules;
