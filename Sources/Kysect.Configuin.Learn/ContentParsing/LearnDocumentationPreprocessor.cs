@@ -4,16 +4,16 @@ namespace Kysect.Configuin.Learn.ContentParsing;
 
 public class LearnDocumentationPreprocessor
 {
-    public LearnDocumentationRawInfo Process(LearnDocumentationRawInfo info)
+    public LearnDocumentationFileContents Process(LearnDocumentationFileContents info)
     {
         info.ThrowIfNull();
 
-        return new LearnDocumentationRawInfo(
+        return new LearnDocumentationFileContents(
             info.QualityRuleFileContents.Select(Process).ToList(),
             info.StyleRuleFileContents.Select(Process).ToList(),
             Process(info.SharpFormattingOptionsContent),
             Process(info.DotnetFormattingOptionsContent),
-            Process(info.QualityRuleOptions));
+            Process(info.QualityRuleOptionFileContent));
     }
 
     public string Process(string input)

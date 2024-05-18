@@ -4,7 +4,7 @@ namespace Kysect.Configuin.Learn;
 
 public class LearnDocumentationReader
 {
-    public LearnDocumentationRawInfo Provide(string pathToRepository)
+    public LearnDocumentationFileContents Provide(string pathToRepository)
     {
         var msLearnRepositoryPathProvider = new LearnRepositoryPathProvider(pathToRepository);
 
@@ -14,7 +14,7 @@ public class LearnDocumentationReader
         string dotnetFormattingOptions = msLearnRepositoryPathProvider.GetPathToDotnetFormattingFile();
         string qualityRuleOptions = msLearnRepositoryPathProvider.GetPathToCodeQualityRuleOptions();
 
-        IReadOnlyCollection<string> qualityRuleInfos = Directory
+        IReadOnlyCollection<string> qualityRuleFileContents = Directory
             .EnumerateFiles(qualityRulesDirectory, "ca*.md")
             .Select(File.ReadAllText)
             .ToList();
@@ -26,13 +26,13 @@ public class LearnDocumentationReader
 
         string sharpFormattingOptionsContent = File.ReadAllText(sharpFormattingOptions);
         string dotnetFormattingOptionsContent = File.ReadAllText(dotnetFormattingOptions);
-        string qualityRuleOptionsContent = File.ReadAllText(qualityRuleOptions);
+        string qualityRuleOptionFileContent = File.ReadAllText(qualityRuleOptions);
 
-        return new LearnDocumentationRawInfo(
-            qualityRuleInfos,
+        return new LearnDocumentationFileContents(
+            qualityRuleFileContents,
             styleRuleInfos,
             sharpFormattingOptionsContent,
             dotnetFormattingOptionsContent,
-            qualityRuleOptionsContent);
+            qualityRuleOptionFileContent);
     }
 }

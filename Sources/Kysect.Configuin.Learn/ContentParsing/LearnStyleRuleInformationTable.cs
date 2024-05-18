@@ -2,7 +2,7 @@ using Kysect.Configuin.RoslynModels;
 
 namespace Kysect.Configuin.Learn.ContentParsing;
 
-public record RoslynStyleRuleInformationTable(
+public record LearnStyleRuleInformationTable(
     RoslynRuleId RuleId,
     string Title,
     string Category,
@@ -10,7 +10,7 @@ public record RoslynStyleRuleInformationTable(
     string ApplicableLanguages,
     IReadOnlyCollection<string> Options)
 {
-    public static RoslynStyleRuleInformationTable Create(LearnPropertyValueDescriptionTable table)
+    public static LearnStyleRuleInformationTable Create(LearnPropertyValueDescriptionTable table)
     {
         ArgumentNullException.ThrowIfNull(table);
 
@@ -26,7 +26,7 @@ public record RoslynStyleRuleInformationTable(
             .Select(o => o.Value)
             .ToList();
 
-        return new RoslynStyleRuleInformationTable(
+        return new LearnStyleRuleInformationTable(
             RoslynRuleId.Parse(ruleId.Value),
             title.Value,
             category.Value,

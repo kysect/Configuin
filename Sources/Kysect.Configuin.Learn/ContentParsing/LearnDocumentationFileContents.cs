@@ -1,29 +1,29 @@
 ﻿namespace Kysect.Configuin.Learn.ContentParsing;
 
-public class LearnDocumentationRawInfo
+public class LearnDocumentationFileContents
 {
     public IReadOnlyCollection<string> QualityRuleFileContents { get; }
     public IReadOnlyCollection<string> StyleRuleFileContents { get; }
     public string SharpFormattingOptionsContent { get; }
     public string DotnetFormattingOptionsContent { get; }
-    public string QualityRuleOptions { get; }
+    public string QualityRuleOptionFileContent { get; }
 
-    public LearnDocumentationRawInfo(
+    public LearnDocumentationFileContents(
         IReadOnlyCollection<string> qualityRuleFileContents,
         IReadOnlyCollection<string> styleRuleFileContents,
         string sharpFormattingOptionsContent,
-        string dotnetFormattingOptionsContent, string qualityRuleOptions)
+        string dotnetFormattingOptionsContent, string qualityRuleOptionFileContent)
     {
         ArgumentNullException.ThrowIfNull(qualityRuleFileContents);
         ArgumentNullException.ThrowIfNull(styleRuleFileContents);
         ArgumentException.ThrowIfNullOrEmpty(sharpFormattingOptionsContent);
         ArgumentException.ThrowIfNullOrEmpty(dotnetFormattingOptionsContent);
-        ArgumentException.ThrowIfNullOrEmpty(qualityRuleOptions);
+        ArgumentException.ThrowIfNullOrEmpty(qualityRuleOptionFileContent);
 
         QualityRuleFileContents = qualityRuleFileContents;
         StyleRuleFileContents = styleRuleFileContents;
         SharpFormattingOptionsContent = sharpFormattingOptionsContent;
         DotnetFormattingOptionsContent = dotnetFormattingOptionsContent;
-        QualityRuleOptions = qualityRuleOptions;
+        QualityRuleOptionFileContent = qualityRuleOptionFileContent;
     }
 }
