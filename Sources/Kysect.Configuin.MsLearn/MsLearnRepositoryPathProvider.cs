@@ -28,4 +28,9 @@ public class MsLearnRepositoryPathProvider
     {
         return Path.Combine(_root, "docs", "fundamentals", "code-analysis", "style-rules", "dotnet-formatting-options.md");
     }
+
+    public string GetPathToCodeQualityRuleOptions()
+    {
+        return Path.Combine(_root, "docs", "fundamentals", "code-analysis", "code-quality-rule-options.md");
+    }
 }

@@ -13,7 +13,8 @@ public class MsLearnDocumentationPreprocessor
             info.QualityRuleFileContents.Select(Process).ToList(),
             info.StyleRuleFileContents.Select(Process).ToList(),
             Process(info.SharpFormattingOptionsContent),
-            Process(info.DotnetFormattingOptionsContent));
+            Process(info.DotnetFormattingOptionsContent),
+            Process(info.QualityRuleOptions));
     }
 
     public string Process(string input)
@@ -65,6 +66,19 @@ public class MsLearnDocumentationPreprocessor
             throw new ArgumentException($"Unsupported zone {lines[startIndex]}");
         }
 
+        while (lines.Any(l => l.StartsWith(":::row:::")))
+        {
+            int startIndex = lines.FindIndex(l => l.StartsWith(":::row:::"));
+            int endIndex = lines.FindIndex(l => l.StartsWith(":::row-end:::"));
+
+            if (startIndex == -1 || endIndex == -1 || startIndex >= endIndex)
+                throw new ArgumentException("Cannot find zones for removing");
+
+            lines.RemoveRange(startIndex, endIndex - startIndex + 1);
+        }
+
         return lines;
     }
+
+
 }

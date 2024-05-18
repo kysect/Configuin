@@ -120,22 +120,24 @@ public static class WellKnownRoslynRuleDefinitions
     public static RoslynQualityRule CA1064()
     {
         return new RoslynQualityRule(
-            ruleId: RoslynRuleId.Parse("CA1064"),
-            title: "Exceptions should be public",
-            category: "Design",
-            description: """
+            RuleId: RoslynRuleId.Parse("CA1064"),
+            Title: "Exceptions should be public",
+            Category: "Design",
+            Description: """
                          An internal exception is only visible inside its own internal scope. After the exception falls outside the internal scope, only the base exception can be used to catch the exception. If the internal exception is inherited from System.Exception, System.SystemException, or System.ApplicationException, the external code will not have sufficient information to know what to do with the exception.
                          But, if the code has a public exception that later is used as the base for an internal exception, it is reasonable to assume the code further out will be able to do something intelligent with the base exception. The public exception will have more information than what is provided by System.Exception, System.SystemException, or System.ApplicationException.
-                         """);
+                         """,
+            Options: []);
     }
 
     public static RoslynQualityRule CA1865()
     {
         return new RoslynQualityRule(
-            ruleId: RoslynRuleId.Parse("CA1865"),
-            title: "Use 'string.Method(char)' instead of 'string.Method(string)' for string with single char",
-            category: "Performance",
-            description: "The overload that takes a char parameter performs better than the overload that takes a string parameter.");
+            RuleId: RoslynRuleId.Parse("CA1865"),
+            Title: "Use 'string.Method(char)' instead of 'string.Method(string)' for string with single char",
+            Category: "Performance",
+            Description: "The overload that takes a char parameter performs better than the overload that takes a string parameter.",
+            Options: []);
     }
 
     public static RoslynStyleRuleOption[] Ide0003_0009Options()

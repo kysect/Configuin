@@ -12,6 +12,7 @@ public class MsLearnDocumentationInfoLocalReader : IMsLearnDocumentationInfoRead
         string styleRulesDirectory = msLearnRepositoryPathProvider.GetPathToStyleRules();
         string sharpFormattingOptions = msLearnRepositoryPathProvider.GetPathToSharpFormattingFile();
         string dotnetFormattingOptions = msLearnRepositoryPathProvider.GetPathToDotnetFormattingFile();
+        string qualityRuleOptions = msLearnRepositoryPathProvider.GetPathToCodeQualityRuleOptions();
 
         IReadOnlyCollection<string> qualityRuleInfos = Directory
             .EnumerateFiles(qualityRulesDirectory, "ca*.md")
@@ -25,11 +26,13 @@ public class MsLearnDocumentationInfoLocalReader : IMsLearnDocumentationInfoRead
 
         string sharpFormattingOptionsContent = File.ReadAllText(sharpFormattingOptions);
         string dotnetFormattingOptionsContent = File.ReadAllText(dotnetFormattingOptions);
+        string qualityRuleOptionsContent = File.ReadAllText(qualityRuleOptions);
 
         return new MsLearnDocumentationRawInfo(
             qualityRuleInfos,
             styleRuleInfos,
             sharpFormattingOptionsContent,
-            dotnetFormattingOptionsContent);
+            dotnetFormattingOptionsContent,
+            qualityRuleOptionsContent);
     }
 }
