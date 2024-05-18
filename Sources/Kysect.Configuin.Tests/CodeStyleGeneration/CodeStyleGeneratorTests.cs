@@ -4,8 +4,7 @@ using Kysect.Configuin.CodeStyleDoc.Models;
 using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
-using Kysect.Configuin.MsLearn;
-using Kysect.Configuin.MsLearn.Models;
+using Kysect.Configuin.Learn;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Tools;
 
@@ -13,16 +12,17 @@ namespace Kysect.Configuin.Tests.CodeStyleGeneration;
 
 public class CodeStyleGeneratorTests
 {
-    private readonly MsLearnDocumentationParser _msLearnDocumentationParser = new MsLearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
     private readonly DotnetConfigSettingsParser _dotnetConfigSettingsParser = new DotnetConfigSettingsParser(TestLogger.ProviderForTests());
-    private readonly MsLearnDocumentationInfoLocalReader _repositoryPathReader = TestImplementations.CreateDocumentationInfoLocalProvider();
     private readonly EditorConfigDocumentParser _documentParser;
+    private readonly LearnDocumentationParser _learnDocumentationParser;
     private readonly CodeStyleGenerator _sut;
 
     public CodeStyleGeneratorTests()
     {
         _sut = new CodeStyleGenerator(TestLogger.ProviderForTests());
         _documentParser = new EditorConfigDocumentParser();
+
+        _learnDocumentationParser = new LearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
     }
 
     [Fact]
@@ -30,8 +30,7 @@ public class CodeStyleGeneratorTests
     {
         string pathToIniFile = Path.Combine("Resources", "Editor-config-sample.ini");
 
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = _repositoryPathReader.Provide(Constants.GetPathToMsDocsRoot());
-        RoslynRules roslynRules = _msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
+        RoslynRules roslynRules = _learnDocumentationParser.Parse(Constants.GetPathToMsDocsRoot());
         string fileText = File.ReadAllText(pathToIniFile);
         EditorConfigDocument editorConfigDocument = _documentParser.Parse(fileText);
         DotnetConfigSettings dotnetConfigSettings = _dotnetConfigSettingsParser.Parse(editorConfigDocument);

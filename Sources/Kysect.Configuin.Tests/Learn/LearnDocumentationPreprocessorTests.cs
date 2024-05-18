@@ -1,10 +1,10 @@
-﻿using Kysect.Configuin.MsLearn;
+﻿using Kysect.Configuin.Learn.ContentParsing;
 
-namespace Kysect.Configuin.Tests.MsLearnDocumentation;
+namespace Kysect.Configuin.Tests.Learn;
 
-public class MsLearnDocumentationPreprocessorTests
+public class LearnDocumentationPreprocessorTests
 {
-    private readonly MsLearnDocumentationPreprocessor _preprocessor = new MsLearnDocumentationPreprocessor();
+    private readonly LearnDocumentationPreprocessor _preprocessor = new LearnDocumentationPreprocessor();
 
     [Fact]
     public void Process_InputWithZones_RemoveOnlyFsharpBlock()

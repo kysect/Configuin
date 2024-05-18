@@ -1,15 +1,14 @@
 using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.Configuin.MsLearn.Models;
 
-namespace Kysect.Configuin.MsLearn;
+namespace Kysect.Configuin.Learn.ContentParsing;
 
-public class MsLearnDocumentationPreprocessor
+public class LearnDocumentationPreprocessor
 {
-    public MsLearnDocumentationRawInfo Process(MsLearnDocumentationRawInfo info)
+    public LearnDocumentationRawInfo Process(LearnDocumentationRawInfo info)
     {
         info.ThrowIfNull();
 
-        return new MsLearnDocumentationRawInfo(
+        return new LearnDocumentationRawInfo(
             info.QualityRuleFileContents.Select(Process).ToList(),
             info.StyleRuleFileContents.Select(Process).ToList(),
             Process(info.SharpFormattingOptionsContent),
@@ -26,7 +25,7 @@ public class MsLearnDocumentationPreprocessor
             .Replace("\r\n", "\n")
             .Replace("\n", Environment.NewLine);
 
-        List<string> lines = input.Split(Environment.NewLine).ToList();
+        var lines = input.Split(Environment.NewLine).ToList();
 
         lines = RemoveZones(lines);
 
@@ -79,6 +78,4 @@ public class MsLearnDocumentationPreprocessor
 
         return lines;
     }
-
-
 }

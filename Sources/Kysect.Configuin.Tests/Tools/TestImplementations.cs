@@ -1,18 +1,18 @@
-﻿using Kysect.Configuin.Markdown.TextExtractor;
-using Kysect.Configuin.MsLearn;
+﻿using Kysect.Configuin.Learn;
+using Kysect.Configuin.Markdown.TextExtractor;
 
 namespace Kysect.Configuin.Tests.Tools;
 
 public static class TestImplementations
 {
-    public static MsLearnDocumentationInfoLocalReader CreateDocumentationInfoLocalProvider()
+    public static LearnDocumentationReader CreateDocumentationInfoLocalProvider()
     {
-        return new MsLearnDocumentationInfoLocalReader();
+        return new LearnDocumentationReader();
     }
 
-    public static MsLearnRepositoryPathProvider CreateRepositoryPathProvider()
+    public static LearnRepositoryPathProvider CreateRepositoryPathProvider()
     {
-        return new MsLearnRepositoryPathProvider(Constants.GetPathToMsDocsRoot());
+        return new LearnRepositoryPathProvider(Constants.GetPathToMsDocsRoot());
     }
 
     public static IMarkdownTextExtractor GetTextExtractor()

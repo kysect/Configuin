@@ -1,19 +1,18 @@
 ﻿using Kysect.Configuin.Markdown.Tables.Models;
-using Kysect.Configuin.MsLearn.Tables.Models;
 
-namespace Kysect.Configuin.MsLearn.Tables;
+namespace Kysect.Configuin.Learn.ContentParsing;
 
-public class MsLearnTableParser
+public class LearnTableParser
 {
-    public MsLearnPropertyValueDescriptionTable Parse(MarkdownTableContent simpleTable)
+    public LearnPropertyValueDescriptionTable Parse(MarkdownTableContent simpleTable)
     {
         ArgumentNullException.ThrowIfNull(simpleTable);
 
         ValidateTableHeader(simpleTable);
 
-        var rows = new Dictionary<string, IReadOnlyList<MsLearnPropertyValueDescriptionTableRow>>();
+        var rows = new Dictionary<string, IReadOnlyList<LearnPropertyValueDescriptionTableRow>>();
         string? lastKey = null;
-        var values = new List<MsLearnPropertyValueDescriptionTableRow>();
+        var values = new List<LearnPropertyValueDescriptionTableRow>();
 
         foreach (IReadOnlyList<string> simpleTableRow in simpleTable.Rows)
         {
@@ -29,18 +28,18 @@ public class MsLearnTableParser
                     throw new InvalidOperationException("Table has invalid configuration. Key is missed.");
 
                 case true when lastKey is not null:
-                    values.Add(new MsLearnPropertyValueDescriptionTableRow(value, description));
+                    values.Add(new LearnPropertyValueDescriptionTableRow(value, description));
                     break;
 
                 case false when lastKey is null:
                     lastKey = rowKey;
-                    values.Add(new MsLearnPropertyValueDescriptionTableRow(value, description));
+                    values.Add(new LearnPropertyValueDescriptionTableRow(value, description));
                     break;
 
                 case false when lastKey is not null:
                     rows[lastKey] = values;
                     lastKey = rowKey;
-                    values = new List<MsLearnPropertyValueDescriptionTableRow> { new(value, description) };
+                    values = new List<LearnPropertyValueDescriptionTableRow> { new(value, description) };
                     break;
 
                 default:
@@ -51,7 +50,7 @@ public class MsLearnTableParser
         if (lastKey is not null)
             rows[lastKey] = values;
 
-        return new MsLearnPropertyValueDescriptionTable(rows);
+        return new LearnPropertyValueDescriptionTable(rows);
     }
 
     private static void ValidateTableHeader(MarkdownTableContent simpleTable)

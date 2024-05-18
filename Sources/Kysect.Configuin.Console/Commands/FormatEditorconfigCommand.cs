@@ -2,8 +2,7 @@
 using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
 using Kysect.Configuin.EditorConfig.Formatter;
-using Kysect.Configuin.MsLearn;
-using Kysect.Configuin.MsLearn.Models;
+using Kysect.Configuin.Learn.Abstraction;
 using Kysect.Configuin.RoslynModels;
 using Spectre.Console.Cli;
 using System.ComponentModel;
@@ -11,10 +10,10 @@ using System.ComponentModel;
 namespace Kysect.Configuin.Console.Commands;
 
 internal sealed class FormatEditorconfigCommand(
-    IMsLearnDocumentationInfoReader repositoryPathReader,
-    IMsLearnDocumentationParser msLearnDocumentationParser,
+    IRoslynRuleDocumentationParser roslynRuleDocumentationParser,
     EditorConfigDocumentParser editorConfigDocumentParser,
-    EditorConfigFormatter editorConfigFormatter) : Command<FormatEditorconfigCommand.Settings>
+    EditorConfigFormatter editorConfigFormatter
+    ) : Command<FormatEditorconfigCommand.Settings>
 {
     public sealed class Settings : CommandSettings
     {
@@ -37,11 +36,9 @@ internal sealed class FormatEditorconfigCommand(
         settings.EditorConfigPath.ThrowIfNull();
         settings.MsLearnRepositoryPath.ThrowIfNull();
 
-        string editorConfigContent = File.ReadAllText(settings.EditorConfigPath);
         string[] editorConfigContentLines = File.ReadAllLines(settings.EditorConfigPath);
+        RoslynRules roslynRules = roslynRuleDocumentationParser.Parse(settings.MsLearnRepositoryPath);
 
-        MsLearnDocumentationRawInfo msLearnDocumentationRawInfo = repositoryPathReader.Provide(settings.MsLearnRepositoryPath);
-        RoslynRules roslynRules = msLearnDocumentationParser.Parse(msLearnDocumentationRawInfo);
         EditorConfigDocument editorConfigDocument = editorConfigDocumentParser.Parse(editorConfigContentLines);
         EditorConfigDocument formattedDocument = editorConfigFormatter.FormatAccordingToRuleDefinitions(editorConfigDocument, roslynRules, settings.GroupQualityRulesByCategory);
         File.WriteAllText(settings.EditorConfigPath, formattedDocument.ToFullString());

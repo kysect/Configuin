@@ -7,8 +7,9 @@ using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.Formatter;
 using Kysect.Configuin.EditorConfig.Template;
+using Kysect.Configuin.Learn;
+using Kysect.Configuin.Learn.Abstraction;
 using Kysect.Configuin.Markdown.TextExtractor;
-using Kysect.Configuin.MsLearn;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,13 +32,8 @@ public static class DependencyBuilder
         serviceCollection.AddSingleton(CreateLogger);
 
         serviceCollection.AddSingleton<IDotnetConfigSettingsParser, DotnetConfigSettingsParser>();
-        serviceCollection.AddSingleton<IMsLearnDocumentationInfoReader, MsLearnDocumentationInfoLocalReader>();
-
-        serviceCollection.AddSingleton<IMsLearnDocumentationParser>(sp =>
-        {
-            ILogger logger = sp.GetRequiredService<ILogger>();
-            return new MsLearnDocumentationParser(PlainTextExtractor.Create(), logger);
-        });
+        serviceCollection.AddSingleton<IRoslynRuleDocumentationParser, LearnDocumentationParser>();
+        serviceCollection.AddSingleton<IMarkdownTextExtractor>(PlainTextExtractor.Create());
         serviceCollection.AddSingleton<ICodeStyleGenerator, CodeStyleGenerator>();
         serviceCollection.AddSingleton<ICodeStyleWriter, MarkdownCodeStyleWriter>();
 

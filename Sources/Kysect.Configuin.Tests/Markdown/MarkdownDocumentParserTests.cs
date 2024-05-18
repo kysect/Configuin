@@ -3,7 +3,7 @@ using Kysect.Configuin.Markdown.TextExtractor;
 using Kysect.Configuin.Tests.Tools;
 using Markdig.Syntax;
 
-namespace Kysect.Configuin.Tests.MsLearnDocumentation;
+namespace Kysect.Configuin.Tests.Markdown;
 
 public class MarkdownDocumentParserTests
 {
