@@ -1,5 +1,4 @@
-﻿using Kysect.Configuin.EditorConfig;
-using Kysect.Configuin.EditorConfig.DocumentModel;
+﻿using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
 using Kysect.Configuin.EditorConfig.Formatter;
 using Kysect.Configuin.Learn;
@@ -16,7 +15,7 @@ public class EditorConfigFormatterTests
 
     public EditorConfigFormatterTests()
     {
-        _formatter = new EditorConfigFormatter(new DotnetConfigSettingsParser(TestLogger.ProviderForTests()));
+        _formatter = new EditorConfigFormatter();
         _parser = new EditorConfigDocumentParser();
         _learnDocumentationParser = new LearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
     }

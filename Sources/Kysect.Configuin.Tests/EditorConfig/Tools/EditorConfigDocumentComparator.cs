@@ -47,7 +47,7 @@ public class EditorConfigDocumentComparator
         CompareChildren(actual.Children, expected.Children);
     }
 
-    private void CompareProperty(EditorConfigPropertyNode actual, EditorConfigPropertyNode expected)
+    private void CompareProperty(IEditorConfigPropertyNode actual, IEditorConfigPropertyNode expected)
     {
         actual.ThrowIfNull();
         expected.ThrowIfNull();
@@ -75,9 +75,9 @@ public class EditorConfigDocumentComparator
             return;
         }
 
-        if (actual is EditorConfigPropertyNode propertyNode)
+        if (actual is IEditorConfigPropertyNode propertyNode)
         {
-            CompareProperty(propertyNode, (EditorConfigPropertyNode) expected);
+            CompareProperty(propertyNode, (IEditorConfigPropertyNode) expected);
             return;
         }
 

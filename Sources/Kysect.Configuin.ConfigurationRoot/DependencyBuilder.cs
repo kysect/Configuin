@@ -4,7 +4,6 @@ using Kysect.Configuin.DotnetFormatIntegration;
 using Kysect.Configuin.DotnetFormatIntegration.Abstractions;
 using Kysect.Configuin.DotnetFormatIntegration.Cli;
 using Kysect.Configuin.DotnetFormatIntegration.FileSystem;
-using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.Formatter;
 using Kysect.Configuin.EditorConfig.Template;
@@ -34,7 +33,6 @@ public static class DependencyBuilder
 
         serviceCollection.AddSingleton<IDotnetFormatPreviewGenerator, DotnetFormatPreviewGenerator>();
 
-        serviceCollection.AddSingleton<IDotnetConfigSettingsParser, DotnetConfigSettingsParser>();
         serviceCollection.AddSingleton<IRoslynRuleDocumentationParser, LearnDocumentationParser>();
         serviceCollection.AddSingleton<IMarkdownTextExtractor>(PlainTextExtractor.Create());
         serviceCollection.AddSingleton<ICodeStyleGenerator, CodeStyleGenerator>();

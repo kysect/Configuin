@@ -13,11 +13,11 @@ public class EditorConfigDocumentNodeRewriterTests
     public void Remove_Child_ReturnDocumentWithoutChild()
     {
         EditorConfigDocument input = new EditorConfigDocument()
-            .AddChild(new EditorConfigPropertyNode("first", "value"))
-            .AddChild(new EditorConfigPropertyNode("second", "value"));
+            .AddChild(new EditorConfigRuleOptionNode("first", "value"))
+            .AddChild(new EditorConfigRuleOptionNode("second", "value"));
 
         EditorConfigDocument expected = new EditorConfigDocument()
-            .AddChild(new EditorConfigPropertyNode("second", "value"));
+            .AddChild(new EditorConfigRuleOptionNode("second", "value"));
 
         var nodeForRemoving = input.Children.First();
         EditorConfigDocument actual = input.RemoveNodes([nodeForRemoving]);
@@ -29,12 +29,12 @@ public class EditorConfigDocumentNodeRewriterTests
     public void Remove_MultipleChild_ReturnDocumentWithoutChild()
     {
         EditorConfigDocument input = new EditorConfigDocument()
-            .AddChild(new EditorConfigPropertyNode("first", "value"))
-            .AddChild(new EditorConfigPropertyNode("second", "value"))
-            .AddChild(new EditorConfigPropertyNode("third", "value"));
+            .AddChild(new EditorConfigRuleOptionNode("first", "value"))
+            .AddChild(new EditorConfigRuleOptionNode("second", "value"))
+            .AddChild(new EditorConfigRuleOptionNode("third", "value"));
 
         EditorConfigDocument expected = new EditorConfigDocument()
-            .AddChild(new EditorConfigPropertyNode("third", "value"));
+            .AddChild(new EditorConfigRuleOptionNode("third", "value"));
 
         var nodesForRemoving = input.Children.Take(2).ToList();
         EditorConfigDocument actual = input.RemoveNodes(nodesForRemoving);
@@ -47,14 +47,14 @@ public class EditorConfigDocumentNodeRewriterTests
     {
         EditorConfigDocument input = new EditorConfigDocument()
             .AddChild(new EditorConfigDocumentSectionNode("### Section ###")
-                .AddChild(new EditorConfigPropertyNode("first", "value")));
+                .AddChild(new EditorConfigRuleOptionNode("first", "value")));
 
         EditorConfigDocument expected = new EditorConfigDocument()
             .AddChild(new EditorConfigDocumentSectionNode("### Section ###")
-                .AddChild(new EditorConfigPropertyNode("second", "value2")));
+                .AddChild(new EditorConfigRuleOptionNode("second", "value2")));
 
         var nodesForRemoving = input.Children.First().To<IEditorConfigContainerNode>().Children.First();
-        EditorConfigDocument actual = input.ReplaceNodes(nodesForRemoving, new EditorConfigPropertyNode("second", "value2"));
+        EditorConfigDocument actual = input.ReplaceNodes(nodesForRemoving, new EditorConfigRuleOptionNode("second", "value2"));
 
         _comparator.Compare(actual, expected);
     }
@@ -64,11 +64,11 @@ public class EditorConfigDocumentNodeRewriterTests
     {
         EditorConfigDocument input = new EditorConfigDocument()
             .AddChild(new EditorConfigDocumentSectionNode("### Section ###")
-                .AddChild(new EditorConfigPropertyNode("first", "value")));
+                .AddChild(new EditorConfigRuleOptionNode("first", "value")));
 
         EditorConfigDocument expected = new EditorConfigDocument()
             .AddChild(new EditorConfigDocumentSectionNode("### Other section ###")
-                .AddChild(new EditorConfigPropertyNode("first", "value")));
+                .AddChild(new EditorConfigRuleOptionNode("first", "value")));
 
         EditorConfigDocument actual = input.UpdateNodes(n =>
         {

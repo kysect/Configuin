@@ -1,5 +1,4 @@
 ﻿using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.EditorConfig.Analyzing;
 using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
@@ -13,7 +12,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kysect.Configuin.Console.Commands;
 
 internal sealed class AnalyzeEditorConfigCommand(
-    IDotnetConfigSettingsParser dotnetConfigSettingsParser,
     IRoslynRuleDocumentationParser roslynRuleDocumentationParser,
     EditorConfigDocumentParser editorConfigDocumentParser,
     ILogger logger
@@ -43,11 +41,10 @@ internal sealed class AnalyzeEditorConfigCommand(
 
         string editorConfigContent = File.ReadAllText(settings.EditorConfigPath);
         EditorConfigDocument editorConfigDocument = editorConfigDocumentParser.Parse(editorConfigContent);
-        DotnetConfigSettings dotnetConfigSettings = dotnetConfigSettingsParser.Parse(editorConfigDocument);
 
-        EditorConfigMissedConfiguration editorConfigMissedConfiguration = editorConfigAnalyzer.GetMissedConfigurations(dotnetConfigSettings, roslynRules);
-        IReadOnlyCollection<EditorConfigInvalidOptionValue> incorrectOptionValues = editorConfigAnalyzer.GetIncorrectOptionValues(dotnetConfigSettings, roslynRules);
-        IReadOnlyCollection<RoslynRuleId> incorrectOptionSeverity = editorConfigAnalyzer.GetIncorrectOptionSeverity(dotnetConfigSettings, roslynRules);
+        EditorConfigMissedConfiguration editorConfigMissedConfiguration = editorConfigAnalyzer.GetMissedConfigurations(editorConfigDocument, roslynRules);
+        IReadOnlyCollection<EditorConfigInvalidOptionValue> incorrectOptionValues = editorConfigAnalyzer.GetIncorrectOptionValues(editorConfigDocument, roslynRules);
+        IReadOnlyCollection<RoslynRuleId> incorrectOptionSeverity = editorConfigAnalyzer.GetIncorrectOptionSeverity(editorConfigDocument, roslynRules);
 
         reporter.ReportMissedConfigurations(editorConfigMissedConfiguration);
         reporter.ReportIncorrectOptionValues(incorrectOptionValues);

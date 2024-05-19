@@ -1,52 +1,53 @@
-﻿using Kysect.Configuin.EditorConfig.Settings;
+﻿using Kysect.Configuin.EditorConfig.DocumentModel;
+using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
 
 namespace Kysect.Configuin.EditorConfig.Diff;
 
 public class EditorConfigSettingsComparator
 {
-    public EditorConfigSettingsDiff Compare(DotnetConfigSettings left, DotnetConfigSettings right)
+    public EditorConfigSettingsDiff Compare(EditorConfigDocument left, EditorConfigDocument right)
     {
         ArgumentNullException.ThrowIfNull(left);
         ArgumentNullException.ThrowIfNull(right);
 
         IReadOnlyCollection<EditorConfigSettingsRuleSeverityDiff> severityDiffs = GetSeverityDiff(
-            left.Settings.OfType<RoslynSeverityEditorConfigSetting>().ToList(),
-            right.Settings.OfType<RoslynSeverityEditorConfigSetting>().ToList());
+            left.DescendantNodes().OfType<EditorConfigRuleSeverityNode>().ToList(),
+            right.DescendantNodes().OfType<EditorConfigRuleSeverityNode>().ToList());
 
         IReadOnlyCollection<EditorConfigSettingsRuleOptionDiff> optionDiffs = GetOptionDiff(
-            left.Settings.OfType<RoslynOptionEditorConfigSetting>().ToList(),
-            right.Settings.OfType<RoslynOptionEditorConfigSetting>().ToList());
+            left.DescendantNodes().OfType<EditorConfigRuleOptionNode>().ToList(),
+            right.DescendantNodes().OfType<EditorConfigRuleOptionNode>().ToList());
 
         return new EditorConfigSettingsDiff(severityDiffs, optionDiffs);
     }
 
     private IReadOnlyCollection<EditorConfigSettingsRuleSeverityDiff> GetSeverityDiff(
-        IReadOnlyCollection<RoslynSeverityEditorConfigSetting> leftRules,
-        IReadOnlyCollection<RoslynSeverityEditorConfigSetting> rightRules)
+        IReadOnlyCollection<EditorConfigRuleSeverityNode> leftRules,
+        IReadOnlyCollection<EditorConfigRuleSeverityNode> rightRules)
     {
         var diff = new List<EditorConfigSettingsRuleSeverityDiff>();
 
-        foreach (RoslynSeverityEditorConfigSetting leftRule in leftRules)
+        foreach (EditorConfigRuleSeverityNode leftRule in leftRules)
         {
             // TODO: enhance message in case when >1 rule
-            RoslynSeverityEditorConfigSetting? rightRule = rightRules.SingleOrDefault(r => r.RuleId.Equals(leftRule.RuleId));
+            EditorConfigRuleSeverityNode? rightRule = rightRules.SingleOrDefault(r => r.RuleId.Equals(leftRule.RuleId));
             if (rightRule == null)
             {
-                diff.Add(new EditorConfigSettingsRuleSeverityDiff(leftRule.RuleId, leftRule.Severity, null));
+                diff.Add(new EditorConfigSettingsRuleSeverityDiff(leftRule.RuleId, leftRule.ParseSeverity(), null));
             }
             else if (leftRule.Severity != rightRule.Severity)
             {
-                diff.Add(new EditorConfigSettingsRuleSeverityDiff(leftRule.RuleId, leftRule.Severity, rightRule.Severity));
+                diff.Add(new EditorConfigSettingsRuleSeverityDiff(leftRule.RuleId, leftRule.ParseSeverity(), rightRule.ParseSeverity()));
             }
         }
 
-        foreach (RoslynSeverityEditorConfigSetting rightRule in rightRules)
+        foreach (EditorConfigRuleSeverityNode rightRule in rightRules)
         {
             // TODO: enhance message in case when >1 rule
-            RoslynSeverityEditorConfigSetting? leftRule = leftRules.SingleOrDefault(r => r.RuleId.Equals(rightRule.RuleId));
+            EditorConfigRuleSeverityNode? leftRule = leftRules.SingleOrDefault(r => r.RuleId.Equals(rightRule.RuleId));
             if (leftRule is null)
             {
-                diff.Add(new EditorConfigSettingsRuleSeverityDiff(rightRule.RuleId, null, rightRule.Severity));
+                diff.Add(new EditorConfigSettingsRuleSeverityDiff(rightRule.RuleId, null, rightRule.ParseSeverity()));
             }
         }
 
@@ -55,15 +56,15 @@ public class EditorConfigSettingsComparator
 
     // TODO: reduce copy paste?
     private IReadOnlyCollection<EditorConfigSettingsRuleOptionDiff> GetOptionDiff(
-        IReadOnlyCollection<RoslynOptionEditorConfigSetting> leftRules,
-        IReadOnlyCollection<RoslynOptionEditorConfigSetting> rightRules)
+        IReadOnlyCollection<EditorConfigRuleOptionNode> leftRules,
+        IReadOnlyCollection<EditorConfigRuleOptionNode> rightRules)
     {
         var diff = new List<EditorConfigSettingsRuleOptionDiff>();
 
-        foreach (RoslynOptionEditorConfigSetting leftRule in leftRules)
+        foreach (EditorConfigRuleOptionNode leftRule in leftRules)
         {
             // TODO: enhance message in case when >1 rule
-            RoslynOptionEditorConfigSetting? rightRule = rightRules.SingleOrDefault(r => r.Key.Equals(leftRule.Key));
+            EditorConfigRuleOptionNode? rightRule = rightRules.SingleOrDefault(r => r.Key.Equals(leftRule.Key));
             if (rightRule == null)
             {
                 diff.Add(new EditorConfigSettingsRuleOptionDiff(leftRule.Key, leftRule.Value, null));
@@ -74,10 +75,10 @@ public class EditorConfigSettingsComparator
             }
         }
 
-        foreach (RoslynOptionEditorConfigSetting rightRule in rightRules)
+        foreach (EditorConfigRuleOptionNode rightRule in rightRules)
         {
             // TODO: enhance message in case when >1 rule
-            RoslynOptionEditorConfigSetting? leftRule = leftRules.SingleOrDefault(r => r.Key.Equals(rightRule.Key));
+            EditorConfigRuleOptionNode? leftRule = leftRules.SingleOrDefault(r => r.Key.Equals(rightRule.Key));
             if (leftRule is null)
             {
                 diff.Add(new EditorConfigSettingsRuleOptionDiff(rightRule.Key, null, rightRule.Value));

@@ -2,25 +2,17 @@
 using Kysect.CommonLib.Collections.Extensions;
 using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
-using Kysect.Configuin.EditorConfig.Settings;
 using Kysect.Configuin.RoslynModels;
 
 namespace Kysect.Configuin.EditorConfig.Formatter;
 
 public class EditorConfigFormatter
 {
-    private readonly IDotnetConfigSettingsParser _settingsParser;
-
-    public EditorConfigFormatter(IDotnetConfigSettingsParser settingsParser)
-    {
-        _settingsParser = settingsParser;
-    }
-
     public EditorConfigDocument Format(EditorConfigDocument value)
     {
-        List<EditorConfigPropertyNode> nodesForRemoving = new List<EditorConfigPropertyNode>();
-        IReadOnlyCollection<EditorConfigPropertyNode> styleRuleNodesForMoving = SelectIdeNodes(value, RoslynRuleTypes.StyleRule).OrderBy(r => r.Key.Value).ToList();
-        IReadOnlyCollection<EditorConfigPropertyNode> qualityRuleNodesForMoving = SelectIdeNodes(value, RoslynRuleTypes.QualityRule).OrderBy(r => r.Key.Value).ToList();
+        List<IEditorConfigPropertyNode> nodesForRemoving = new List<IEditorConfigPropertyNode>();
+        IReadOnlyCollection<IEditorConfigPropertyNode> styleRuleNodesForMoving = SelectIdeNodes(value, RoslynRuleTypes.StyleRule).OrderBy(r => r.Key).ToList();
+        IReadOnlyCollection<IEditorConfigPropertyNode> qualityRuleNodesForMoving = SelectIdeNodes(value, RoslynRuleTypes.QualityRule).OrderBy(r => r.Key).ToList();
         nodesForRemoving.AddRange(styleRuleNodesForMoving);
         nodesForRemoving.AddRange(qualityRuleNodesForMoving);
 
@@ -38,19 +30,19 @@ public class EditorConfigFormatter
     {
         rules.ThrowIfNull();
 
-        List<EditorConfigPropertyNode> nodesForRemoving = new List<EditorConfigPropertyNode>();
+        List<IEditorConfigPropertyNode> nodesForRemoving = new List<IEditorConfigPropertyNode>();
 
-        List<EditorConfigPropertyNode> propertyNodes = document
+        List<IEditorConfigPropertyNode> propertyNodes = document
             .DescendantNodes()
-            .OfType<EditorConfigPropertyNode>()
+            .OfType<IEditorConfigPropertyNode>()
             .ToList();
 
-        List<EditorConfigPropertyNode> selectedStyleRuleNodes = new List<EditorConfigPropertyNode>();
+        List<IEditorConfigPropertyNode> selectedStyleRuleNodes = new List<IEditorConfigPropertyNode>();
         foreach (RoslynStyleRuleGroup roslynStyleRuleGroup in rules.StyleRuleGroups)
         {
             foreach (RoslynStyleRule roslynStyleRule in roslynStyleRuleGroup.Rules)
             {
-                EditorConfigPropertyNode? editorConfigPropertyNode = TryFindSeverityNode(propertyNodes, roslynStyleRule.RuleId);
+                IEditorConfigPropertyNode? editorConfigPropertyNode = TryFindSeverityNode(propertyNodes, roslynStyleRule.RuleId);
                 if (editorConfigPropertyNode is null)
                     continue;
 
@@ -59,7 +51,7 @@ public class EditorConfigFormatter
 
             foreach (RoslynStyleRuleOption roslynStyleRuleOption in roslynStyleRuleGroup.Options)
             {
-                EditorConfigPropertyNode? editorConfigPropertyNode = TryFindOptionNode(propertyNodes, roslynStyleRuleOption);
+                IEditorConfigPropertyNode? editorConfigPropertyNode = TryFindOptionNode(propertyNodes, roslynStyleRuleOption);
                 if (editorConfigPropertyNode is null)
                     continue;
 
@@ -68,13 +60,12 @@ public class EditorConfigFormatter
 
             if (roslynStyleRuleGroup.Rules.Any(r => r.RuleId.Equals(RoslynNameRuleInfo.RuleId)))
             {
-                foreach (EditorConfigPropertyNode editorConfigPropertyNode in propertyNodes)
+                foreach (IEditorConfigPropertyNode editorConfigPropertyNode in propertyNodes)
                 {
-                    IEditorConfigSetting editorConfigSetting = _settingsParser.ParseSetting(editorConfigPropertyNode);
-                    if (editorConfigSetting is not CompositeRoslynOptionEditorConfigSetting option)
+                    if (editorConfigPropertyNode is not EditorConfigRuleCompositeOptionNode option)
                         continue;
 
-                    if (RoslynNameRuleInfo.IsNameRuleOption(option.ToDisplayString()))
+                    if (RoslynNameRuleInfo.IsNameRuleOption(option.ToFullString()))
                         selectedStyleRuleNodes.Add(editorConfigPropertyNode);
                 }
             }
@@ -85,10 +76,10 @@ public class EditorConfigFormatter
         {
             foreach (IGrouping<string, RoslynQualityRule> categoryRules in rules.QualityRules.GroupBy(r => r.Category).OrderBy(c => c.Key))
             {
-                List<EditorConfigPropertyNode> selectedQualityRuleNodes = new List<EditorConfigPropertyNode>();
+                List<IEditorConfigPropertyNode> selectedQualityRuleNodes = new List<IEditorConfigPropertyNode>();
                 foreach (RoslynQualityRule qualityRule in categoryRules.OrderBy(r => r.RuleId))
                 {
-                    EditorConfigPropertyNode? editorConfigPropertyNode = TryFindSeverityNode(propertyNodes, qualityRule.RuleId);
+                    IEditorConfigPropertyNode? editorConfigPropertyNode = TryFindSeverityNode(propertyNodes, qualityRule.RuleId);
                     if (editorConfigPropertyNode is null)
                         continue;
 
@@ -101,10 +92,10 @@ public class EditorConfigFormatter
         }
         else
         {
-            List<EditorConfigPropertyNode> selectedQualityRuleNodes = new List<EditorConfigPropertyNode>();
+            List<IEditorConfigPropertyNode> selectedQualityRuleNodes = new List<IEditorConfigPropertyNode>();
             foreach (RoslynQualityRule qualityRule in rules.QualityRules)
             {
-                EditorConfigPropertyNode? editorConfigPropertyNode = TryFindSeverityNode(propertyNodes, qualityRule.RuleId);
+                IEditorConfigPropertyNode? editorConfigPropertyNode = TryFindSeverityNode(propertyNodes, qualityRule.RuleId);
                 if (editorConfigPropertyNode is null)
                     continue;
 
@@ -123,10 +114,10 @@ public class EditorConfigFormatter
             .AddChild(autoGeneratedSection);
     }
 
-    public record RoslynQualityRuleFormattedSection(string Title, IReadOnlyCollection<EditorConfigPropertyNode> SelectedQualityRuleNodes);
+    public record RoslynQualityRuleFormattedSection(string Title, IReadOnlyCollection<IEditorConfigPropertyNode> SelectedQualityRuleNodes);
 
     private EditorConfigCategoryNode CreateAutoGeneratedCategory(
-        IReadOnlyCollection<EditorConfigPropertyNode> styleRuleNodesForMoving,
+        IReadOnlyCollection<IEditorConfigPropertyNode> styleRuleNodesForMoving,
         IReadOnlyCollection<RoslynQualityRuleFormattedSection> qualityRuleNodesForMoving)
     {
         var autoGeneratedSection = new EditorConfigCategoryNode("*.cs", [], ["# Autogenerated values"], null);
@@ -135,7 +126,7 @@ public class EditorConfigFormatter
         {
             var styleRuleSection = new EditorConfigDocumentSectionNode("### IDE ###");
 
-            foreach (EditorConfigPropertyNode styleRule in styleRuleNodesForMoving)
+            foreach (IEditorConfigPropertyNode styleRule in styleRuleNodesForMoving)
                 styleRuleSection = styleRuleSection.AddChild(styleRule);
 
             autoGeneratedSection = autoGeneratedSection.AddChild(styleRuleSection);
@@ -147,7 +138,7 @@ public class EditorConfigFormatter
                 continue;
 
             var qualitySection = new EditorConfigDocumentSectionNode($"### {roslynQualityRuleFormattedSection.Title} ###");
-            foreach (EditorConfigPropertyNode qualityRule in roslynQualityRuleFormattedSection.SelectedQualityRuleNodes)
+            foreach (IEditorConfigPropertyNode qualityRule in roslynQualityRuleFormattedSection.SelectedQualityRuleNodes)
                 qualitySection = qualitySection.AddChild(qualityRule);
             autoGeneratedSection = autoGeneratedSection.AddChild(qualitySection);
         }
@@ -155,18 +146,17 @@ public class EditorConfigFormatter
         return autoGeneratedSection;
     }
 
-    private IReadOnlyCollection<EditorConfigPropertyNode> SelectIdeNodes(EditorConfigDocument document, string ruleType)
+    private IReadOnlyCollection<IEditorConfigPropertyNode> SelectIdeNodes(EditorConfigDocument document, string ruleType)
     {
-        List<EditorConfigPropertyNode> propertyNodes = document
+        List<IEditorConfigPropertyNode> propertyNodes = document
             .DescendantNodes()
-            .OfType<EditorConfigPropertyNode>()
+            .OfType<IEditorConfigPropertyNode>()
             .ToList();
 
-        List<EditorConfigPropertyNode> styleRuleNodes = new List<EditorConfigPropertyNode>();
-        foreach (EditorConfigPropertyNode editorConfigPropertyNode in propertyNodes)
+        List<IEditorConfigPropertyNode> styleRuleNodes = new List<IEditorConfigPropertyNode>();
+        foreach (IEditorConfigPropertyNode editorConfigPropertyNode in propertyNodes)
         {
-            IEditorConfigSetting editorConfigSetting = _settingsParser.ParseSetting(editorConfigPropertyNode);
-            if (editorConfigSetting is not RoslynSeverityEditorConfigSetting severityConfigSetting)
+            if (editorConfigPropertyNode is not EditorConfigRuleSeverityNode severityConfigSetting)
                 continue;
 
             if (severityConfigSetting.RuleId.RuleType == ruleType)
@@ -176,12 +166,11 @@ public class EditorConfigFormatter
         return styleRuleNodes;
     }
 
-    private EditorConfigPropertyNode? TryFindSeverityNode(IReadOnlyCollection<EditorConfigPropertyNode> propertyNodes, RoslynRuleId id)
+    private IEditorConfigPropertyNode? TryFindSeverityNode(IReadOnlyCollection<IEditorConfigPropertyNode> propertyNodes, RoslynRuleId id)
     {
-        foreach (EditorConfigPropertyNode editorConfigPropertyNode in propertyNodes)
+        foreach (IEditorConfigPropertyNode editorConfigPropertyNode in propertyNodes)
         {
-            IEditorConfigSetting editorConfigSetting = _settingsParser.ParseSetting(editorConfigPropertyNode);
-            if (editorConfigSetting is not RoslynSeverityEditorConfigSetting severitySettings)
+            if (editorConfigPropertyNode is not EditorConfigRuleSeverityNode severitySettings)
                 continue;
 
             if (severitySettings.RuleId == id)
@@ -191,12 +180,11 @@ public class EditorConfigFormatter
         return null;
     }
 
-    private EditorConfigPropertyNode? TryFindOptionNode(IReadOnlyCollection<EditorConfigPropertyNode> propertyNodes, RoslynStyleRuleOption roslynStyleRuleOption)
+    private IEditorConfigPropertyNode? TryFindOptionNode(IReadOnlyCollection<IEditorConfigPropertyNode> propertyNodes, RoslynStyleRuleOption roslynStyleRuleOption)
     {
-        foreach (EditorConfigPropertyNode editorConfigPropertyNode in propertyNodes)
+        foreach (IEditorConfigPropertyNode editorConfigPropertyNode in propertyNodes)
         {
-            IEditorConfigSetting editorConfigSetting = _settingsParser.ParseSetting(editorConfigPropertyNode);
-            if (editorConfigSetting is not RoslynOptionEditorConfigSetting option)
+            if (editorConfigPropertyNode is not EditorConfigRuleOptionNode option)
                 continue;
 
             if (option.Key == roslynStyleRuleOption.Name)
