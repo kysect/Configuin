@@ -69,7 +69,7 @@ public class EditorConfigDocumentParserTests()
         const string content = """
                                key=value
                                """;
-        EditorConfigDocument expected = new EditorConfigDocument([new EditorConfigPropertyNode("key", "value")]);
+        EditorConfigDocument expected = new EditorConfigDocument([new EditorConfigRuleOptionNode("key", "value")]);
 
         ParseAndCompare(content, expected);
     }
@@ -80,7 +80,7 @@ public class EditorConfigDocumentParserTests()
         const string content = """
                                key=value # comment
                                """;
-        EditorConfigDocument expected = new EditorConfigDocument([new EditorConfigPropertyNode("key", "value") { TrailingTrivia = " comment" }]);
+        EditorConfigDocument expected = new EditorConfigDocument([new EditorConfigRuleOptionNode("key", "value") { TrailingTrivia = " comment" }]);
 
         ParseAndCompare(content, expected);
     }
@@ -97,9 +97,9 @@ public class EditorConfigDocumentParserTests()
 
         EditorConfigDocument expected = new EditorConfigDocument([
             new EditorConfigCategoryNode("*.cs")
-                .AddChild(new EditorConfigPropertyNode("tab_width", "4"))
-                .AddChild(new EditorConfigPropertyNode("indent_size", "4"))
-                .AddChild(new EditorConfigPropertyNode("end_of_line", "crlf"))]);
+                .AddChild(new EditorConfigGeneralOptionNode("tab_width", "4"))
+                .AddChild(new EditorConfigGeneralOptionNode("indent_size", "4"))
+                .AddChild(new EditorConfigGeneralOptionNode("end_of_line", "crlf"))]);
 
         ParseAndCompare(content, expected);
     }
@@ -118,9 +118,9 @@ public class EditorConfigDocumentParserTests()
         EditorConfigDocument expected = new EditorConfigDocument([
             new EditorConfigCategoryNode("*.cs")
                 .AddChild(new EditorConfigDocumentSectionNode("### Custom section ###")
-                    .AddChild(new EditorConfigPropertyNode("tab_width", "4"))
-                    .AddChild(new EditorConfigPropertyNode("indent_size", "4"))
-                    .AddChild(new EditorConfigPropertyNode("end_of_line", "crlf")))
+                    .AddChild(new EditorConfigGeneralOptionNode("tab_width", "4"))
+                    .AddChild(new EditorConfigGeneralOptionNode("indent_size", "4"))
+                    .AddChild(new EditorConfigGeneralOptionNode("end_of_line", "crlf")))
         ]);
 
         ParseAndCompare(content, expected);
@@ -138,7 +138,7 @@ public class EditorConfigDocumentParserTests()
 
         EditorConfigDocument expected = new EditorConfigDocument([
             new EditorConfigCategoryNode("*.cs")
-                .AddChild(new EditorConfigPropertyNode("tab_width", "4") { LeadingTrivia = [string.Empty, string.Empty] })
+                .AddChild(new EditorConfigGeneralOptionNode("tab_width", "4") { LeadingTrivia = [string.Empty, string.Empty] })
         ]);
 
         ParseAndCompare(content, expected);

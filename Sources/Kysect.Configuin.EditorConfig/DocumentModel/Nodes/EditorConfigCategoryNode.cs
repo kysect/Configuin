@@ -24,6 +24,16 @@ public record EditorConfigCategoryNode(string Value, ImmutableList<IEditorConfig
         return this with { Children = Children.Add(child) };
     }
 
+    public IEditorConfigNode WithLeadingTrivia(ImmutableList<string> leadingTrivia)
+    {
+        return this with { LeadingTrivia = leadingTrivia };
+    }
+
+    public IEditorConfigNode WithTrailingTrivia(string? trailingTrivia)
+    {
+        return this with { TrailingTrivia = trailingTrivia };
+    }
+
     public string ToFullString()
     {
         var stringBuilder = new StringBuilder();

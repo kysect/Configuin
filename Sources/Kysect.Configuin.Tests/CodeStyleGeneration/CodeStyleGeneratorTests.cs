@@ -1,7 +1,6 @@
 ﻿using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.CodeStyleDoc;
 using Kysect.Configuin.CodeStyleDoc.Models;
-using Kysect.Configuin.EditorConfig;
 using Kysect.Configuin.EditorConfig.DocumentModel;
 using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
 using Kysect.Configuin.Learn;
@@ -12,7 +11,6 @@ namespace Kysect.Configuin.Tests.CodeStyleGeneration;
 
 public class CodeStyleGeneratorTests
 {
-    private readonly DotnetConfigSettingsParser _dotnetConfigSettingsParser = new DotnetConfigSettingsParser(TestLogger.ProviderForTests());
     private readonly EditorConfigDocumentParser _documentParser;
     private readonly LearnDocumentationParser _learnDocumentationParser;
     private readonly CodeStyleGenerator _sut;
@@ -33,9 +31,7 @@ public class CodeStyleGeneratorTests
         RoslynRules roslynRules = _learnDocumentationParser.Parse(Constants.GetPathToMsDocsRoot());
         string fileText = File.ReadAllText(pathToIniFile);
         EditorConfigDocument editorConfigDocument = _documentParser.Parse(fileText);
-        DotnetConfigSettings dotnetConfigSettings = _dotnetConfigSettingsParser.Parse(editorConfigDocument);
-
-        CodeStyle codeStyle = _sut.Generate(dotnetConfigSettings, roslynRules);
+        CodeStyle codeStyle = _sut.Generate(editorConfigDocument, roslynRules);
 
         ICodeStyleElement codeStyleElement = codeStyle.Elements.ElementAt(2);
         codeStyleElement.Should().BeOfType<CodeStyleRoslynStyleRuleConfiguration>();

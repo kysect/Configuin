@@ -1,10 +1,34 @@
 ﻿using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
+using Kysect.Configuin.RoslynModels;
 
 namespace Kysect.Configuin.EditorConfig.DocumentModel;
 
+public record EqualSymbol(string LeadingTrivia, string TrailingTrivia)
+{
+    public static EqualSymbol Empty { get; } = new EqualSymbol(string.Empty, string.Empty);
+
+    public string ToFullString()
+    {
+        return $"{LeadingTrivia}={TrailingTrivia}";
+    }
+}
+
 public class EditorConfigDocumentParser
 {
+    private readonly HashSet<string> _generalRuleKeys;
+
+    public EditorConfigDocumentParser()
+    {
+        // TODO: Investigate other rules
+        _generalRuleKeys = new HashSet<string>
+        {
+            "tab_width",
+            "indent_size",
+            "end_of_line"
+        };
+    }
+
     public EditorConfigDocument Parse(string content)
     {
         content.ThrowIfNull();
@@ -66,11 +90,16 @@ public class EditorConfigDocumentParser
                 if (parts.Length != 2)
                     throw new ArgumentException($"Line {line} contains unexpected count of '='");
 
-                var propertyNode = new EditorConfigPropertyNode(EditorConfigStringNode.Create(parts[0]), EditorConfigStringNode.Create(parts[1]));
-                if (comment is not null)
-                    propertyNode = propertyNode with { TrailingTrivia = comment };
+                var keyNode = EditorConfigStringNode.Create(parts[0]);
+                var valueNode = EditorConfigStringNode.Create(parts[1]);
+                EqualSymbol equalSymbol = new EqualSymbol(keyNode.TrailingTrivia, valueNode.LeadingTrivia);
 
-                context.AddProperty(propertyNode);
+                IEditorConfigPropertyNode editorConfigSetting = ParseSetting(keyNode.Value, equalSymbol, valueNode.Value);
+
+                if (comment is not null)
+                    editorConfigSetting = editorConfigSetting.WithTrailingTrivia(comment);
+
+                context.AddProperty(editorConfigSetting);
                 continue;
             }
 
@@ -87,5 +116,35 @@ public class EditorConfigDocumentParser
 
         string[] parts = originalString.Split('#');
         return (parts[0], parts[1]);
+    }
+
+    private IEditorConfigPropertyNode ParseSetting(string key, EqualSymbol equalSymbol, string value)
+    {
+        if (_generalRuleKeys.Contains(key))
+            return new EditorConfigGeneralOptionNode(key, equalSymbol, value);
+
+        bool isSeveritySetting = key.StartsWith("dotnet_diagnostic.");
+        if (isSeveritySetting)
+        {
+            string[] keyParts = key.Split('.');
+
+            if (keyParts.Length != 3)
+                throw new ArgumentException($"Incorrect rule key: {key}");
+
+            if (!string.Equals(keyParts[2], "severity", StringComparison.InvariantCultureIgnoreCase))
+                throw new ArgumentException($"Expect postfix .severity for diagnostic rule but was {keyParts[2]}");
+
+            var ruleId = RoslynRuleId.Parse(keyParts[1]);
+            return new EditorConfigRuleSeverityNode(ruleId, equalSymbol, value);
+        }
+
+        bool isCompositeKeyRule = key.Contains('.');
+        if (isCompositeKeyRule)
+        {
+            string[] keyParts = key.Split('.');
+            return new EditorConfigRuleCompositeOptionNode(keyParts, equalSymbol, value);
+        }
+
+        return new EditorConfigRuleOptionNode(key, equalSymbol, value);
     }
 }

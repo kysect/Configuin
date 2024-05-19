@@ -37,11 +37,11 @@ public class EditorConfigDocumentParsingContext
         _currentTrivia = new List<string>();
     }
 
-    public void AddProperty(EditorConfigPropertyNode propertyNode)
+    public void AddProperty(IEditorConfigPropertyNode propertyNode)
     {
         propertyNode.ThrowIfNull();
 
-        propertyNode = propertyNode with { LeadingTrivia = _currentTrivia.ToImmutableList() };
+        propertyNode = propertyNode.WithLeadingTrivia(_currentTrivia.ToImmutableList());
         _currentTrivia = new List<string>();
 
         if (_currentSection is not null)

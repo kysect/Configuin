@@ -1,26 +1,27 @@
 ﻿using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.CommonLib.Collections.Extensions;
-using Kysect.Configuin.EditorConfig.Settings;
+using Kysect.Configuin.EditorConfig.DocumentModel;
+using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
 using Kysect.Configuin.RoslynModels;
 
 namespace Kysect.Configuin.EditorConfig.Analyzing;
 
 public class EditorConfigAnalyzer
 {
-    public EditorConfigMissedConfiguration GetMissedConfigurations(DotnetConfigSettings dotnetConfigSettings, RoslynRules roslynRules)
+    public EditorConfigMissedConfiguration GetMissedConfigurations(EditorConfigDocument editorConfigDocument, RoslynRules roslynRules)
     {
-        dotnetConfigSettings.ThrowIfNull();
+        editorConfigDocument.ThrowIfNull();
         roslynRules.ThrowIfNull();
 
-        var selectedSeverity = dotnetConfigSettings
-            .Settings
-            .OfType<RoslynSeverityEditorConfigSetting>()
+        var selectedSeverity = editorConfigDocument
+            .DescendantNodes()
+            .OfType<EditorConfigRuleSeverityNode>()
             .Select(c => c.RuleId)
             .ToHashSet();
 
-        var selectedOptions = dotnetConfigSettings
-            .Settings
-            .OfType<RoslynOptionEditorConfigSetting>()
+        var selectedOptions = editorConfigDocument
+            .DescendantNodes()
+            .OfType<EditorConfigRuleOptionNode>()
             .Select(c => c.Key)
             .ToHashSet();
 
@@ -47,17 +48,19 @@ public class EditorConfigAnalyzer
         return new EditorConfigMissedConfiguration(missedStyleRules, missedQualityRules, missedOptions);
     }
 
-    public IReadOnlyCollection<EditorConfigInvalidOptionValue> GetIncorrectOptionValues(DotnetConfigSettings dotnetConfigSettings, RoslynRules roslynRules)
+    public IReadOnlyCollection<EditorConfigInvalidOptionValue> GetIncorrectOptionValues(EditorConfigDocument editorConfigDocument, RoslynRules roslynRules)
     {
-        ArgumentNullException.ThrowIfNull(dotnetConfigSettings);
-        ArgumentNullException.ThrowIfNull(roslynRules);
+        editorConfigDocument.ThrowIfNull();
+        roslynRules.ThrowIfNull();
 
         var result = new List<EditorConfigInvalidOptionValue>();
 
         var optionAvailableValues = roslynRules.GetOptions().ToDictionary(o => o.Name, o => o.Values);
 
-        foreach ((string key, string value) in dotnetConfigSettings.Settings.OfType<RoslynOptionEditorConfigSetting>())
+        foreach (var node in editorConfigDocument.DescendantNodes().OfType<EditorConfigRuleOptionNode>())
         {
+            string key = node.Key;
+            string value = node.Value;
             if (!optionAvailableValues.TryGetValue(key, out IReadOnlyCollection<RoslynStyleRuleOptionValue>? values))
                 values = Array.Empty<RoslynStyleRuleOptionValue>();
 
@@ -68,20 +71,20 @@ public class EditorConfigAnalyzer
         return result;
     }
 
-    public IReadOnlyCollection<RoslynRuleId> GetIncorrectOptionSeverity(DotnetConfigSettings dotnetConfigSettings, RoslynRules roslynRules)
+    public IReadOnlyCollection<RoslynRuleId> GetIncorrectOptionSeverity(EditorConfigDocument editorConfigDocument, RoslynRules roslynRules)
     {
-        ArgumentNullException.ThrowIfNull(dotnetConfigSettings);
-        ArgumentNullException.ThrowIfNull(roslynRules);
+        editorConfigDocument.ThrowIfNull();
+        roslynRules.ThrowIfNull();
 
         var ruleIds = new HashSet<RoslynRuleId>();
         ruleIds.AddEach(roslynRules.GetStyleRules().Select(r => r.RuleId));
         ruleIds.AddEach(roslynRules.QualityRules.Select(r => r.RuleId));
 
         var result = new List<RoslynRuleId>();
-        foreach ((RoslynRuleId roslynRuleId, RoslynRuleSeverity _) in dotnetConfigSettings.Settings.OfType<RoslynSeverityEditorConfigSetting>())
+        foreach (EditorConfigRuleSeverityNode value in editorConfigDocument.DescendantNodes().OfType<EditorConfigRuleSeverityNode>())
         {
-            if (!ruleIds.Contains(roslynRuleId))
-                result.Add(roslynRuleId);
+            if (!ruleIds.Contains(value.RuleId))
+                result.Add(value.RuleId);
         }
 
         return result;
