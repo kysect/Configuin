@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kysect.Configuin.ConfigurationRoot\Kysect.Configuin.ConfigurationRoot.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.Console\Kysect.Configuin.Console.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,12 +1,13 @@
 ﻿using Kysect.CommonLib.Collections.Diff;
 using Kysect.CommonLib.Logging;
+using Kysect.Configuin.DotnetFormatIntegration.Abstractions;
 using Kysect.Configuin.DotnetFormatIntegration.Cli;
 using Kysect.Configuin.DotnetFormatIntegration.FileSystem;
 using Microsoft.Extensions.Logging;
 
 namespace Kysect.Configuin.DotnetFormatIntegration;
 
-public class DotnetFormatPreviewGenerator
+public class DotnetFormatPreviewGenerator : IDotnetFormatPreviewGenerator
 {
     private readonly DotnetFormatWarningGenerator _dotnetFormatWarningGenerator;
     private readonly TemporaryFileMover _temporaryFileMover;

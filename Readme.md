@@ -16,7 +16,7 @@ Configuin is a tool for working with .NET .editorconfig.
 Configuin parses all rules described in the documentation and generates a .editorconfig where they are all described to simplify the process of filling out the .editorconfig. For example, the command
 
 ```
-Kysect.Configuin.Console.exe template ".editorconfig" -d "C:\Coding\dotnet-docs"
+Kysect.Configuin template ".editorconfig"
 ```
 
 will generate a file with the following content:
@@ -45,7 +45,7 @@ The full file can be viewed [here](Docs/.editorconfig).
 Configuin parses the Roslyn description, which is available on the MS Learn website, parses the .editorconfig file provided by the user, and generates a document with a detailed description of the lines. Example of use:
 
 ```bash
-Kysect.Configuin.Console.exe generate-styledoc "C:\Project\.editorconfig" -o "output.md" -d "C:\Coding\dotnet-docs"
+Kysect.Configuin generate-styledoc "C:\Project\.editorconfig" -o "output.md"
 ```
 
 For example, the .editorconfig file may contain:
@@ -85,7 +85,7 @@ class MyClass
 ### Preview changes after applying `dotnet format` with new .editorconfig
 
 ```bash
-Kysect.Configuin.Console.exe preview -s "C:\Project\" -t "C:\Project\.editorconfig" -e "C:\.editorconfig"
+Kysect.Configuin preview -s "C:\Project\" -t "C:\Project\.editorconfig" -e "C:\.editorconfig"
 ```
 
 Configuin generates a list of changes that will be received if the .editorconfig is applied to the project.
@@ -118,7 +118,7 @@ Generated result:
 ### Format .NET .editorconfig file
 
 ```bash
-Kysect.Configuin.Console.exe format ".editorconfig" -d "C:\Coding\dotnet-docs"
+Kysect.Configuin format ".editorconfig"
 ```
 
 Configuin formats the .editorconfig file according to the rules described in the documentation. Generated result will be same as [template](Docs/.editorconfig):

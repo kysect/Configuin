@@ -1,6 +1,7 @@
 ﻿using Kysect.Configuin.CodeStyleDoc;
 using Kysect.Configuin.CodeStyleDoc.Markdown;
 using Kysect.Configuin.DotnetFormatIntegration;
+using Kysect.Configuin.DotnetFormatIntegration.Abstractions;
 using Kysect.Configuin.DotnetFormatIntegration.Cli;
 using Kysect.Configuin.DotnetFormatIntegration.FileSystem;
 using Kysect.Configuin.EditorConfig;
@@ -30,6 +31,8 @@ public static class DependencyBuilder
         IServiceCollection serviceCollection = builder.Services;
 
         serviceCollection.AddSingleton(CreateLogger);
+
+        serviceCollection.AddSingleton<IDotnetFormatPreviewGenerator, DotnetFormatPreviewGenerator>();
 
         serviceCollection.AddSingleton<IDotnetConfigSettingsParser, DotnetConfigSettingsParser>();
         serviceCollection.AddSingleton<IRoslynRuleDocumentationParser, LearnDocumentationParser>();
