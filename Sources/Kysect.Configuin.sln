@@ -26,9 +26,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.Learn.Abstraction", "Kysect.Configuin.Learn.Abstraction\Kysect.Configuin.Learn.Abstraction.csproj", "{C16DFC44-C11B-4B7D-A1EF-242FAAC55DD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin.Learn.Abstraction", "Kysect.Configuin.Learn.Abstraction\Kysect.Configuin.Learn.Abstraction.csproj", "{C16DFC44-C11B-4B7D-A1EF-242FAAC55DD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.Learn", "Kysect.Configuin.Learn\Kysect.Configuin.Learn.csproj", "{4428CEC8-DB24-42BC-9689-BA8DF769F603}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin.Learn", "Kysect.Configuin.Learn\Kysect.Configuin.Learn.csproj", "{4428CEC8-DB24-42BC-9689-BA8DF769F603}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kysect.Configuin", "Kysect.Configuin\Kysect.Configuin.csproj", "{DC52757E-B97D-433D-BCC7-EB27364D8FC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kysect.Configuin.DotnetFormatIntegration.Abstractions", "Kysect.Configuin.DotnetFormatIntegration.Abstractions\Kysect.Configuin.DotnetFormatIntegration.Abstractions.csproj", "{38439A63-7A20-40E1-AC7F-0143050CE124}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +40,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38439A63-7A20-40E1-AC7F-0143050CE124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38439A63-7A20-40E1-AC7F-0143050CE124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38439A63-7A20-40E1-AC7F-0143050CE124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38439A63-7A20-40E1-AC7F-0143050CE124}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4428CEC8-DB24-42BC-9689-BA8DF769F603}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4428CEC8-DB24-42BC-9689-BA8DF769F603}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4428CEC8-DB24-42BC-9689-BA8DF769F603}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -80,18 +88,10 @@ Global
 		{372CD01F-754F-4D95-8F59-F08F9BC645A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{372CD01F-754F-4D95-8F59-F08F9BC645A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{372CD01F-754F-4D95-8F59-F08F9BC645A6}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {01578FC6-10E0-4D67-A696-986C508E2723}
-	EndGlobalSection
-EndGlobal
-fg = Debug|Any CPU
-		{372CD01F-754F-4D95-8F59-F08F9BC645A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{372CD01F-754F-4D95-8F59-F08F9BC645A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{372CD01F-754F-4D95-8F59-F08F9BC645A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC52757E-B97D-433D-BCC7-EB27364D8FC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC52757E-B97D-433D-BCC7-EB27364D8FC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC52757E-B97D-433D-BCC7-EB27364D8FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC52757E-B97D-433D-BCC7-EB27364D8FC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

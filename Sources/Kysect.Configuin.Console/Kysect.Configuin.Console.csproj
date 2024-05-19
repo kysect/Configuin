@@ -1,10 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <NoWarn>$(NoWarn);CS1591;CA1724</NoWarn>
+    <NoWarn>$(NoWarn);CA1724</NoWarn>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="codeessentials.Extensions.Logging.Demystifier" />
     <PackageReference Include="Kysect.CommonLib" />
@@ -20,14 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kysect.Configuin.CodeStyleDoc\Kysect.Configuin.CodeStyleDoc.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.Common\Kysect.Configuin.Common.csproj" />
-    <ProjectReference Include="..\Kysect.Configuin.ConfigurationRoot\Kysect.Configuin.ConfigurationRoot.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.DotnetFormatIntegration.Abstractions\Kysect.Configuin.DotnetFormatIntegration.Abstractions.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.EditorConfig\Kysect.Configuin.EditorConfig.csproj" />
+    <ProjectReference Include="..\Kysect.Configuin.Learn.Abstraction\Kysect.Configuin.Learn.Abstraction.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

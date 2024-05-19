@@ -1,11 +1,12 @@
 ﻿using Kysect.CommonLib.BaseTypes.Extensions;
-using Kysect.Configuin.DotnetFormatIntegration;
+using Kysect.Configuin.DotnetFormatIntegration.Abstractions;
 using Spectre.Console.Cli;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Kysect.Configuin.Console.Commands;
 
-internal sealed class EditorConfigApplyPreviewCommand : Command<EditorConfigApplyPreviewCommand.Settings>
+internal sealed class EditorConfigApplyPreviewCommand(
+    IDotnetFormatPreviewGenerator dotnetFormatPreviewGenerator
+    ) : Command<EditorConfigApplyPreviewCommand.Settings>
 {
     public sealed class Settings : CommandSettings
     {
@@ -18,21 +19,14 @@ internal sealed class EditorConfigApplyPreviewCommand : Command<EditorConfigAppl
         public string NewEditorConfig { get; init; } = null!;
     }
 
-    private readonly DotnetFormatPreviewGenerator _dotnetFormatPreviewGenerator;
-
-    public EditorConfigApplyPreviewCommand(DotnetFormatPreviewGenerator dotnetFormatPreviewGenerator)
-    {
-        _dotnetFormatPreviewGenerator = dotnetFormatPreviewGenerator;
-    }
-
-    public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings)
+    public override int Execute(CommandContext context, Settings settings)
     {
         settings.SolutionPath.ThrowIfNull();
         settings.SourceEditorConfig.ThrowIfNull();
         settings.NewEditorConfig.ThrowIfNull();
 
 
-        _dotnetFormatPreviewGenerator.GetEditorConfigWarningUpdates(
+        dotnetFormatPreviewGenerator.GetEditorConfigWarningUpdates(
             settings.SolutionPath,
             settings.NewEditorConfig,
             settings.SourceEditorConfig);

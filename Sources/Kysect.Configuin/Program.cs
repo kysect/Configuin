@@ -1,33 +1,19 @@
 ﻿using Kysect.Configuin.ConfigurationRoot;
-using Kysect.Configuin.Console.Commands;
+using Kysect.Configuin.Console;
 using Microsoft.Extensions.DependencyInjection;
-using Spectre.Console.Cli;
 
-namespace Kysect.Configuin.Console;
+namespace Kysect.Configuin;
 
 internal class Program
 {
-    public static void Main(string[] args)
+    private static void Main(string[] args)
     {
-
         IServiceCollection registrations = DependencyBuilder.InitializeServiceProvider();
 
         if (args.Length == 0)
             args = PrepareTestCommand();
 
-        var registrar = new TypeRegistrar(registrations);
-        var app = new CommandApp(registrar);
-
-        app.Configure(config =>
-        {
-            config.AddCommand<GenerateCodeStyleDocCommand>("generate-styledoc");
-            config.AddCommand<EditorConfigApplyPreviewCommand>("preview");
-            config.AddCommand<AnalyzeEditorConfigCommand>("analyze");
-            config.AddCommand<GenerateEditorConfigTemplateTemplate>("template");
-            config.AddCommand<FormatEditorconfigCommand>("format");
-            config.AddCommand<GenerateRoslynRuleDocumentationFile>("generate-roslyn-documentation");
-        });
-
+        var app = CommandAppInitializer.Initialize(registrations);
         app.Run(args);
     }
 
