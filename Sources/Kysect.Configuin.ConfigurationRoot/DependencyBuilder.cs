@@ -1,12 +1,12 @@
 ﻿using Kysect.Configuin.CodeStyleDoc;
 using Kysect.Configuin.CodeStyleDoc.Markdown;
+using Kysect.Configuin.DotnetConfig.Formatter;
+using Kysect.Configuin.DotnetConfig.Syntax;
+using Kysect.Configuin.DotnetConfig.Template;
 using Kysect.Configuin.DotnetFormatIntegration;
 using Kysect.Configuin.DotnetFormatIntegration.Abstractions;
 using Kysect.Configuin.DotnetFormatIntegration.Cli;
 using Kysect.Configuin.DotnetFormatIntegration.FileSystem;
-using Kysect.Configuin.EditorConfig.DocumentModel;
-using Kysect.Configuin.EditorConfig.Formatter;
-using Kysect.Configuin.EditorConfig.Template;
 using Kysect.Configuin.Learn;
 using Kysect.Configuin.Learn.Abstraction;
 using Kysect.Configuin.Markdown.TextExtractor;
@@ -42,9 +42,9 @@ public static class DependencyBuilder
         serviceCollection.AddSingleton<TemporaryFileMover>();
         serviceCollection.AddSingleton<DotnetFormatReportComparator>();
         serviceCollection.AddSingleton<DotnetFormatPreviewGenerator>();
-        serviceCollection.AddSingleton<EditorConfigTemplateGenerator>();
-        serviceCollection.AddSingleton<EditorConfigDocumentParser>();
-        serviceCollection.AddSingleton<EditorConfigFormatter>();
+        serviceCollection.AddSingleton<DotnetConfigDocumentTemplateGenerator>();
+        serviceCollection.AddSingleton<DotnetConfigDocumentParser>();
+        serviceCollection.AddSingleton<DotnetConfigDocumentFormatter>();
 
         return serviceCollection;
     }

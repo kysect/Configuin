@@ -26,11 +26,11 @@ public class DotnetFormatPreviewGenerator : IDotnetFormatPreviewGenerator
         _logger = logger;
     }
 
-    public void GetEditorConfigWarningUpdates(string solutionPath, string newEditorConfig, string sourceEditorConfig)
+    public void GetWarningsAfterChangingDotnetConfig(string solutionPath, string newDotnetConfig, string sourceDotnetConfig)
     {
         IReadOnlyCollection<DotnetFormatFileReport> originalWarnings = _dotnetFormatWarningGenerator.GenerateWarnings(solutionPath);
 
-        IFileMoveUndoOperation undoOperation = _temporaryFileMover.MoveFile(newEditorConfig, sourceEditorConfig);
+        IFileMoveUndoOperation undoOperation = _temporaryFileMover.MoveFile(newDotnetConfig, sourceDotnetConfig);
         IReadOnlyCollection<DotnetFormatFileReport> newWarnings = _dotnetFormatWarningGenerator.GenerateWarnings(solutionPath);
         undoOperation.Undo();
 

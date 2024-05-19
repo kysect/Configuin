@@ -20,7 +20,6 @@
     <ProjectReference Include="..\Kysect.Configuin.CodeStyleDoc\Kysect.Configuin.CodeStyleDoc.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.Common\Kysect.Configuin.Common.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.DotnetFormatIntegration.Abstractions\Kysect.Configuin.DotnetFormatIntegration.Abstractions.csproj" />
-    <ProjectReference Include="..\Kysect.Configuin.EditorConfig\Kysect.Configuin.EditorConfig.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.Learn.Abstraction\Kysect.Configuin.Learn.Abstraction.csproj" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,5 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\Kysect.Configuin.DotnetConfig\Kysect.Configuin.DotnetConfig.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.RoslynModels\Kysect.Configuin.RoslynModels.csproj" />
   </ItemGroup>
 </Project>

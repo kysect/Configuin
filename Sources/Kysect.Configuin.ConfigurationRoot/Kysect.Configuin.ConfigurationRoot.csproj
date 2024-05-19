@@ -16,7 +16,6 @@
     <ProjectReference Include="..\Kysect.Configuin.CodeStyleDoc\Kysect.Configuin.CodeStyleDoc.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.Common\Kysect.Configuin.Common.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.DotnetFormatIntegration\Kysect.Configuin.DotnetFormatIntegration.csproj" />
-    <ProjectReference Include="..\Kysect.Configuin.EditorConfig\Kysect.Configuin.EditorConfig.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.Learn\Kysect.Configuin.Learn.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.Markdown\Kysect.Configuin.Markdown.csproj" />
     <ProjectReference Include="..\Kysect.Configuin.RoslynModels\Kysect.Configuin.RoslynModels.csproj" />

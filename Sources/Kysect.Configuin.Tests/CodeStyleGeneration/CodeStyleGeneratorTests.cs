@@ -1,8 +1,8 @@
 ﻿using Kysect.CommonLib.BaseTypes.Extensions;
 using Kysect.Configuin.CodeStyleDoc;
 using Kysect.Configuin.CodeStyleDoc.Models;
-using Kysect.Configuin.EditorConfig.DocumentModel;
-using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
+using Kysect.Configuin.DotnetConfig.Syntax;
+using Kysect.Configuin.DotnetConfig.Syntax.Nodes;
 using Kysect.Configuin.Learn;
 using Kysect.Configuin.RoslynModels;
 using Kysect.Configuin.Tests.Tools;
@@ -11,14 +11,14 @@ namespace Kysect.Configuin.Tests.CodeStyleGeneration;
 
 public class CodeStyleGeneratorTests
 {
-    private readonly EditorConfigDocumentParser _documentParser;
+    private readonly DotnetConfigDocumentParser _documentParser;
     private readonly LearnDocumentationParser _learnDocumentationParser;
     private readonly CodeStyleGenerator _sut;
 
     public CodeStyleGeneratorTests()
     {
         _sut = new CodeStyleGenerator(TestLogger.ProviderForTests());
-        _documentParser = new EditorConfigDocumentParser();
+        _documentParser = new DotnetConfigDocumentParser();
 
         _learnDocumentationParser = new LearnDocumentationParser(TestImplementations.GetTextExtractor(), TestLogger.ProviderForTests());
     }
@@ -30,8 +30,8 @@ public class CodeStyleGeneratorTests
 
         RoslynRules roslynRules = _learnDocumentationParser.Parse(Constants.GetPathToMsDocsRoot());
         string fileText = File.ReadAllText(pathToIniFile);
-        EditorConfigDocument editorConfigDocument = _documentParser.Parse(fileText);
-        CodeStyle codeStyle = _sut.Generate(editorConfigDocument, roslynRules);
+        DotnetConfigDocument dotnetConfigDocument = _documentParser.Parse(fileText);
+        CodeStyle codeStyle = _sut.Generate(dotnetConfigDocument, roslynRules);
 
         ICodeStyleElement codeStyleElement = codeStyle.Elements.ElementAt(2);
         codeStyleElement.Should().BeOfType<CodeStyleRoslynStyleRuleConfiguration>();
