@@ -2,8 +2,8 @@
 using Kysect.CommonLib.Collections.Extensions;
 using Kysect.Configuin.CodeStyleDoc.Models;
 using Kysect.Configuin.Common;
-using Kysect.Configuin.EditorConfig.DocumentModel;
-using Kysect.Configuin.EditorConfig.DocumentModel.Nodes;
+using Kysect.Configuin.DotnetConfig.Syntax;
+using Kysect.Configuin.DotnetConfig.Syntax.Nodes;
 using Kysect.Configuin.RoslynModels;
 using Microsoft.Extensions.Logging;
 using System.Collections.Immutable;
@@ -19,34 +19,34 @@ public class CodeStyleGenerator : ICodeStyleGenerator
         _logger = logger;
     }
 
-    public CodeStyle Generate(EditorConfigDocument editorConfigDocument, RoslynRules roslynRules)
+    public CodeStyle Generate(DotnetConfigDocument dotnetConfigDocument, RoslynRules roslynRules)
     {
-        editorConfigDocument.ThrowIfNull();
+        dotnetConfigDocument.ThrowIfNull();
         roslynRules.ThrowIfNull();
 
         _logger.LogInformation("Start code style generating.");
 
         IReadOnlyCollection<RoslynStyleRuleOption> roslynRuleOptions = roslynRules.GetOptions();
-        IReadOnlyCollection<IEditorConfigNode> notProcessedSettings = editorConfigDocument.DescendantNodes();
+        IReadOnlyCollection<IDotnetConfigSyntaxNode> notProcessedSettings = dotnetConfigDocument.DescendantNodes();
 
         _logger.LogInformation("Try parse {count} settings", notProcessedSettings.Count);
         notProcessedSettings = notProcessedSettings.Where(IsSupported).ToImmutableList();
 
         IReadOnlyCollection<CodeStyleRoslynOptionConfiguration> optionConfigurations = notProcessedSettings
-            .OfType<EditorConfigRuleOptionNode>()
+            .OfType<DotnetConfigRuleOptionNode>()
             .Select(o => ParseOptionSettings(o, roslynRuleOptions))
             .ToList();
         _logger.LogInformation("Parsed {count} option configurations", optionConfigurations.Count);
 
-        notProcessedSettings = notProcessedSettings.Where(r => r is not EditorConfigRuleOptionNode).ToImmutableList();
+        notProcessedSettings = notProcessedSettings.Where(r => r is not DotnetConfigRuleOptionNode).ToImmutableList();
 
         IReadOnlyCollection<ICodeStyleElement> ruleConfiguration = notProcessedSettings
-            .OfType<EditorConfigRuleSeverityNode>()
+            .OfType<DotnetConfigRuleSeverityNode>()
             .Select(severitySetting => ParseRuleSettings(severitySetting, optionConfigurations, roslynRules))
             .ToList();
         _logger.LogInformation("Parsed {count} rule severity", ruleConfiguration.Count);
 
-        notProcessedSettings = notProcessedSettings.Where(r => r is not EditorConfigRuleSeverityNode).ToImmutableList();
+        notProcessedSettings = notProcessedSettings.Where(r => r is not DotnetConfigRuleSeverityNode).ToImmutableList();
 
         if (notProcessedSettings.Any())
         {
@@ -61,15 +61,15 @@ public class CodeStyleGenerator : ICodeStyleGenerator
         return new CodeStyle(ruleConfiguration);
     }
 
-    private bool IsSupported(IEditorConfigNode setting)
+    private bool IsSupported(IDotnetConfigSyntaxNode setting)
     {
-        if (setting is not IEditorConfigPropertyNode)
+        if (setting is not IDotnetConfigPropertySyntaxNode)
         {
             return false;
         }
 
         // TODO: #35 support parsing for this rule 
-        if (setting is EditorConfigRuleSeverityNode severityEditorConfigRule
+        if (setting is DotnetConfigRuleSeverityNode severityEditorConfigRule
             && severityEditorConfigRule.RuleId.Equals(RoslynRuleId.Parse("IDE1006")))
         {
             _logger.LogWarning("Rule IDE1006 is not supported and will be skipped.");
@@ -77,14 +77,14 @@ public class CodeStyleGenerator : ICodeStyleGenerator
         }
 
         // TODO: #35 Probably, most of this rules related to IDE1006
-        if (setting is EditorConfigRuleCompositeOptionNode compositeSetting)
+        if (setting is DotnetConfigRuleCompositeOptionNode compositeSetting)
         {
             _logger.LogWarning("{setting} is not supported and will be skipped.", compositeSetting.ToFullString());
             return false;
         }
 
         // TODO: Maybe we need to support it in some way
-        if (setting is EditorConfigGeneralOptionNode generalSetting)
+        if (setting is DotnetConfigGeneralOptionNode generalSetting)
         {
             _logger.LogWarning("{option} is not supported and will be skipped.", generalSetting.ToFullString());
             return false;
@@ -93,42 +93,42 @@ public class CodeStyleGenerator : ICodeStyleGenerator
         return true;
     }
 
-    private CodeStyleRoslynOptionConfiguration ParseOptionSettings(EditorConfigRuleOptionNode optionEditorConfigSetting, IReadOnlyCollection<RoslynStyleRuleOption> styleRuleOptions)
+    private CodeStyleRoslynOptionConfiguration ParseOptionSettings(DotnetConfigRuleOptionNode optionDotnetConfigSetting, IReadOnlyCollection<RoslynStyleRuleOption> styleRuleOptions)
     {
-        RoslynStyleRuleOption? roslynStyleRuleOption = styleRuleOptions.SingleOrDefault(o => o.Name == optionEditorConfigSetting.Key);
+        RoslynStyleRuleOption? roslynStyleRuleOption = styleRuleOptions.SingleOrDefault(o => o.Name == optionDotnetConfigSetting.Key);
 
         if (roslynStyleRuleOption is null)
-            throw new ConfiguinException($"Option {optionEditorConfigSetting.Key} was not found in documentation");
+            throw new ConfiguinException($"Option {optionDotnetConfigSetting.Key} was not found in documentation");
 
-        return new CodeStyleRoslynOptionConfiguration(roslynStyleRuleOption, optionEditorConfigSetting.Value);
+        return new CodeStyleRoslynOptionConfiguration(roslynStyleRuleOption, optionDotnetConfigSetting.Value);
     }
 
     private ICodeStyleElement ParseRuleSettings(
-        EditorConfigRuleSeverityNode severityEditorConfigSetting,
+        DotnetConfigRuleSeverityNode severityDotnetConfigSetting,
         IReadOnlyCollection<CodeStyleRoslynOptionConfiguration> optionConfigurations,
         RoslynRules roslynRules)
     {
-        RoslynStyleRuleGroup? ruleGroup = roslynRules.StyleRuleGroups.SingleOrDefault(g => g.Rules.Any(r => r.RuleId.Equals(severityEditorConfigSetting.RuleId)));
+        RoslynStyleRuleGroup? ruleGroup = roslynRules.StyleRuleGroups.SingleOrDefault(g => g.Rules.Any(r => r.RuleId.Equals(severityDotnetConfigSetting.RuleId)));
 
         if (ruleGroup is not null)
         {
-            RoslynStyleRule rule = ruleGroup.Rules.Single(r => r.RuleId.Equals(severityEditorConfigSetting.RuleId));
+            RoslynStyleRule rule = ruleGroup.Rules.Single(r => r.RuleId.Equals(severityDotnetConfigSetting.RuleId));
             var options = ruleGroup
                 .Options
                 .Select(o => FindOptionConfiguration(optionConfigurations, o.Name))
                 .WhereNotNull()
                 .ToList();
 
-            return new CodeStyleRoslynStyleRuleConfiguration(rule, severityEditorConfigSetting.ParseSeverity(), options, ruleGroup.Overview, ruleGroup.Example);
+            return new CodeStyleRoslynStyleRuleConfiguration(rule, severityDotnetConfigSetting.ParseSeverity(), options, ruleGroup.Overview, ruleGroup.Example);
         }
 
-        RoslynQualityRule? roslynQualityRule = roslynRules.QualityRules.FirstOrDefault(q => q.RuleId.Equals(severityEditorConfigSetting.RuleId));
+        RoslynQualityRule? roslynQualityRule = roslynRules.QualityRules.FirstOrDefault(q => q.RuleId.Equals(severityDotnetConfigSetting.RuleId));
         if (roslynQualityRule is not null)
         {
-            return new CodeStyleRoslynQualityRuleConfiguration(roslynQualityRule, severityEditorConfigSetting.ParseSeverity());
+            return new CodeStyleRoslynQualityRuleConfiguration(roslynQualityRule, severityDotnetConfigSetting.ParseSeverity());
         }
 
-        throw new ConfiguinException($"Rule with id {severityEditorConfigSetting.RuleId} was not found");
+        throw new ConfiguinException($"Rule with id {severityDotnetConfigSetting.RuleId} was not found");
     }
 
     private CodeStyleRoslynOptionConfiguration? FindOptionConfiguration(

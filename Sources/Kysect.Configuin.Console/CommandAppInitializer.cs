@@ -14,10 +14,10 @@ public static class CommandAppInitializer
         app.Configure(config =>
         {
             config.AddCommand<GenerateCodeStyleDocCommand>("generate-styledoc");
-            config.AddCommand<EditorConfigApplyPreviewCommand>("preview");
-            config.AddCommand<AnalyzeEditorConfigCommand>("analyze");
-            config.AddCommand<GenerateEditorConfigTemplateTemplate>("template");
-            config.AddCommand<FormatEditorconfigCommand>("format");
+            config.AddCommand<PreviewDotnetConfigChangesCommand>("preview");
+            config.AddCommand<AnalyzeDotnetConfigCommand>("analyze");
+            config.AddCommand<GenerateDotnetConfigTemplateCommand>("template");
+            config.AddCommand<FormatDotnetConfigCommand>("format");
             config.AddCommand<GenerateRoslynRuleDocumentationFile>("generate-roslyn-documentation");
         });
 
